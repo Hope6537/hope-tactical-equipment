@@ -1,0 +1,21 @@
+
+/target
+=======
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+
+# Intellij project files
+*.iml
+*.patch
+.idea/
+bison-webapp/src/main/webapp/js/bower_components/
+
+# Others
+META-INF/
+target/
+logs/
+webapp/admin_assets/img/upload
+webapp/frontend_assets/img/upload
