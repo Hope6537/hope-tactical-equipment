@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
  *
  * @author Hope6537
  */
-public class ReflectGeneric {
+public class ReflectGenericUtil {
     /**
      * 获得参数化类型的泛型类型，取第一个参数的泛型类型，（默认去的第一个）
      *
