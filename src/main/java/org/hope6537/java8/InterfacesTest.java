@@ -135,6 +135,7 @@ public class InterfacesTest {
     }
 
 
+    @Test
     public void testCount() {
         long startsWithB =
                 getStringCollection()
