@@ -1,3 +1,4 @@
+/*
 package org.hope6537.utils;
 
 import org.apache.http.HttpEntity;
@@ -17,11 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+*/
 /**
  * Http工具类
  *
  * @author Hope6537
- */
+ *//*
+
 public class HttpRequestUtil {
 
     @Test
@@ -37,17 +40,19 @@ public class HttpRequestUtil {
     public static final String REQUEST_TYPE_GET = "get";
     public static final String REQUEST_TYPE_POST = "post";
 
-    /**
-     * 模拟发出Http请求
-     *
-     * @param uri      请求资源,如：http://www.baidu.com/,注意严谨的格式
-     * @param params   请求参数
-     * @param type     请求方式,目前只支持get/post
-     * @param encoding 网页编码
-     * @return HttpResponseBody
-     * @throws java.io.IOException
-     * @throws ClientProtocolException
-     */
+    */
+/**
+ * 模拟发出Http请求
+ *
+ * @param uri      请求资源,如：http://www.baidu.com/,注意严谨的格式
+ * @param params   请求参数
+ * @param type     请求方式,目前只支持get/post
+ * @param encoding 网页编码
+ * @return HttpResponseBody
+ * @throws java.io.IOException
+ * @throws ClientProtocolException
+ *//*
+
     public static String request(String uri, Map<String, String> params, String type, String encoding) throws ClientProtocolException, IOException {
         String result = "";
         DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -98,4 +103,4 @@ public class HttpRequestUtil {
         }
         return result;
     }
-}
+}*/

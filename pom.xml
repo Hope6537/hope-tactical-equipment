@@ -364,7 +364,7 @@
             <artifactId>httpcomponents-client</artifactId>
             <version>4.3.5</version>
         </dependency>-->
-        <dependency>
+        <!--<dependency>
             <groupId>httpcomponents-httpcore</groupId>
             <artifactId>jakarta-httpcore-niossl</artifactId>
             <version>4.0-alpha4</version>
@@ -373,7 +373,7 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>4.4-beta1</version>
-        </dependency>
+        </dependency>-->
 
         <!-- OK HTTP-->
         <dependency>
