@@ -75,31 +75,31 @@ public class OkHttpUtil {
      *
      * @param params
      * @return
-     */
+     *//*
     public static String formatParams(List<BasicNameValuePair> params) {
         return URLEncodedUtils.format(params, CHARSET_NAME);
     }
 
-    /**
+    *//**
      * 为HttpGet 的 url 方便的添加多个name value 参数。
      *
      * @param url
      * @param params
      * @return
-     */
+     *//*
     public static String attachHttpGetParams(String url, List<BasicNameValuePair> params) {
         return url + "?" + formatParams(params);
     }
 
-    /**
+    *//**
      * 为HttpGet 的 url 方便的添加1个name value 参数。
      *
      * @param url
      * @param name
      * @param value
      * @return
-     */
+     *//*
     public static String attachHttpGetParam(String url, String name, String value) {
         return url + "?" + name + "=" + value;
-    }
+    }*/
 }
