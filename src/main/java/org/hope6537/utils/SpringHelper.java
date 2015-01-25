@@ -21,7 +21,7 @@ public class SpringHelper {
      * <p>Using: 用来操作Spring的IoC动作</p>
      */
     protected ApplicationContext context;
-    private Logger logger;
+    protected Logger logger;
 
     /**
      * <p>Describe: 指定Spring配置文件<p>
