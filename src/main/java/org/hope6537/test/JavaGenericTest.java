@@ -1,6 +1,6 @@
 package org.hope6537.test;
 
-import org.hope6537.utils.ReflectGenericUtil;
+import org.hope6537.reflect.ReflectGenericUtil;
 
 import java.util.HashMap;
 import java.util.Map;
