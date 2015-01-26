@@ -1,7 +1,5 @@
 package org.hope6537.math;
 
-import org.hope6537.math.Gcd;
-
 public class ProbRelPrim {
 
     private ProbRelPrim() {
