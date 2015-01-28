@@ -1,5 +1,7 @@
 package org.hope6537.lucene;
- 
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -8,70 +10,69 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.wltea.analyzer.lucene.IKAnalyzer;
- 
+
 import java.io.File;
 import java.io.IOException;
- 
+
 /**
  * Describe: 基础的Lucene服务类
  * Created by Hope6537 on 14-11-27.
  */
 public class LuceneService {
- 
+
     private FSDirectory dir = null;
-    private IKAnalyzer analyzer = null;
+    private Analyzer analyzer = null;
     private IndexWriter indexWriter = null;
     private IndexReader indexReader = null;
     private static final String DIRECTORY_PATH = "./luceneIndex";
     private static final Version DEFAULT_VERSION = Version.LUCENE_41;
- 
+
     public IndexWriter getIndexWriter() throws IOException {
         if (indexWriter == null) {
             initWriter();
         }
         return indexWriter;
     }
- 
+
     public IndexReader getIndexReader() throws IOException {
         if (indexReader == null) {
             initReader();
         }
         return indexReader;
     }
- 
-    public IKAnalyzer getAnalyzer() {
+
+    public Analyzer getAnalyzer() {
         return analyzer;
     }
- 
+
     public LuceneService() {
         this(DIRECTORY_PATH);
     }
- 
+
     public LuceneService(String directoryPath) {
         try {
             File indexFiles = new File(directoryPath);
             // 索引文件的保存位置
             dir = FSDirectory.open(indexFiles);
             // 分析器
-            analyzer = new IKAnalyzer();
+            analyzer = new SimpleAnalyzer(DEFAULT_VERSION);
             // 配置类
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
- 
+
     protected void initWriter() throws IOException {
         IndexWriterConfig iwc = new IndexWriterConfig(DEFAULT_VERSION, analyzer);
         // 创建模式 OpenMode.CREATE_OR_APPEND 添加模式
         iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
         indexWriter = new IndexWriter(dir, iwc);
     }
- 
+
     protected void initReader() throws IOException {
         indexReader = DirectoryReader.open(dir);
     }
- 
+
     /**
      * 高亮被检索到的字段
      *
@@ -97,11 +98,11 @@ public class LuceneService {
         }
         return result;
     }
- 
+
     public String setLightData(Query query, String value) {
         return this.setLightData(query, value, "<b>", "</b>");
     }
- 
+
     /**
      * Describe 带有截取字符串的高亮，也就是说只显示高亮的那一部分
      * <pre>
@@ -146,12 +147,12 @@ public class LuceneService {
         }
         return result;
     }
- 
+
     public String setLightDataOnSubString(Query query, String value, int size) {
         return this.setLightDataOnSubString(query, value, size, "<b>", "</b>");
     }
- 
- 
+
+
     public void readerClose() {
         try {
             if (indexReader != null) {
@@ -161,7 +162,7 @@ public class LuceneService {
             e.printStackTrace();
         }
     }
- 
+
     public void writerClose() {
         try {
             if (indexWriter != null) {
@@ -171,11 +172,11 @@ public class LuceneService {
             e.printStackTrace();
         }
     }
- 
+
     public void close() {
         writerClose();
         readerClose();
     }
- 
- 
+
+
 }

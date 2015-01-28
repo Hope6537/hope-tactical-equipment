@@ -1,3 +1,4 @@
+/*
 package org.hope6537.lucene;
  
 import com.threegrand.pica.law.model.Law;
@@ -18,19 +19,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
  
+*/
 /**
  * Pica项目的Lucene服务类
  * Created by Hope6537 on 14-11-27.
- */
+ *//*
+
 public class PicaLuceneService extends LuceneService {
  
     public PicaLuceneService() {
         super();
     }
  
-    /**
+    */
+/**
      * 提交
-     */
+     *//*
+
     public void commit() {
         try {
             getIndexWriter().commit();
@@ -39,9 +44,11 @@ public class PicaLuceneService extends LuceneService {
         }
     }
  
-    /**
+    */
+/**
      * 回滚
-     */
+     *//*
+
     public void rollback() {
         try {
             getIndexWriter().rollback();
@@ -51,26 +58,30 @@ public class PicaLuceneService extends LuceneService {
     }
  
  
-    /**
+    */
+/**
      * 将Law对象添加进入索引中
      *
      * @param law 待添加的law对象
      * @throws IOException 没找到索引位置
-     */
+     *//*
+
     public void addLaw2Index(Law law) throws IOException {
         IndexWriter indexWriter = getIndexWriter();
         Document document = PicaLuceneUtil.law2Document(law);
         indexWriter.addDocument(document);
     }
  
-    /**
+    */
+/**
      * 更新Law对象在索引内的数据
      * 由Law的lawId字段进行识别
      * 所以需要先进行查询
      *
      * @param law 待更新的law对象
      * @throws IOException 没找到索引位置
-     */
+     *//*
+
     public void updateLaw2Index(Law law) throws IOException {
         IndexWriter indexWriter = getIndexWriter();
         Term term = new Term("lawId", law.getLawId());
@@ -78,30 +89,36 @@ public class PicaLuceneService extends LuceneService {
  
     }
  
-    /**
+    */
+/**
      * 删除Law对象在索引内的数据
      * 由Law的lawId字段进行识别
      * 所以需要先进行查询
      *
      * @param law 待刪除的law对象
      * @throws IOException 没找到索引位置
-     */
+     *//*
+
     public void deleteLaw4Index(Law law) throws IOException {
         IndexWriter indexWriter = getIndexWriter();
         Term term = new Term("lawId", law.getLawId());
         indexWriter.deleteDocuments(term);
     }
  
-    /**
+    */
+/**
      * 更懒的查询方法 默认查询域和分页大小
-     */
+     *//*
+
     public List<Law> getLaw4Index(String keyWord) throws IOException, ParseException {
         return getLaw4Index(keyWord, 0, 10);
     }
  
-    /**
+    */
+/**
      * 只搜索标题和内容符合关键字的Law对象 默认不截串
-     */
+     *//*
+
     public List<Law> getLaw4Index(String keyWord, int firstResult, int maxResult) throws IOException, ParseException {
         ArrayList<String> checkedProperties = new ArrayList<String>();
         checkedProperties.add("lawId");
@@ -110,7 +127,8 @@ public class PicaLuceneService extends LuceneService {
         return getLaw4Index(keyWord, checkedProperties, 100, firstResult, maxResult, false);
     }
  
-    /**
+    */
+/**
      * 查询符合关键字keyWord的Law对象
      *
      * @param keyWord           关键字
@@ -123,7 +141,8 @@ public class PicaLuceneService extends LuceneService {
      * @throws IOException                                          没有找到索引在磁盘上的位置
      * @throws org.apache.lucene.queryparser.classic.ParseException 因为查询关键字非法
      * @author 赵鹏
-     */
+     *//*
+
     public List<Law> getLaw4Index(String keyWord, ArrayList<String> checkedProperties, int searchNum, int firstResult, int maxResult, boolean isSubStr)
             throws IOException, ParseException {
         //定义好搜索器 我们开始干活
@@ -167,4 +186,4 @@ public class PicaLuceneService extends LuceneService {
         return laws;
     }
  
- 
+ */

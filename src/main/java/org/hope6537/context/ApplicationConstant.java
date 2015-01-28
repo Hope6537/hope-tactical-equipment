@@ -10,6 +10,9 @@ public class ApplicationConstant {
     public static final int EFFECTIVE_LINE_ONE = 1;
     public static final int EFFECTIVE_LINE_ZERO = 0;
 
+    public static final String YES = "是";
+    public static final String NO = "否";
+
     public static final String SUCCESS = "success";
     public static final String ERROR = "error";
 
