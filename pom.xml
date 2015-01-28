@@ -458,19 +458,20 @@
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-core</artifactId>
-            <version>2.2.0-mr1-cdh5.0.0-beta-2</version>
-            <type>pom</type>
+            <artifactId>hadoop-common</artifactId>
+            <version>2.2.0</version>
         </dependency>
+
         <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty-util</artifactId>
-            <scope>test</scope>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-hdfs</artifactId>
+            <version>2.2.0</version>
         </dependency>
+
         <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty</artifactId>
-            <scope>test</scope>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-core</artifactId>
+            <version>2.2.0</version>
         </dependency>
         <!--<dependency>
             <groupId>IKAnalyzer</groupId>

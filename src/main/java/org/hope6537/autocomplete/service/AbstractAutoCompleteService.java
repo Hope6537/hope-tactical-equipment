@@ -17,7 +17,6 @@ public abstract class AbstractAutoCompleteService implements AutoCompleteService
 
     public void initAutoComplete() {
         initAutoCompleteMap();
-        initAutoCompleteSpell();
     }
 
     /**
@@ -25,27 +24,6 @@ public abstract class AbstractAutoCompleteService implements AutoCompleteService
      */
     abstract protected void initAutoCompleteMap();
 
-    /**
-     * 对已缓存的map进行拼音转换
-     */
-    public void initAutoCompleteSpell() {
-        Map<String, List<AutoComplete>> map = getAutoCompleteMap();
-        for (String str : map.keySet()) {
-            initAutoCompleteSpell(map.get(str));
-        }
-    }
-
-    /**
-     * 对list进行拼音转换
-     */
-    protected void initAutoCompleteSpell(List<AutoComplete> list) {
-        if (list == null) {
-            return;
-        }
-        for (AutoComplete autoCompleteVO : list) {
-            autoCompleteVO.setSpellAndFirstSpellByName();
-        }
-    }
 
     /**
      * 获取自动提示的结果

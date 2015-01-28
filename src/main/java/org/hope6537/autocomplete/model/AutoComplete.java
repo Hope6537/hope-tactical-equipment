@@ -1,8 +1,6 @@
 package org.hope6537.autocomplete.model;
 
 
-import org.hope6537.piyin.Cn2Spell;
-
 public class AutoComplete {
 
     private String id;//hidden input的value
@@ -20,12 +18,6 @@ public class AutoComplete {
     public AutoComplete(String id, String name) {
         this.id = id;
         this.name = name;
-        setSpellAndFirstSpellByName();
-    }
-
-    public void setSpellAndFirstSpellByName() {
-        setSpell(Cn2Spell.converterToSpell(getName()));
-        setFirstSpell(Cn2Spell.converterToFirstSpell(getName()));
     }
 
     public boolean contain(String keyword) {
