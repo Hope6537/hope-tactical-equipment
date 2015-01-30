@@ -16,6 +16,14 @@ public class ApplicationConstant {
     public static final String SUCCESS = "success";
     public static final String ERROR = "error";
 
+    public static final String REFRESHSUCCESS = "refresh";
+
+    public static final String SUCCESSCHN = "操作成功";
+    public static final String FAILCHN = "操作失败";
+    public static final String ERRORCHN = "发生错误";
+    public static final String REFRESHSUCCESSCHN = "刷新成功";
+
+
     public static final String FOUNDER = "创建者";
     public static final String READER = "只读";
     public static final String WRITER = "读写";
@@ -32,6 +40,10 @@ public class ApplicationConstant {
             return o != null && !((Collection) o).isEmpty();
         }
         return o != null;
+    }
+
+    public static boolean isNull(Object o) {
+        return !notNull(o);
     }
 
 }
