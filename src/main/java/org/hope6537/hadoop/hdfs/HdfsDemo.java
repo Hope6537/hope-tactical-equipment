@@ -50,7 +50,7 @@ public class HdfsDemo {
 
     @Test
     public void testMakedir() throws Exception {
-        boolean flag = fileSystem.mkdirs(new Path("/hope6537"));
+        boolean flag = fileSystem.mkdirs(new Path("/hope6537(test)"));
         assertTrue(flag);
     }
 }
