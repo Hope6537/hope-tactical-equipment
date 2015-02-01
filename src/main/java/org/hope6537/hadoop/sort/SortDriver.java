@@ -29,10 +29,10 @@ public class SortDriver {
             String line = value.toString();
             if (ApplicationConstant.notNull(line)) {
                 String[] datas = line.split("\t");
-                String username = datas[0];
-                Long increase = Long.parseLong(datas[1]);
-                Long decrease = Long.parseLong(datas[2]);
-                String date = datas[3];
+                String username = datas[1];
+                Long increase = Long.parseLong(datas[2]);
+                Long decrease = Long.parseLong(datas[3]);
+                String date = datas[5];
                 SortBean.setBeanData(sortBean, username, increase, decrease, date);
                 context.write(sortBean, NullWritable.get());
             }
@@ -52,21 +52,26 @@ public class SortDriver {
     }
 
 
-    public static void main(String[] args) throws Exception {
-        Configuration configuration = new Configuration();
-        Job job = Job.getInstance(configuration);
-        job.setJarByClass(SortDriver.class);
-        job.setMapperClass(SortMapper.class);
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(SortBean.class);
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
+    public static void main(String[] args) {
 
-        job.setReducerClass(SortReducer.class);
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(SortBean.class);
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        try {
+            Configuration configuration = new Configuration();
+            Job job = Job.getInstance(configuration);
+            job.setJarByClass(SortDriver.class);
+            job.setMapperClass(SortMapper.class);
+            job.setMapOutputKeyClass(SortBean.class);
+            job.setMapOutputValueClass(NullWritable.class);
+            FileInputFormat.setInputPaths(job, new Path(args[0]));
 
-        job.waitForCompletion(true);
+            job.setReducerClass(SortReducer.class);
+            job.setOutputKeyClass(Text.class);
+            job.setOutputValueClass(SortBean.class);
+            FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+            job.waitForCompletion(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

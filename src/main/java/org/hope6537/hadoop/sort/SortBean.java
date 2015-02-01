@@ -24,13 +24,7 @@ public class SortBean implements WritableComparable<SortBean> {
 
     @Override
     public String toString() {
-        return "{" +
-                "用户名='" + username + '\'' +
-                ", 收益" + theIncreaseNumber +
-                ", 支出" + theDecreaseNumber +
-                ", 毛利润" + theBenefitNumber +
-                ", 记录日期'" + theDate + '\'' +
-                '}';
+        return username + "\t" + getTheIncreaseNumber() + "\t" + getTheDecreaseNumber() + "\t" + getTheBenefitNumber() + "\t" + getTheDate();
     }
 
     public static void setBeanData(SortBean sortBean, String username, Long theIncreaseNumber, Long theDecreaseNumber, String theDate) {
