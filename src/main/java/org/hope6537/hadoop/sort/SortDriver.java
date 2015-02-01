@@ -15,6 +15,7 @@ import org.hope6537.context.ApplicationConstant;
 import java.io.IOException;
 
 /**
+ * export HADOOP_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=12888"
  * Created by Hope6537 on 2015/2/1.
  */
 public class SortDriver {
@@ -34,6 +35,7 @@ public class SortDriver {
                 Long decrease = Long.parseLong(datas[3]);
                 String date = datas[5];
                 SortBean.setBeanData(sortBean, username, increase, decrease, date);
+                context.getCounter("map计数器", "mapper的个数").increment(1L);
                 context.write(sortBean, NullWritable.get());
             }
         }
