@@ -25,6 +25,7 @@ public class WSDriver {
         job.setOutputValueClass(LongWritable.class);
         FileInputFormat.setInputPaths(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        job.setCombinerClass(WSCombiner.class);
         job.waitForCompletion(true);
     }
 

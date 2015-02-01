@@ -1,11 +1,15 @@
 package org.hope6537.context;
 
+import org.apache.log4j.Logger;
+
 import java.util.Collection;
 
 /**
  * Created by Zhaopeng-Rabook on 15-1-9.
  */
 public class ApplicationConstant {
+
+    protected Logger logger = Logger.getLogger(getClass());
 
     public static final int EFFECTIVE_LINE_ONE = 1;
     public static final int EFFECTIVE_LINE_ZERO = 0;
