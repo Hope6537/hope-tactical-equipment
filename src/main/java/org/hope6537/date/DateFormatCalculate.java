@@ -101,13 +101,13 @@ public class DateFormatCalculate {
      * @param startTime 開始日期
      * @param endTime   結束日期
      * @return
-     * @see
-     * @deprecated <p>Describe: 计算时间间隔 输出格式为小时 进一法 废弃</p>
+     * @see <p>Describe: 计算时间间隔 输出格式为小时 进一法 废弃</p>
      * <p>Using: </p>
      * <p>How To Work: 化为毫秒 然后计算</p>
      * <p>DevelopedTime: 2013年11月2日下午05:41:12 </p>
      * <p>Author:Hope6537</p>
      */
+    @Deprecated
     public static double jiSuanTimeReturnHoursJINYI(String startTime,
                                                     String endTime) {
         SimpleDateFormat s1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -213,7 +213,24 @@ public class DateFormatCalculate {
             e.printStackTrace();
             return -1;
         }
+    }
 
+    public static double compareDateSeconds(String startTime, String endTime) {
+        SimpleDateFormat s1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat s2 = new SimpleDateFormat("yyyy0MM-dd");
+        Date d1;
+        Date d2;
+        try {
+            d1 = s1.parse(startTime);
+            d2 = s2.parse(endTime);
+            double t1 = d1.getTime();
+            double t2 = d2.getTime();
+            double second = (t1 - t2 / (1000));
+            return second;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     public static void main(String[] args) {
