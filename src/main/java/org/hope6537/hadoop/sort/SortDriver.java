@@ -18,6 +18,11 @@ import java.io.IOException;
  * export HADOOP_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=12888"
  * Created by Hope6537 on 2015/2/1.
  */
+
+/**
+ * <name>mapred.map.child.java.opts</name>
+   <value>-Xmx200m -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=16888</value>
+ */
 public class SortDriver {
 
 
