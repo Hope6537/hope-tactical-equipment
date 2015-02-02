@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 
 /**
- * <name>mapred.map.child.java.opts</name>
+ * <name>mapred.child.java.opts</name>
    <value>-Xmx200m -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=16888</value>
  */
 public class SortDriver {
