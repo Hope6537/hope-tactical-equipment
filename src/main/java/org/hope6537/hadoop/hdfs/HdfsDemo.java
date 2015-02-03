@@ -22,10 +22,22 @@ public class HdfsDemo {
     FileSystem fileSystem;
     Logger logger;
 
+    public static Configuration getConfigurationByHA() {
+        Configuration configuration = new Configuration();
+        configuration.set("fs.defaultFS", "hdfs://ns1");
+        configuration.set("dfs.nameservices", "ns1");
+        configuration.set("dfs.ha.namenodes.ns1", "nn1,nn2");
+        configuration.set("dfs.namenode.rpc-address.ns1.nn1", "itcast01:9000");
+        configuration.set("dfs.namenode.rpc-address.ns1.nn2", "itcast02:9000");
+        configuration.set("dfs.client.failover.proxy.provider.ns1", "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider");
+        return configuration;
+    }
+
     @Before
     public void init() throws Exception {
         System.setProperty("hadoop.home.dir", "C:\\CoderDocuments\\hadoop-2.2.0");
-        fileSystem = FileSystem.get(new URI("hdfs://hadoop2master:9000"), new Configuration(), "hope6537");
+        //fileSystem = FileSystem.get(new URI("hdfs://hadoop2master:9000"), new Configuration(), "hope6537");
+        fileSystem = FileSystem.get(new URI("hdfs://ns1"), getConfigurationByHA(), "hope6537");
     }
 
     @Test
