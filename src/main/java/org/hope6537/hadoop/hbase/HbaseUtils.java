@@ -1,6 +1,8 @@
 package org.hope6537.hadoop.hbase;
 
+import com.sun.istack.NotNull;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
@@ -19,6 +21,7 @@ import java.io.IOException;
  */
 public class HbaseUtils {
 
+    @NotNull
     private Configuration hbaseConfiguration;
     private User user;
 
@@ -26,18 +29,36 @@ public class HbaseUtils {
         hbaseConfiguration = ConfigurationUtils.getConfiguration(HadoopConstants.HBASE);
     }
 
+    public HbaseUtils(Configuration hbaseConfiguration) {
+        this.hbaseConfiguration = hbaseConfiguration;
+    }
+
+    public void insertData(String rowKey, String tableName, String columnFamily, String column, String data) throws IOException {
+        HTable table = new HTable(hbaseConfiguration, tableName);
+        Put put = new Put(Bytes.toBytes(rowKey));
+        put.add(Bytes.toBytes(columnFamily), Bytes.toBytes(column), Bytes.toBytes(data));
+        table.put(put);
+        table.close();
+    }
+
+    public void insertData(String tableName, HbaseModel hbaseModel) throws IOException {
+        HTable table = new HTable(hbaseConfiguration, tableName);
+        table.put(hbaseModel.toPut());
+        table.close();
+    }
+
     @Before
     public void init() {
         hbaseConfiguration = ConfigurationUtils.getConfiguration(HadoopConstants.HBASE);
         //指定用户和用户组
-        user = User.createUserForTesting(hbaseConfiguration, "hope6537", new String[]{"adm"});
+        //user = User.createUserForTesting(hbaseConfiguration, "hope6537", new String[]{"adm"});
     }
 
     @Test
     public void testPut() throws IOException {
-        HTable table = new HTable(hbaseConfiguration, "user");
-        Put put = new Put(Bytes.toBytes("rk0003"));
-        put.add(Bytes.toBytes("info"), Bytes.toBytes("name"), Bytes.toBytes("liuyan"));
+        HTable table = new HTable(hbaseConfiguration, "test");
+        Put put = new Put(Bytes.toBytes("row1"));
+        put.add(Bytes.toBytes("cf"), Bytes.toBytes("a"), Bytes.toBytes("hope6537"));
         table.put(put);
         table.close();
     }
@@ -51,20 +72,36 @@ public class HbaseUtils {
         scan.addFamily(Bytes.toBytes("cf"));
         ResultScanner scanner = table.getScanner(scan);
         for (Result r : scanner) {
-            /**
-             for(KeyValue kv : r.list()){
-             String family = new String(kv.getFamily());
-             System.out.println(family);
-             String qualifier = new String(kv.getQualifier());
-             System.out.println(qualifier);
-             System.out.println(new String(kv.getValue()));
-             }
-             */
             byte[] value = r.getValue(Bytes.toBytes("cf"), Bytes.toBytes("a"));
             System.out.println(new String(value));
         }
         connection.close();
     }
+
+    @Test
+    public void testGet() throws Exception {
+        HTable table = new HTable(hbaseConfiguration, "test");
+        Get get = new Get(Bytes.toBytes("row1"));
+        get.setMaxVersions(5);
+        Result result = table.get(get);
+        for (Cell kv : result.listCells()) {
+            String family = new String(kv.getFamily());
+            System.out.println(family);
+            String qualifier = new String(kv.getQualifier());
+            System.out.println(qualifier);
+            System.out.println(new String(kv.getValue()));
+        }
+        table.close();
+    }
+
+    @Test
+    public void testDrop() throws Exception {
+        HBaseAdmin admin = new HBaseAdmin(hbaseConfiguration);
+        admin.disableTable("test");
+        admin.deleteTable("test");
+        admin.close();
+    }
+
 
     @Test
     public void testCreate() throws IOException {
@@ -80,6 +117,15 @@ public class HbaseUtils {
         table.addFamily(info);
         admin.createTable(table);
         admin.close();
+    }
+
+    @Test
+    public void testDel() throws Exception {
+        HTable table = new HTable(hbaseConfiguration, "test");
+        Delete del = new Delete(Bytes.toBytes("row1"));
+        del.deleteColumn(Bytes.toBytes("cf"), Bytes.toBytes("b"));
+        table.delete(del);
+        table.close();
     }
 
 

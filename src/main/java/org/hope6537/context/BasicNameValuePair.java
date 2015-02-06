@@ -5,12 +5,16 @@ import java.io.Serializable;
 /**
  * Created by Hope6537 on 2015/1/21.
  */
-public class BasicNameValuePair<K, V>  implements Serializable{
+public class BasicNameValuePair<K, V> implements Serializable {
 
     private K key;
     private V value;
 
     public BasicNameValuePair() {
+    }
+
+    public BasicNameValuePair(K key) {
+        this.key = key;
     }
 
     public BasicNameValuePair(K key, V value) {
