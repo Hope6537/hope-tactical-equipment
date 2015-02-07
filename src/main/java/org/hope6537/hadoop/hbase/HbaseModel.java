@@ -1,6 +1,7 @@
 package org.hope6537.hadoop.hbase;
 
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.hope6537.context.ApplicationConstant;
 import org.slf4j.Logger;
@@ -12,11 +13,12 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 
 /**
  * Created by Hope6537 on 2015/2/6.
  */
-public class HbaseModel implements Serializable {
+public class HBaseModel implements Serializable {
 
     private Integer rowKey;
 
@@ -28,14 +30,36 @@ public class HbaseModel implements Serializable {
     private static final String INFO_MAP = "info";
     private static final String SECURITY_MAP = "security";
 
-    private HbaseModelHashMap columnFamilyMap;
+    private HBaseFamilyMap hBaseFamilyMap;
 
-    public HbaseModelHashMap getColumnFamilyMap() {
-        return columnFamilyMap;
+    public HBaseFamilyMap gethBaseFamilyMap() {
+        return hBaseFamilyMap;
     }
 
-    public void setColumnFamilyMap(HbaseModelHashMap columnFamilyMap) {
-        this.columnFamilyMap = columnFamilyMap;
+    public void sethBaseFamilyMap(HBaseFamilyMap hBaseFamilyMap) {
+        this.hBaseFamilyMap = hBaseFamilyMap;
+    }
+
+    public static HBaseModel getModelFromHBase(Result result) {
+        HBaseModel model = getInstance();
+        HBaseFamilyMap baseFamilyMap = model.gethBaseFamilyMap();
+        NavigableMap<byte[], NavigableMap<byte[], byte[]>> resultMap = result.getNoVersionMap();
+        for (byte[] keyByte : resultMap.keySet()) {
+            String key = Bytes.toString(keyByte);
+            Map<String, Object> familyMap = baseFamilyMap.get(key);
+            if (ApplicationConstant.isNull(familyMap)) {
+                familyMap = new HashMap<>();
+            }
+            NavigableMap<byte[], byte[]> subMap = resultMap.get(keyByte);
+            for (byte[] subKeyByte : subMap.keySet()) {
+                String columnKey = Bytes.toString(subKeyByte);
+                String value = Bytes.toString(subMap.get(subKeyByte));
+                familyMap.put(columnKey, value);
+            }
+            baseFamilyMap.put(key, familyMap);
+        }
+        model.sethBaseFamilyMap(baseFamilyMap);
+        return model;
     }
 
     public Object getValueByFamilyAndColumn(String familyName, String columnName) {
@@ -44,7 +68,7 @@ public class HbaseModel implements Serializable {
             return null;
         } else {
             try {
-                HbaseModelHashMap map = getColumnFamilyMap();
+                HBaseFamilyMap map = gethBaseFamilyMap();
                 return map.get(familyName).get(columnName);
             } catch (NullPointerException e) {
                 logger.error("no data");
@@ -58,7 +82,7 @@ public class HbaseModel implements Serializable {
             logger.warn("data not access");
             return false;
         } else {
-            HbaseModelHashMap map = getColumnFamilyMap();
+            HBaseFamilyMap map = gethBaseFamilyMap();
             Map<String, Object> familyMap = map.get(familyName);
             if (ApplicationConstant.isNull(familyMap)) {
                 familyMap = new HashMap<>();
@@ -69,38 +93,38 @@ public class HbaseModel implements Serializable {
 
     }
 
-    private HbaseModel() {
+    private HBaseModel() {
         this(null);
     }
 
-    private HbaseModel(List<String> columnFamilyNames) {
-        columnFamilyMap = new HbaseModelHashMap();
-        columnFamilyMap.put(INFO_MAP, null);
-        columnFamilyMap.put(SECURITY_MAP, null);
+    private HBaseModel(List<String> columnFamilyNames) {
+        hBaseFamilyMap = new HBaseFamilyMap();
+        hBaseFamilyMap.put(INFO_MAP, null);
+        hBaseFamilyMap.put(SECURITY_MAP, null);
         if (ApplicationConstant.isNull(columnFamilyNames)) {
             return;
         }
         for (String columnFamilyName : columnFamilyNames) {
-            columnFamilyMap.put(columnFamilyName, null);
+            hBaseFamilyMap.put(columnFamilyName, null);
         }
     }
 
 
-    private static HbaseModel getInstance(List<String> columnFamilyNames) {
-        HbaseModel model = new HbaseModel(columnFamilyNames);
+    private static HBaseModel getInstance(List<String> columnFamilyNames) {
+        HBaseModel model = new HBaseModel(columnFamilyNames);
         //TODO:init
         return model;
     }
 
-    private static HbaseModel getInstance() {
-        HbaseModel model = new HbaseModel();
+    private static HBaseModel getInstance() {
+        HBaseModel model = new HBaseModel();
         return model;
     }
 
 
-    public static HbaseModel castToModelBasic(Object object) {
-        HbaseModel hbaseModel = getInstance();
-        HbaseModelHashMap baseModelHashMap = hbaseModel.getColumnFamilyMap();
+    public static HBaseModel castToModelBasic(Object object) {
+        HBaseModel hBaseModel = getInstance();
+        HBaseFamilyMap baseModelHashMap = hBaseModel.gethBaseFamilyMap();
         Map<String, Object> infoMap = new HashMap<>();
         Map<String, Object> securityMap = null;
         Class clz = object.getClass();
@@ -127,18 +151,18 @@ public class HbaseModel implements Serializable {
         if (ApplicationConstant.notNull(securityMap)) {
             baseModelHashMap.put(SECURITY_MAP, securityMap);
         }
-        return hbaseModel;
+        return hBaseModel;
     }
 
-    public static <T> T castToObject(HbaseModel hbaseModel, T obj) throws ClassNotFoundException {
-        if (ApplicationConstant.isNull(hbaseModel)) {
+    public static <T> T castToObject(HBaseModel hBaseModel, T obj) throws ClassNotFoundException {
+        if (ApplicationConstant.isNull(hBaseModel)) {
             return null;
         } else if (ApplicationConstant.isNull(obj)) {
             throw new NullPointerException("not able to cast null object");
         } else {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             Class<?> clz = classLoader.loadClass(obj.getClass().getName());
-            HbaseModelHashMap hbaseModelHashMap = hbaseModel.getColumnFamilyMap();
+            HBaseFamilyMap hbaseModelHashMap = hBaseModel.gethBaseFamilyMap();
             for (Map<String, Object> map : hbaseModelHashMap.values()) {
                 for (String key : map.keySet()) {
                     Field field = null;
@@ -160,7 +184,7 @@ public class HbaseModel implements Serializable {
 
     public Put toPut() {
         Put put = new Put(Bytes.toBytes(rowKey));
-        HbaseModelHashMap hbaseModelHashMap = getColumnFamilyMap();
+        HBaseFamilyMap hbaseModelHashMap = gethBaseFamilyMap();
         for (String familyKey : hbaseModelHashMap.keySet()) {
             Map<String, Object> map = hbaseModelHashMap.get(familyKey);
             for (String key : map.keySet()) {

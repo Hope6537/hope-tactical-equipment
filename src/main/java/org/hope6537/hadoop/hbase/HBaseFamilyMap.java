@@ -10,7 +10,7 @@ import java.util.Map;
  * @Signdate 2014-4-5下午12:07:37
  * @company Changchun University&SHXT
  */
-public class HbaseModelHashMap extends HashMap<String, Map<String, Object>> {
+public class HBaseFamilyMap extends HashMap<String, Map<String, Object>> {
 
 
 }
