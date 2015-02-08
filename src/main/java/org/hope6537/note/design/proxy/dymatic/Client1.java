@@ -9,16 +9,16 @@ import java.lang.reflect.Proxy;
 
 public class Client1 {
 
-	@Test
-	public void test() {
-		IGamePlayer gamePlayer = new GamePlayer("张三");
-		InvocationHandler handler = new DymaticGamePlay(gamePlayer);
-		ClassLoader classLoader = gamePlayer.getClass().getClassLoader();
-		IGamePlayer proxy = (IGamePlayer) Proxy.newProxyInstance(classLoader,
-				new Class[] { IGamePlayer.class }, handler);
-		proxy.login("", "");
-		proxy.killBoss();
-		proxy.upgrade();
-	}
+    @Test
+    public void test() {
+        IGamePlayer gamePlayer = new GamePlayer("张三");
+        InvocationHandler handler = new DymaticGamePlay(gamePlayer);
+        ClassLoader classLoader = gamePlayer.getClass().getClassLoader();
+        IGamePlayer proxy = (IGamePlayer) Proxy.newProxyInstance(classLoader,
+                new Class[]{IGamePlayer.class}, handler);
+        proxy.login("", "");
+        proxy.killBoss();
+        proxy.upgrade();
+    }
 
 }

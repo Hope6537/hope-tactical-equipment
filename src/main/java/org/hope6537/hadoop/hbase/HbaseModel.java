@@ -20,24 +20,29 @@ import java.util.NavigableMap;
  */
 public class HBaseModel implements Serializable {
 
-    private Integer rowKey;
-
-    private static Logger logger;
-
     private static final Integer NORMAL_SIZE = 2;
     private static final String USERNAME_COLUMN = "username";
     private static final String PASSWORD_COLUMN = "password";
     private static final String INFO_MAP = "info";
     private static final String SECURITY_MAP = "security";
-
+    private static Logger logger;
+    private Integer rowKey;
     private HBaseFamilyMap hBaseFamilyMap;
 
-    public HBaseFamilyMap gethBaseFamilyMap() {
-        return hBaseFamilyMap;
+    private HBaseModel() {
+        this(null);
     }
 
-    public void sethBaseFamilyMap(HBaseFamilyMap hBaseFamilyMap) {
-        this.hBaseFamilyMap = hBaseFamilyMap;
+    private HBaseModel(List<String> columnFamilyNames) {
+        hBaseFamilyMap = new HBaseFamilyMap();
+        hBaseFamilyMap.put(INFO_MAP, null);
+        hBaseFamilyMap.put(SECURITY_MAP, null);
+        if (ApplicationConstant.isNull(columnFamilyNames)) {
+            return;
+        }
+        for (String columnFamilyName : columnFamilyNames) {
+            hBaseFamilyMap.put(columnFamilyName, null);
+        }
     }
 
     public static HBaseModel getModelFromHBase(Result result) {
@@ -62,54 +67,6 @@ public class HBaseModel implements Serializable {
         return model;
     }
 
-    public Object getValueByFamilyAndColumn(String familyName, String columnName) {
-        if (!(ApplicationConstant.notNull(familyName) && ApplicationConstant.notNull(columnName))) {
-            logger.warn("data not access");
-            return null;
-        } else {
-            try {
-                HBaseFamilyMap map = gethBaseFamilyMap();
-                return map.get(familyName).get(columnName);
-            } catch (NullPointerException e) {
-                logger.error("no data");
-                return null;
-            }
-        }
-    }
-
-    public boolean setValueByFamilyAndColumn(String familyName, String columnName, Object data) {
-        if (!(ApplicationConstant.notNull(familyName) && ApplicationConstant.notNull(columnName) && ApplicationConstant.notNull(data))) {
-            logger.warn("data not access");
-            return false;
-        } else {
-            HBaseFamilyMap map = gethBaseFamilyMap();
-            Map<String, Object> familyMap = map.get(familyName);
-            if (ApplicationConstant.isNull(familyMap)) {
-                familyMap = new HashMap<>();
-            }
-            familyMap.put(columnName, data);
-        }
-        return true;
-
-    }
-
-    private HBaseModel() {
-        this(null);
-    }
-
-    private HBaseModel(List<String> columnFamilyNames) {
-        hBaseFamilyMap = new HBaseFamilyMap();
-        hBaseFamilyMap.put(INFO_MAP, null);
-        hBaseFamilyMap.put(SECURITY_MAP, null);
-        if (ApplicationConstant.isNull(columnFamilyNames)) {
-            return;
-        }
-        for (String columnFamilyName : columnFamilyNames) {
-            hBaseFamilyMap.put(columnFamilyName, null);
-        }
-    }
-
-
     private static HBaseModel getInstance(List<String> columnFamilyNames) {
         HBaseModel model = new HBaseModel(columnFamilyNames);
         //TODO:init
@@ -120,7 +77,6 @@ public class HBaseModel implements Serializable {
         HBaseModel model = new HBaseModel();
         return model;
     }
-
 
     public static HBaseModel castToModelBasic(Object object) {
         HBaseModel hBaseModel = getInstance();
@@ -180,6 +136,45 @@ public class HBaseModel implements Serializable {
             }
         }
         return obj;
+    }
+
+    public HBaseFamilyMap gethBaseFamilyMap() {
+        return hBaseFamilyMap;
+    }
+
+    public void sethBaseFamilyMap(HBaseFamilyMap hBaseFamilyMap) {
+        this.hBaseFamilyMap = hBaseFamilyMap;
+    }
+
+    public Object getValueByFamilyAndColumn(String familyName, String columnName) {
+        if (!(ApplicationConstant.notNull(familyName) && ApplicationConstant.notNull(columnName))) {
+            logger.warn("data not access");
+            return null;
+        } else {
+            try {
+                HBaseFamilyMap map = gethBaseFamilyMap();
+                return map.get(familyName).get(columnName);
+            } catch (NullPointerException e) {
+                logger.error("no data");
+                return null;
+            }
+        }
+    }
+
+    public boolean setValueByFamilyAndColumn(String familyName, String columnName, Object data) {
+        if (!(ApplicationConstant.notNull(familyName) && ApplicationConstant.notNull(columnName) && ApplicationConstant.notNull(data))) {
+            logger.warn("data not access");
+            return false;
+        } else {
+            HBaseFamilyMap map = gethBaseFamilyMap();
+            Map<String, Object> familyMap = map.get(familyName);
+            if (ApplicationConstant.isNull(familyMap)) {
+                familyMap = new HashMap<>();
+            }
+            familyMap.put(columnName, data);
+        }
+        return true;
+
     }
 
     public Put toPut() {

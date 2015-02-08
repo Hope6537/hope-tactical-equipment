@@ -11,11 +11,6 @@ import java.io.IOException;
  */
 public class RPCServer implements PublicInterface {
 
-    @Override
-    public String getMeg(String path) {
-        return "[INFO] the path is " + path;
-    }
-
     public static void main(String[] args) {
         try {
             Configuration configuration = new Configuration();
@@ -29,6 +24,11 @@ public class RPCServer implements PublicInterface {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public String getMeg(String path) {
+        return "[INFO] the path is " + path;
     }
 
 }

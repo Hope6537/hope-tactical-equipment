@@ -7,22 +7,22 @@ import java.nio.channels.FileChannel;
 
 public class ChannelCopy {
 
-	private static final int BSIZE = 1024;
+    private static final int BSIZE = 1024;
 
-	public static void main(String[] args) throws Exception {
-		if (args.length != 2) {
-			System.out.println("arguements : sourcefile destfile");
-			System.exit(1);
-		}
-		FileChannel in = new FileInputStream(args[0]).getChannel(), out = new FileOutputStream(
-				args[1]).getChannel();
+    public static void main(String[] args) throws Exception {
+        if (args.length != 2) {
+            System.out.println("arguements : sourcefile destfile");
+            System.exit(1);
+        }
+        FileChannel in = new FileInputStream(args[0]).getChannel(), out = new FileOutputStream(
+                args[1]).getChannel();
 
-		ByteBuffer bf = ByteBuffer.allocate(BSIZE);
-		while (in.read(bf) != -1) {
-			bf.flip();
-			out.write(bf);
-			bf.clear();
-		}
-	}
+        ByteBuffer bf = ByteBuffer.allocate(BSIZE);
+        while (in.read(bf) != -1) {
+            bf.flip();
+            out.write(bf);
+            bf.clear();
+        }
+    }
 
 }

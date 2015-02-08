@@ -1,6 +1,6 @@
 package org.hope6537.note.design.factory.example;
 
-/** 
+/**
  * <p>
  * 工厂模式的优点：<br/>
  * 1、良好的封装性，代码结构清晰，创建一个对象的过程并不需要了解具体构造器的实现，只需要调用工厂方法即可，降低耦合性<br/>
@@ -16,14 +16,15 @@ package org.hope6537.note.design.factory.example;
  * </p>
  * <p>DevelopedTime: 2014年9月5日下午4:29:02</p>
  * <p>Company: ChangChun Unviersity JiChuang Team</p>
+ *
  * @author Hope6537
  * @version 1.0
  * @see
  */
 public class Client {
 
-	public static void main(String[] args) {
-		AbstractFactory factory = new ConcreteCreator();
-		Product product = factory.createProduct(CurrentProduct1.class);
-	}
+    public static void main(String[] args) {
+        AbstractFactory factory = new ConcreteCreator();
+        Product product = factory.createProduct(CurrentProduct1.class);
+    }
 }

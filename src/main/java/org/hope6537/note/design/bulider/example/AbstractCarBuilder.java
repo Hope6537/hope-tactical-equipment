@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class AbstractCarBuilder {
 
-	public abstract void setSequence(ArrayList<String> list);
+    public abstract void setSequence(ArrayList<String> list);
 
-	public abstract AbstractCarModel getCarModel();
+    public abstract AbstractCarModel getCarModel();
 }

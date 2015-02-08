@@ -1,4 +1,4 @@
-/** 
+/**
  * <pre>
  *模板方法模式：
  *定义一个操作中的算法的框架，而将一些步骤延迟到子类中去，使得子类可以在不改变一个算法的结构，即可重定义该算法的某些特定步骤
@@ -12,17 +12,17 @@
  *运行客户端
  *{@link org.hope6537.note.design.modelfunction.hummer.Client}
  *基本方法：一般被称为基本操作，由子类来实现
- * 
+ *
  *模板方法：实现对基本方法的调度，完成固定的逻辑(一般被定义为final方法)
- * 
+ *
  *下面是一个抽象的模板类
  * abstract class AbstractClass {
-	protected abstract void method1();
-	protected abstract void method2();
-	public final void run(){
-		method1();
-		method2();
-		}
+ protected abstract void method1();
+ protected abstract void method2();
+ public final void run(){
+ method1();
+ method2();
+ }
  *}
  *
  *模板方法模式的优点：

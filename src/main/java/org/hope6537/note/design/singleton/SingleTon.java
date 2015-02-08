@@ -1,6 +1,7 @@
 package org.hope6537.note.design.singleton;
 
-/** <p>
+/**
+ * <p>
  * 单例模式的优点<br/>
  * 1、只有一个实例，减少了内存开支<br/>
  * 2、减少了系统的性能开销<br/>
@@ -16,60 +17,63 @@ package org.hope6537.note.design.singleton;
  * <p>Using: 单例模式的使用</p>
  * <p>DevelopedTime: 2014年9月3日上午10:03:20</p>
  * <p>Company: ChangChun Unviersity JiChuang Team</p>
+ *
  * @author Hope6537
  * @version 1.0
  * @see
  */
 public class SingleTon {
 
-	private static final SingleTon SINGLE_TON = new SingleTon();
+    private static final SingleTon SINGLE_TON = new SingleTon();
 
-	/**
-	 * <p>Describe: 通过将构造方法私有化，从而使对象无法由外部创建<p>
-	 */
-	private SingleTon() {
+    /**
+     * <p>Describe: 通过将构造方法私有化，从而使对象无法由外部创建<p>
+     */
+    private SingleTon() {
 
-	}
+    }
 
-	public static SingleTon geSingleTon() {
-		return SINGLE_TON;
-	}
+    public static SingleTon geSingleTon() {
+        return SINGLE_TON;
+    }
 
-	/**
-	 * <p>Describe: 对象中的其他方法，最好是静态的</p>
-	 * <p>Using: 其他方法举例</p>
-	 * <p>How To Work: 使用类名直接调用</p>
-	 * <p>DevelopedTime: 2014年9月3日上午10:05:19 </p>
-	 * <p>Author:Hope6537</p>
-	 * @see
-	 */
-	public static void doSomething() {
+    /**
+     * <p>Describe: 对象中的其他方法，最好是静态的</p>
+     * <p>Using: 其他方法举例</p>
+     * <p>How To Work: 使用类名直接调用</p>
+     * <p>DevelopedTime: 2014年9月3日上午10:05:19 </p>
+     * <p>Author:Hope6537</p>
+     *
+     * @see
+     */
+    public static void doSomething() {
 
-	}
+    }
 }
 
-/** 
+/**
  * <p>Describe: 线程不安全的单例模式的使用</p>
  * <p>Using: </p>
  * <p>DevelopedTime: 2014年9月3日上午10:20:32</p>
  * <p>Company: ChangChun Unviersity JiChuang Team</p>
+ *
  * @author Hope6537
  * @version 1.0
  * @see
  */
 class UnSafeSingleTon {
 
-	private static UnSafeSingleTon unSafeSingleTon = null;
+    private static UnSafeSingleTon unSafeSingleTon = null;
 
-	private UnSafeSingleTon() {
+    private UnSafeSingleTon() {
 
-	}
+    }
 
-	public static UnSafeSingleTon getUnSafeSingleTon() {
-		if (unSafeSingleTon == null) {
-			unSafeSingleTon = new UnSafeSingleTon();
-		}
-		return unSafeSingleTon;
-	}
+    public static UnSafeSingleTon getUnSafeSingleTon() {
+        if (unSafeSingleTon == null) {
+            unSafeSingleTon = new UnSafeSingleTon();
+        }
+        return unSafeSingleTon;
+    }
 
 }

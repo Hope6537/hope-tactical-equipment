@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class BMWBuilder extends AbstractCarBuilder {
 
-	private BMWModel bmwModel = new BMWModel();
+    private BMWModel bmwModel = new BMWModel();
 
-	@Override
-	public void setSequence(ArrayList<String> list) {
-		bmwModel.setOrderList(list);
-	}
+    @Override
+    public void setSequence(ArrayList<String> list) {
+        bmwModel.setOrderList(list);
+    }
 
-	@Override
-	public AbstractCarModel getCarModel() {
-		return bmwModel;
-	}
+    @Override
+    public AbstractCarModel getCarModel() {
+        return bmwModel;
+    }
 
 }

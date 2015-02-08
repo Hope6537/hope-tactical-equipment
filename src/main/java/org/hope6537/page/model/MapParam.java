@@ -7,8 +7,6 @@ import java.util.HashMap;
  */
 public class MapParam extends HashMap<String, Object> {
 
-    private static final long serialVersionUID = 1L;
-
     /**
      * 作为Key的字段对应MapParam的Key
      */
@@ -17,6 +15,7 @@ public class MapParam extends HashMap<String, Object> {
      * 作为Value的字段对应MapParam的Key
      */
     public static final String VALUE_FIELD = "valueField";
+    private static final long serialVersionUID = 1L;
 
     public MapParam() {
     }

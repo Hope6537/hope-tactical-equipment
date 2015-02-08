@@ -9,16 +9,16 @@ import java.io.IOException;
 /**
  * Created by Hope6537 on 2015/1/30.
  */
-public class WSReducer extends Reducer<Text,LongWritable,Text,LongWritable> {
+public class WSReducer extends Reducer<Text, LongWritable, Text, LongWritable> {
 
     @Override
     protected void reduce(Text key, Iterable<LongWritable> values, Context context) throws IOException, InterruptedException {
 
         long counter = 0;
-        for(LongWritable longWritable :values){
+        for (LongWritable longWritable : values) {
             counter += longWritable.get();
         }
-        context.write(key,new LongWritable(counter));
+        context.write(key, new LongWritable(counter));
 
     }
 }

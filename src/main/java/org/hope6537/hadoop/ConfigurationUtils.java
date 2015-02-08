@@ -29,7 +29,7 @@ public class ConfigurationUtils {
                 case HadoopConstants.HBASE:
                     Configuration configuration = HBaseConfiguration.create();
                     configuration.set("hbase.cluster.distributed", "true");
-                    configuration.set("hbase.zookeeper.master","hadoop5:60000");
+                    configuration.set("hbase.zookeeper.master", "hadoop5:60000");
                     configuration.set("hbase.zookeeper.quorum", "hadoop5,hadoop6,hadoop7");
                     return configuration;
                 case "test":

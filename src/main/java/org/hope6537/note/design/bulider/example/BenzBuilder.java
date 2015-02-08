@@ -4,18 +4,17 @@ import java.util.ArrayList;
 
 public class BenzBuilder extends AbstractCarBuilder {
 
-	private BenzModel benzModel = new BenzModel();
-	
-	@Override
-	public void setSequence(ArrayList<String> list) {
-		benzModel.setOrderList(list);
-	}
+    private BenzModel benzModel = new BenzModel();
 
-	@Override
-	public AbstractCarModel getCarModel() {
-		return benzModel;
-	}
+    @Override
+    public void setSequence(ArrayList<String> list) {
+        benzModel.setOrderList(list);
+    }
 
-	
-	
+    @Override
+    public AbstractCarModel getCarModel() {
+        return benzModel;
+    }
+
+
 }

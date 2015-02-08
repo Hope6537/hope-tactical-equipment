@@ -40,7 +40,6 @@ public class EmailSender {
 
     /**
      * 以HTML格式发送邮件
-     *
      */
     public boolean sendHtmlMail() {
         // 根据邮件会话属性和密码验证器构造一个发送邮件的session
@@ -82,7 +81,7 @@ public class EmailSender {
             e.printStackTrace();
         }
         String from = getFromAddress();
-        if(StringUtils.isNotBlank(nick)){
+        if (StringUtils.isNotBlank(nick)) {
             from = nick + " <" + from + ">";
         }
         return from;

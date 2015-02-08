@@ -14,6 +14,7 @@ public class OkHttpUtil {
     static {
         mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
     }
+    private static final String CHARSET_NAME = "UTF-8";
 
     /**
      * 该不会开启异步线程。
@@ -66,8 +67,6 @@ public class OkHttpUtil {
             throw new IOException("Unexpected code " + response);
         }
     }
-
-    private static final String CHARSET_NAME = "UTF-8";
 
     /**
      * 这里使用了HttpClinet的API。只是为了方便

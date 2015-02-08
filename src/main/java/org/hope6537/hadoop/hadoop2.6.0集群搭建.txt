@@ -27,7 +27,7 @@
 			修改：dataDir=/home/hope6537/hadoop/zookeeper-3.4.5/tmp
 			在最后添加：
 			server.1=hadoop5:2888:3888
-			server.2=hadoop6:2888:3888
+			server.2=hadoop6:2888:388
 			server.3=hadoop7:2888:3888
 			保存退出
 			然后创建一个tmp文件夹

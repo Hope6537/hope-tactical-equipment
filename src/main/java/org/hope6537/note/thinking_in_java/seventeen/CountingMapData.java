@@ -7,64 +7,64 @@ import java.util.Set;
 
 public class CountingMapData extends AbstractMap<Integer, String> {
 
-	private int size;
-	private static String[] chars = "A B C D E F G H J K L M N O P Q R S T U V W X Y Z"
-			.split(" ");
+    private static String[] chars = "A B C D E F G H J K L M N O P Q R S T U V W X Y Z"
+            .split(" ");
+    private int size;
 
-	public CountingMapData() {
-	}
+    public CountingMapData() {
+    }
 
-	public CountingMapData(int size) {
-		super();
-		this.size = size < 0 ? 0 : size;
-	}
+    public CountingMapData(int size) {
+        super();
+        this.size = size < 0 ? 0 : size;
+    }
 
-	private static class Entry implements Map.Entry<Integer, String> {
-		int index;
+    public static void main(String[] args) {
+        System.out.println(new CountingMapData(30));
+    }
 
-		public Entry(int index) {
-			this.index = index;
-		}
+    @SuppressWarnings("unchecked")
+    public Set<Map.Entry<Integer, String>> entrySet() {
+        Set<Map.Entry<Integer, String>> entries = new LinkedHashSet();
+        for (int i = 0; i < size; i++) {
+            entries.add(new Entry(i));
+        }
+        return entries;
+    }
 
-		@Override
-		public boolean equals(Object obj) {
-			return Integer.valueOf(index).equals(obj);
-		}
+    private static class Entry implements Map.Entry<Integer, String> {
+        int index;
 
-		@Override
-		public Integer getKey() {
-			return index;
-		}
+        public Entry(int index) {
+            this.index = index;
+        }
 
-		@Override
-		public String getValue() {
-			return chars[index % chars.length]
-					+ Integer.toString(index / chars.length);
-		}
+        @Override
+        public boolean equals(Object obj) {
+            return Integer.valueOf(index).equals(obj);
+        }
 
-		@Override
-		public String setValue(String value) {
-			System.out.println("No Set");
-			return null;
-		}
+        @Override
+        public Integer getKey() {
+            return index;
+        }
 
-		@Override
-		public int hashCode() {
-			return Integer.valueOf(index).hashCode();
-		}
-	}
+        @Override
+        public String getValue() {
+            return chars[index % chars.length]
+                    + Integer.toString(index / chars.length);
+        }
 
-	@SuppressWarnings("unchecked")
-	public Set<Map.Entry<Integer, String>> entrySet() {
-		Set<Map.Entry<Integer, String>> entries = new LinkedHashSet();
-		for (int i = 0; i < size; i++) {
-			entries.add(new Entry(i));
-		}
-		return entries;
-	}
+        @Override
+        public String setValue(String value) {
+            System.out.println("No Set");
+            return null;
+        }
 
-	public static void main(String[] args) {
-		System.out.println(new CountingMapData(30));
-	}
+        @Override
+        public int hashCode() {
+            return Integer.valueOf(index).hashCode();
+        }
+    }
 
 }

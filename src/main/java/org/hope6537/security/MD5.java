@@ -27,16 +27,51 @@ public class MD5 {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
+    public String digestHexStr;
     private long[] state = new long[4];  // state (ABCD)
     private long[] count = new long[2];  // number of bits, modulo 2^64 (lsb first)
     private byte[] buffer = new byte[64]; // input buffer
-
-
-    public String digestHexStr;
-
     private byte[] digest = new byte[16];
 
+
+    public MD5() {
+        md5Init();
+
+        return;
+    }
+
+    public static long b2iu(byte b) {
+        return b < 0 ? b & 0x7F + 128 : b;
+    }
+
+    public static String byteHEX(byte ib) {
+        char[] Digit = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F'};
+        char[] ob = new char[2];
+        ob[0] = Digit[(ib >>> 4) & 0X0F];
+        ob[1] = Digit[ib & 0X0F];
+        String s = new String(ob);
+        return s;
+    }
+
+    public static void main(String args[]) {
+
+        MD5 m = new MD5();
+
+        if (Array.getLength(args) == 0) {
+
+            System.out.println("MD5 Test suite:");
+            System.out.println("MD5(\"\"):" + m.getMD5ofStr(""));
+            System.out.println("MD5(\"a\"):" + m.getMD5ofStr("a"));
+            System.out.println("MD5(\"abc\"):" + m.getMD5ofStr("abc"));
+            System.out.println("MD5(\"message digest\"):" + m.getMD5ofStr("message digest"));
+            System.out.println("MD5(\"abcdefghijklmnopqrstuvwxyz\"):" +
+                    m.getMD5ofStr("abcdefghijklmnopqrstuvwxyz"));
+            System.out.println("MD5(\"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"):" +
+                    m.getMD5ofStr("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
+        } else
+            System.out.println("MD5(" + args[0] + ")=" + m.getMD5ofStr(args[0]));
+    }
 
     public String getMD5ofStr(String inbuf) {
         md5Init();
@@ -50,13 +85,6 @@ public class MD5 {
 
     }
 
-    public MD5() {
-        md5Init();
-
-        return;
-    }
-
-
     private void md5Init() {
         count[0] = 0L;
         count[1] = 0L;
@@ -69,7 +97,6 @@ public class MD5 {
 
         return;
     }
-
 
     private long F(long x, long y, long z) {
         return (x & y) | ((~x) & z);
@@ -88,7 +115,6 @@ public class MD5 {
     private long I(long x, long y, long z) {
         return y ^ (x | (~z));
     }
-
 
     private long FF(long a, long b, long c, long d, long x, long s,
                     long ac) {
@@ -156,7 +182,6 @@ public class MD5 {
 
     }
 
-
     private void md5Final() {
         byte[] bits = new byte[8];
         int index, padLen;
@@ -177,7 +202,6 @@ public class MD5 {
 
     }
 
-
     private void md5Memcpy(byte[] output, byte[] input,
                            int outpos, int inpos, int len) {
         int i;
@@ -185,7 +209,6 @@ public class MD5 {
         for (i = 0; i < len; i++)
             output[outpos + i] = input[inpos + i];
     }
-
 
     private void md5Transform(byte block[]) {
         long a = state[0], b = state[1], c = state[2], d = state[3];
@@ -272,7 +295,6 @@ public class MD5 {
 
     }
 
-
     private void Encode(byte[] output, long[] input, int len) {
         int i, j;
 
@@ -283,7 +305,6 @@ public class MD5 {
             output[j + 3] = (byte) ((input[i] >>> 24) & 0xffL);
         }
     }
-
 
     private void Decode(long[] output, byte[] input, int len) {
         int i, j;
@@ -296,41 +317,6 @@ public class MD5 {
                     (b2iu(input[j + 3]) << 24);
 
         return;
-    }
-
-
-    public static long b2iu(byte b) {
-        return b < 0 ? b & 0x7F + 128 : b;
-    }
-
-
-    public static String byteHEX(byte ib) {
-        char[] Digit = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                'A', 'B', 'C', 'D', 'E', 'F'};
-        char[] ob = new char[2];
-        ob[0] = Digit[(ib >>> 4) & 0X0F];
-        ob[1] = Digit[ib & 0X0F];
-        String s = new String(ob);
-        return s;
-    }
-
-    public static void main(String args[]) {
-
-        MD5 m = new MD5();
-
-        if (Array.getLength(args) == 0) {
-
-            System.out.println("MD5 Test suite:");
-            System.out.println("MD5(\"\"):" + m.getMD5ofStr(""));
-            System.out.println("MD5(\"a\"):" + m.getMD5ofStr("a"));
-            System.out.println("MD5(\"abc\"):" + m.getMD5ofStr("abc"));
-            System.out.println("MD5(\"message digest\"):" + m.getMD5ofStr("message digest"));
-            System.out.println("MD5(\"abcdefghijklmnopqrstuvwxyz\"):" +
-                    m.getMD5ofStr("abcdefghijklmnopqrstuvwxyz"));
-            System.out.println("MD5(\"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\"):" +
-                    m.getMD5ofStr("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"));
-        } else
-            System.out.println("MD5(" + args[0] + ")=" + m.getMD5ofStr(args[0]));
     }
 
 }

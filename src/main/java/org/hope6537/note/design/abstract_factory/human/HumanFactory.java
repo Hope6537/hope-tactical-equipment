@@ -1,6 +1,6 @@
 package org.hope6537.note.design.abstract_factory.human;
 
-/** 
+/**
  * <p>
  * 抽象工厂模式使用的场景:<br/>
  * 一个对象族都拥有相同的约束
@@ -13,16 +13,17 @@ package org.hope6537.note.design.abstract_factory.human;
  * <p>Using: </p>
  * <p>DevelopedTime: 2014年9月10日下午2:25:55</p>
  * <p>Company: ChangChun Unviersity JiChuang Team</p>
+ *
  * @author Hope6537
  * @version 1.0
  * @see
  */
 public interface HumanFactory {
 
-	public Human createYellowHuman();
+    public Human createYellowHuman();
 
-	public Human createWhiteHuman();
+    public Human createWhiteHuman();
 
-	public Human createBlackHuman();
+    public Human createBlackHuman();
 
 }

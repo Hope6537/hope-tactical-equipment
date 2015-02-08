@@ -23,8 +23,8 @@ class Slush extends Snow {
 
 public class eleven_three_test {
 
-	public static void main(String[] args) {
-		List<Snow> list = Arrays.<Snow> asList(new Light(), new Heavy());
-	}
+    public static void main(String[] args) {
+        List<Snow> list = Arrays.<Snow>asList(new Light(), new Heavy());
+    }
 
 }

@@ -6,19 +6,19 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 
 public class FileOutputShortcut {
-	static String file = "D:\\FileOutputShortcut.out";
-	static String path = "E:\\(WorkSpace04)GitHub\\Project_00_Learning\\Project_0_Learning\\src\\org\\hope6537\\thinking_in_java\\eighteen\\FileOutputShortcut.java";
+    static String file = "D:\\FileOutputShortcut.out";
+    static String path = "E:\\(WorkSpace04)GitHub\\Project_00_Learning\\Project_0_Learning\\src\\org\\hope6537\\thinking_in_java\\eighteen\\FileOutputShortcut.java";
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader in = new BufferedReader(new StringReader(
-				BufferedInputFile.read(path)));
-		PrintWriter out = new PrintWriter(file);
-		int linecount = 1;
-		String s;
-		while ((s = in.readLine()) != null) {
-			out.println(linecount++ + ": " + s);
-		}
-		out.close();
-		System.out.println(BufferedInputFile.read(file));
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new StringReader(
+                BufferedInputFile.read(path)));
+        PrintWriter out = new PrintWriter(file);
+        int linecount = 1;
+        String s;
+        while ((s = in.readLine()) != null) {
+            out.println(linecount++ + ": " + s);
+        }
+        out.close();
+        System.out.println(BufferedInputFile.read(file));
+    }
 }

@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
-	http://www.springframework.org/schema/context 
-	http://www.springframework.org/schema/context/spring-context-4.1.xsd
-	http://www.springframework.org/schema/aop 
-	http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
-	http://www.springframework.org/schema/tx
-	http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+<beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
     <!--<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
     &lt;!&ndash; SessionFactory使用自定义数据源 必须使用自定义的数据源 在这里dataSource定义了之后就没有必要使用Hibernate的配置文件定义了 &ndash;&gt;
     <context:property-placeholder location="classpath:config.properties"/>
@@ -52,30 +44,30 @@
     </bean>-->
 
     <!--  配置hibernate SessionFactory-->
-   <!-- <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="current_session_context_class">thread</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-            </props>
-        </property>
-        <property name="configLocations">
-            <list>
-                <value>
-                    classpath*:hibernate/hibernate.cfg.xml
-                </value>
-            </list>
-        </property>
-    </bean>
-    <bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory">
-            <ref bean="sessionFactory"/>
-        </property>
-    </bean>-->
+    <!-- <bean id="sessionFactory"
+           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+         <property name="dataSource" ref="dataSource"/>
+         <property name="hibernateProperties">
+             <props>
+                 <prop key="current_session_context_class">thread</prop>
+                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                 <prop key="hibernate.hbm2ddl.auto">update</prop>
+             </props>
+         </property>
+         <property name="configLocations">
+             <list>
+                 <value>
+                     classpath*:hibernate/hibernate.cfg.xml
+                 </value>
+             </list>
+         </property>
+     </bean>
+     <bean id="transactionManager"
+           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+         <property name="sessionFactory">
+             <ref bean="sessionFactory"/>
+         </property>
+     </bean>-->
     <!--<aop:config>
         <aop:pointcut
                 expression="execution(* org.jichuang.hope6537.*.service.impl.*.*(..))"

@@ -21,6 +21,26 @@ import java.util.Arrays;
 public class SumDriver {
 
 
+    public static void main(String[] args) throws Exception {
+        Configuration configuration = new Configuration();
+        Job job = Job.getInstance(configuration);
+        job.setJarByClass(SumMapper.class);
+        job.setMapperClass(SumMapper.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(SortBean.class);
+        FileInputFormat.setInputPaths(job, new Path(args[0]));
+
+        job.setReducerClass(SumReducer.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(SortBean.class);
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        job.waitForCompletion(true);
+
+        //SortDrvier.main(new String[]{args[1], args[2]});
+
+    }
+
     public static class SumMapper extends Mapper<LongWritable, Text, Text, SortBean> {
 
         private SortBean sortBean = new SortBean();
@@ -79,26 +99,6 @@ public class SumDriver {
 
 
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        Configuration configuration = new Configuration();
-        Job job = Job.getInstance(configuration);
-        job.setJarByClass(SumMapper.class);
-        job.setMapperClass(SumMapper.class);
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(SortBean.class);
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
-
-        job.setReducerClass(SumReducer.class);
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(SortBean.class);
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
-
-        job.waitForCompletion(true);
-
-        //SortDrvier.main(new String[]{args[1], args[2]});
-
     }
 
 

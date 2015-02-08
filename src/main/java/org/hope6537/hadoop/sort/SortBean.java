@@ -22,9 +22,16 @@ public class SortBean implements WritableComparable<SortBean> {
 
     private String theDate;
 
-    @Override
-    public String toString() {
-        return username + "\t" + getTheIncreaseNumber() + "\t" + getTheDecreaseNumber() + "\t" + getTheBenefitNumber() + "\t" + getTheDate();
+    public SortBean() {
+
+    }
+
+    public SortBean(String username, Long theIncreaseNumber, Long theDecreaseNumber, String theDate) {
+        this.username = username;
+        this.theIncreaseNumber = theIncreaseNumber;
+        this.theDecreaseNumber = theDecreaseNumber;
+        this.theBenefitNumber = this.theIncreaseNumber - this.theDecreaseNumber;
+        this.theDate = theDate;
     }
 
     public static void setBeanData(SortBean sortBean, String username, Long theIncreaseNumber, Long theDecreaseNumber, String theDate) {
@@ -33,6 +40,11 @@ public class SortBean implements WritableComparable<SortBean> {
         sortBean.theDecreaseNumber = theDecreaseNumber;
         sortBean.theBenefitNumber = sortBean.theIncreaseNumber - sortBean.theDecreaseNumber;
         sortBean.theDate = theDate;
+    }
+
+    @Override
+    public String toString() {
+        return username + "\t" + getTheIncreaseNumber() + "\t" + getTheDecreaseNumber() + "\t" + getTheBenefitNumber() + "\t" + getTheDate();
     }
 
     public String getTheDate() {
@@ -73,19 +85,6 @@ public class SortBean implements WritableComparable<SortBean> {
 
     public void setTheBenefitNumber(Long theBenefitNumber) {
         this.theBenefitNumber = theBenefitNumber;
-    }
-
-
-    public SortBean() {
-
-    }
-
-    public SortBean(String username, Long theIncreaseNumber, Long theDecreaseNumber, String theDate) {
-        this.username = username;
-        this.theIncreaseNumber = theIncreaseNumber;
-        this.theDecreaseNumber = theDecreaseNumber;
-        this.theBenefitNumber = this.theIncreaseNumber - this.theDecreaseNumber;
-        this.theDate = theDate;
     }
 
     /**

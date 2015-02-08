@@ -6,6 +6,7 @@ import org.hibernate.tool.hbm2ddl.SchemaExport;
 
 /**
  * Hibernate框架初始化
+ *
  * @author ：赵鹏
  * @since ：2013-10-26下午08:54:37
  */

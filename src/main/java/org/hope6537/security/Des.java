@@ -25,6 +25,14 @@ public class Des {
         this.strDefaultKey = strDefaultKey;
     }
 
+    public static void main(String[] args) {
+        Des des = new Des();
+        String e = "";
+        String d;
+        d = des.encrypt(e);
+        System.out.println(d);
+    }
+
     /**
      * 将byte数组转换为表示16进制值的字符串， 如：byte[]{8,18}转换为：0813， 和public  byte[]
      * hexStr2ByteArr(String strIn) 互为可逆的转换过程
@@ -71,7 +79,6 @@ public class Des {
         }
         return arrOut;
     }
-
 
     /**
      * 加密字节数组
@@ -150,14 +157,6 @@ public class Des {
         // 生成密钥
 
         return new javax.crypto.spec.SecretKeySpec(arrB, "DES");
-    }
-
-    public static void main(String[] args) {
-        Des des = new Des();
-        String e = "";
-        String d;
-        d = des.encrypt(e);
-        System.out.println(d);
     }
 }
 

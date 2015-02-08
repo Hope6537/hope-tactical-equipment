@@ -6,29 +6,29 @@ import java.util.concurrent.TimeUnit;
 
 public class SleepingTask extends LiftOff {
 
-	@Override
-	public void run() {
-		try {
-			while (countDown-- > 0) {
-				System.out.println(status());
-				// 老版休眠
-				// Thread.sleep(100);
-				// 正是这段休眠的事件所以使得事件能够有序的进行
-				TimeUnit.MILLISECONDS.sleep(100);
-			}
-		} catch (Exception e) {
-			// 异常无法跨线程传递 所以需要各个单位自己解决
-			System.out.println("Crashed!");
-		}
-	}
+    public static void main(String[] args) {
+        ExecutorService exec = Executors.newCachedThreadPool();
+        for (int i = 0; i < 5; i++) {
+            exec.execute(new SleepingTask());
+        }
+        exec.shutdown();
+    }
 
-	public static void main(String[] args) {
-		ExecutorService exec = Executors.newCachedThreadPool();
-		for (int i = 0; i < 5; i++) {
-			exec.execute(new SleepingTask());
-		}
-		exec.shutdown();
-	}
+    @Override
+    public void run() {
+        try {
+            while (countDown-- > 0) {
+                System.out.println(status());
+                // 老版休眠
+                // Thread.sleep(100);
+                // 正是这段休眠的事件所以使得事件能够有序的进行
+                TimeUnit.MILLISECONDS.sleep(100);
+            }
+        } catch (Exception e) {
+            // 异常无法跨线程传递 所以需要各个单位自己解决
+            System.out.println("Crashed!");
+        }
+    }
 }
 /*
  * #0(9) #2(9) #4(9) #3(9) #1(9) #4(8) #1(8) #3(8) #2(8) #0(8) #3(7) #0(7) #4(7)

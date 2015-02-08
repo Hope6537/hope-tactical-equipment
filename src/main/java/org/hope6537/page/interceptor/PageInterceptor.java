@@ -39,10 +39,9 @@ import java.util.Properties;
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class})})
 public class PageInterceptor implements Interceptor {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
-
     private static String dialect = "";    //数据库方言
     private static String pageSqlId = ""; //mapper.xml中需要拦截的ID(正则匹配)
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Object intercept(Invocation ivk) throws Throwable {
         if (ivk.getTarget() instanceof RoutingStatementHandler) {

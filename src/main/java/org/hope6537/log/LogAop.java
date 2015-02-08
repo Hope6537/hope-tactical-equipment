@@ -22,6 +22,26 @@ public class LogAop {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * 获取请求的ip地址
+     *
+     * @param request
+     * @return 解析后的ip地址
+     */
+    public static String getIp(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
+
     //切入点
     @Pointcut("execution(* com.threegrand..*.*Controller.*(..))")
     public void aspect() {
@@ -30,7 +50,7 @@ public class LogAop {
     @AfterReturning(value = "aspect()", returning = "returnValue")
     public void afterReturning(JoinPoint jp, Object returnValue) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        if(request.getRequestURI().contains(".jsp")){
+        if (request.getRequestURI().contains(".jsp")) {
             return;
         }
         Subject user = SecurityUtils.getSubject();
@@ -54,26 +74,6 @@ public class LogAop {
             logger.info("save log {loginName: {}, uri: {}}, ", user.getPrincipal(), log.getRequestUri());
 
         }
-    }
-
-    /**
-     * 获取请求的ip地址
-     *
-     * @param request
-     * @return 解析后的ip地址
-     */
-    public static String getIp(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
     }
 
 }

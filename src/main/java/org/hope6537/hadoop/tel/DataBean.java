@@ -16,6 +16,24 @@ public class DataBean implements Writable {
     private Long downloadData;
     private Long totalData;
 
+    public DataBean() {
+
+    }
+
+    public DataBean(String telNum, String uploadData, String downloadData) {
+        this.telNum = telNum;
+        this.uploadData = Long.parseLong(uploadData);
+        this.downloadData = Long.parseLong(downloadData);
+        this.totalData = this.uploadData + this.downloadData;
+    }
+
+    public DataBean(String telNum, Long uploadData, Long downloadData) {
+        this.telNum = telNum;
+        this.uploadData = uploadData;
+        this.downloadData = downloadData;
+        this.totalData = downloadData + uploadData;
+    }
+
     public String getTelNum() {
         return telNum;
     }
@@ -46,24 +64,6 @@ public class DataBean implements Writable {
 
     public void setTotalData(Long totalData) {
         this.totalData = totalData;
-    }
-
-    public DataBean() {
-
-    }
-
-    public DataBean(String telNum, String uploadData, String downloadData) {
-        this.telNum = telNum;
-        this.uploadData = Long.parseLong(uploadData);
-        this.downloadData = Long.parseLong(downloadData);
-        this.totalData = this.uploadData + this.downloadData;
-    }
-
-    public DataBean(String telNum, Long uploadData, Long downloadData) {
-        this.telNum = telNum;
-        this.uploadData = uploadData;
-        this.downloadData = downloadData;
-        this.totalData = downloadData + uploadData;
     }
 
     @Override

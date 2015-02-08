@@ -21,10 +21,33 @@ import java.io.IOException;
 
 /**
  * <name>mapred.child.java.opts</name>
-   <value>-Xmx200m -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=16888</value>
+ * <value>-Xmx200m -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=16888</value>
  */
 public class SortDriver {
 
+
+    public static void main(String[] args) {
+
+        try {
+            Configuration configuration = new Configuration();
+            Job job = Job.getInstance(configuration);
+            job.setJarByClass(SortDriver.class);
+            job.setMapperClass(SortMapper.class);
+            job.setMapOutputKeyClass(SortBean.class);
+            job.setMapOutputValueClass(NullWritable.class);
+            FileInputFormat.setInputPaths(job, new Path(args[0]));
+
+            job.setReducerClass(SortReducer.class);
+            job.setOutputKeyClass(Text.class);
+            job.setOutputValueClass(SortBean.class);
+            FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+            job.waitForCompletion(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public static class SortMapper extends Mapper<LongWritable, Text, SortBean, NullWritable> {
 
@@ -56,30 +79,6 @@ public class SortDriver {
             text.set(username);
             context.write(text, key);
         }
-    }
-
-
-    public static void main(String[] args) {
-
-        try {
-            Configuration configuration = new Configuration();
-            Job job = Job.getInstance(configuration);
-            job.setJarByClass(SortDriver.class);
-            job.setMapperClass(SortMapper.class);
-            job.setMapOutputKeyClass(SortBean.class);
-            job.setMapOutputValueClass(NullWritable.class);
-            FileInputFormat.setInputPaths(job, new Path(args[0]));
-
-            job.setReducerClass(SortReducer.class);
-            job.setOutputKeyClass(Text.class);
-            job.setOutputValueClass(SortBean.class);
-            FileOutputFormat.setOutputPath(job, new Path(args[1]));
-
-            job.waitForCompletion(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
 }

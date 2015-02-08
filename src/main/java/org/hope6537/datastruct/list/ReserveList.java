@@ -4,9 +4,8 @@ import java.util.LinkedList;
 
 public class ReserveList {
 
-    LinkedList<Integer> l = new LinkedList<Integer>();
-
     static int[] a1 = {1, 2, 3, 4, 5};
+    LinkedList<Integer> l = new LinkedList<Integer>();
 
     public static void reserve() {
 

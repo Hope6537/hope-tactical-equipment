@@ -20,12 +20,29 @@ import java.io.IOException;
  */
 public class LuceneService {
 
+    private static final String DIRECTORY_PATH = "./luceneIndex";
+    private static final Version DEFAULT_VERSION = Version.LUCENE_41;
     private FSDirectory dir = null;
     private Analyzer analyzer = null;
     private IndexWriter indexWriter = null;
     private IndexReader indexReader = null;
-    private static final String DIRECTORY_PATH = "./luceneIndex";
-    private static final Version DEFAULT_VERSION = Version.LUCENE_41;
+
+    public LuceneService() {
+        this(DIRECTORY_PATH);
+    }
+
+    public LuceneService(String directoryPath) {
+        try {
+            File indexFiles = new File(directoryPath);
+            // 索引文件的保存位置
+            dir = FSDirectory.open(indexFiles);
+            // 分析器
+            analyzer = new SimpleAnalyzer(DEFAULT_VERSION);
+            // 配置类
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public IndexWriter getIndexWriter() throws IOException {
         if (indexWriter == null) {
@@ -43,23 +60,6 @@ public class LuceneService {
 
     public Analyzer getAnalyzer() {
         return analyzer;
-    }
-
-    public LuceneService() {
-        this(DIRECTORY_PATH);
-    }
-
-    public LuceneService(String directoryPath) {
-        try {
-            File indexFiles = new File(directoryPath);
-            // 索引文件的保存位置
-            dir = FSDirectory.open(indexFiles);
-            // 分析器
-            analyzer = new SimpleAnalyzer(DEFAULT_VERSION);
-            // 配置类
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     protected void initWriter() throws IOException {

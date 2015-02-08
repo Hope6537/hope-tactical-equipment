@@ -18,11 +18,11 @@ public class PicaLuceneUtil {
  
     */
 /**
-     * 对象转换索引
-     *
-     * @param law 要转换的对象
-     * @return 返回转换完毕的Document
-     *//*
+ * 对象转换索引
+ *
+ * @param law 要转换的对象
+ * @return 返回转换完毕的Document
+ *//*
 
     public static Document law2Document(Law law) {
         Document document = new Document();
@@ -37,12 +37,12 @@ public class PicaLuceneUtil {
  
     */
 /**
-     * 索引转换对象
-     * 注意 该对象只有lawId title和content字段
-     *
-     * @param document 要还原的装载着law的document对象
-     * @return 返回由Document封装好的Law对象
-     *//*
+ * 索引转换对象
+ * 注意 该对象只有lawId title和content字段
+ *
+ * @param document 要还原的装载着law的document对象
+ * @return 返回由Document封装好的Law对象
+ *//*
 
     public static Law document2Law(Document document) {
         Law law = new Law();

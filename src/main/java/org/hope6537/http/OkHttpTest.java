@@ -10,6 +10,9 @@ import java.io.IOException;
  */
 public class OkHttpTest {
 
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+
     @Test
     public void testGet() throws IOException {
 
@@ -34,9 +37,6 @@ public class OkHttpTest {
         Response response = okHttpClient.newCall(request).execute();
         return response.body().string();
     }
-
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
 
     private String post() throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();

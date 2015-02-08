@@ -33,6 +33,51 @@ import java.util.List;
 
 public class InverseIndexDriver {
 
+    public static void main(String[] args) {
+
+        Configuration configuration = new Configuration();
+
+        Job countJob = null;
+        Job indexJob = null;
+
+        try {
+            countJob = Job.getInstance(configuration);
+            indexJob = Job.getInstance(configuration);
+
+            countJob.setJarByClass(InverseIndexDriver.class);
+            indexJob.setJarByClass(InverseIndexDriver.class);
+
+            countJob.setMapperClass(CountMapper.class);
+            countJob.setMapOutputKeyClass(Text.class);
+            countJob.setMapOutputValueClass(LongWritable.class);
+            FileInputFormat.setInputPaths(countJob, new Path(args[0]));
+
+            countJob.setReducerClass(CountReducer.class);
+            countJob.setOutputKeyClass(Text.class);
+            countJob.setOutputKeyClass(LongWritable.class);
+            FileOutputFormat.setOutputPath(countJob, new Path(args[1]));
+
+            indexJob.setMapperClass(IndexMapper.class);
+            indexJob.setMapOutputKeyClass(Text.class);
+            indexJob.setMapOutputValueClass(Text.class);
+            FileInputFormat.setInputPaths(indexJob, new Path(args[1]));
+
+            indexJob.setReducerClass(IndexReducer.class);
+            indexJob.setOutputKeyClass(Text.class);
+            indexJob.setOutputValueClass(Text.class);
+            FileOutputFormat.setOutputPath(indexJob, new Path(args[2]));
+
+            boolean res = countJob.waitForCompletion(true);
+            if (res) {
+                indexJob.waitForCompletion(true);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * 1、计数Mapper
      * Hello-->a.txt 1
@@ -69,7 +114,6 @@ public class InverseIndexDriver {
             }
         }
     }
-
 
     /**
      * 2、计数Reducer
@@ -132,50 +176,5 @@ public class InverseIndexDriver {
             }
             context.write(key, new Text(valueList.toString()));
         }
-    }
-
-    public static void main(String[] args) {
-
-        Configuration configuration = new Configuration();
-
-        Job countJob = null;
-        Job indexJob = null;
-
-        try {
-            countJob = Job.getInstance(configuration);
-            indexJob = Job.getInstance(configuration);
-
-            countJob.setJarByClass(InverseIndexDriver.class);
-            indexJob.setJarByClass(InverseIndexDriver.class);
-
-            countJob.setMapperClass(CountMapper.class);
-            countJob.setMapOutputKeyClass(Text.class);
-            countJob.setMapOutputValueClass(LongWritable.class);
-            FileInputFormat.setInputPaths(countJob, new Path(args[0]));
-
-            countJob.setReducerClass(CountReducer.class);
-            countJob.setOutputKeyClass(Text.class);
-            countJob.setOutputKeyClass(LongWritable.class);
-            FileOutputFormat.setOutputPath(countJob, new Path(args[1]));
-
-            indexJob.setMapperClass(IndexMapper.class);
-            indexJob.setMapOutputKeyClass(Text.class);
-            indexJob.setMapOutputValueClass(Text.class);
-            FileInputFormat.setInputPaths(indexJob, new Path(args[1]));
-
-            indexJob.setReducerClass(IndexReducer.class);
-            indexJob.setOutputKeyClass(Text.class);
-            indexJob.setOutputValueClass(Text.class);
-            FileOutputFormat.setOutputPath(indexJob, new Path(args[2]));
-
-            boolean res = countJob.waitForCompletion(true);
-            if (res) {
-                indexJob.waitForCompletion(true);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 }
