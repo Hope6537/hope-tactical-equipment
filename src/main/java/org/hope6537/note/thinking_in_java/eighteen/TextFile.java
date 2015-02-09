@@ -56,37 +56,6 @@ public class TextFile extends ArrayList<String> {
         return sBuilder.toString();
     }
 
-    /**
-     * <p>Describe: 将字符串写入文件</p>
-     * <p>Using: 用于I/O写操作</p>
-     * <p>How To Work: 使用PrintWriter进行write操作，当然需要刷新和关闭流</p>
-     * <p>DevelopedTime: 2014年7月24日上午10:20:46</p>
-     * <p>Author:Hope6537</p>
-     *
-     * @param filename 目标文件的绝对路径
-     * @param text     要写入的文本
-     * @return status 标记写入文件的状态
-     * @see java.util.Scanner
-     */
-    public static boolean write(String filename, String text) {
-        boolean status = true;
-        try {
-            // 标准输出流
-            PrintWriter out = new PrintWriter(
-                    new File(filename).getAbsoluteFile());
-            try {
-                // 逐个字符串写入
-                out.write(text);
-            } finally {
-                out.close();
-            }
-        } catch (IOException e) {
-            status = false;
-            System.out.println("===写入文件失败===");
-            e.printStackTrace();
-        }
-        return status;
-    }
 
     /**
      * <p>Describe: 直接获取文件和分隔符。形成可读的ArrayList<p>
@@ -142,7 +111,9 @@ public class TextFile extends ArrayList<String> {
             e.printStackTrace();
         }
         return status;
-    }    /**
+    }
+
+    /**
      * <p>Describe: 默认构造方法 <p>
      */
     public TextFile() {

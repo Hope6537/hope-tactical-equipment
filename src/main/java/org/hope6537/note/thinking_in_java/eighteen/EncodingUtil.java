@@ -23,7 +23,7 @@ public class EncodingUtil {
     public static void run(String directoryPath, String targetPath) {
 
         try {
-            TreeInfo tree = walk(directoryPath);
+            FileTreeInfo tree = walk(directoryPath);
             List<File> fileList = tree.files;
             for (File file : fileList) {
                 GBKtoUTF(file.getAbsolutePath(), targetPath);
@@ -83,7 +83,7 @@ public class EncodingUtil {
          * @param other
          * @see
          */
-        void addAll(TreeInfo other) {
+        void addAll(FileTreeInfo other) {
             files.addAll(other.files);
             dirs.addAll(other.dirs);
         }
@@ -102,8 +102,8 @@ public class EncodingUtil {
      * @return
      * @see
      */
-    static TreeInfo recurseDirs(File startDir, String regex) {
-        TreeInfo result = new TreeInfo();
+    static FileTreeInfo recurseDirs(File startDir, String regex) {
+        FileTreeInfo result = new FileTreeInfo();
         // 对startDir出的list出来的目录进行遍历
         for (File item : startDir.listFiles()) {
             if (item.isDirectory()) {
@@ -122,7 +122,7 @@ public class EncodingUtil {
         return result;
     }
 
-    public static TreeInfo walk(String start) {
+    public static FileTreeInfo walk(String start) {
         return recurseDirs(new File(start), ".*");
     }
 
@@ -219,7 +219,7 @@ public class EncodingUtil {
      * @version 1.0
      * @see
      */
-    public static class TreeInfo implements Iterable<File> {
+    public static class FileTreeInfo implements Iterable<File> {
         /**
          * Describe: 该List保存文件
          */
@@ -247,7 +247,7 @@ public class EncodingUtil {
          * @param other
          * @see
          */
-        void addAll(TreeInfo other) {
+        void addAll(FileTreeInfo other) {
             files.addAll(other.files);
             dirs.addAll(other.dirs);
         }

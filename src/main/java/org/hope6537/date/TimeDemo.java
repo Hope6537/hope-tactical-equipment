@@ -1,7 +1,5 @@
 package org.hope6537.date;
 
-import org.apache.log4j.Logger;
-
 public class TimeDemo {
 
     private Long start;
@@ -14,6 +12,11 @@ public class TimeDemo {
     public Double end() {
         end = System.currentTimeMillis();
         return (end - start * 1.0 / 1000);
+    }
+
+
+    public void showEndTime(String timeStap) {
+        System.out.println(endTime(timeStap));
     }
 
     public String endTime(String timeStap) {
@@ -46,7 +49,7 @@ public class TimeDemo {
                 localTimeStap = ChineseTimeString.YEAR;
                 break;
             default:
-                Logger.getLogger(getClass()).info("no element use second");
+                System.err.println("no element use second");
                 break;
         }
         return localTime + localTimeStap;

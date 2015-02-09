@@ -14,15 +14,15 @@ public interface DataBaseInterface {
     /**
      * <p>Describe: URL</p>
      */
-    public static final String DBURL = "jdbc:mysql://localhost:3306/project_1_testing";
+    public static String DBURL = "jdbc:mysql://localhost:3306/project_1_testing";
     /**
      * <p>Describe: 用户名</p>
      */
-    public static final String DBUSER = "root";
+    public static String DBUSER = "root";
     /**
      * <p>Describe: 密码</p>
      */
-    public static final String DBPASS = "root";
+    public static String DBPASS = "root";
 
     /**
      * <p>Describe: 获取到连接 </p>
