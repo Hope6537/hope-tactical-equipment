@@ -7,6 +7,6 @@ public class HadoopConstants {
 
     public static final String HDFS = "HDFS";
     public static final String HBASE = "Hbase";
-
+    public static final String HIVE = "Hive";
 
 }
