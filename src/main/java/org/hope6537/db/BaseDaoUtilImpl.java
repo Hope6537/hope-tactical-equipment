@@ -1,5 +1,7 @@
 package org.hope6537.db;
 
+import org.hope6537.context.ApplicationConstant;
+
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -68,6 +70,9 @@ public class BaseDaoUtilImpl<T> implements BaseDaoUtil<T> {
      */
     static ResultSet rs = null;
 
+
+    private String status = ApplicationConstant.STATUS_DIE;
+
     static {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -79,6 +84,7 @@ public class BaseDaoUtilImpl<T> implements BaseDaoUtil<T> {
 
     protected BaseDaoUtilImpl() {
         conn = getConnections();
+        status = ApplicationConstant.STATUS_NORMAL;
     }
 
     public Connection getConnections() {
@@ -173,12 +179,99 @@ public class BaseDaoUtilImpl<T> implements BaseDaoUtil<T> {
                 }
             }
             result = pstmt.executeUpdate();
-
+            closeStmts();
         } catch (Exception e) {
             e.printStackTrace();
 
         }
         return result;
+    }
+
+    public boolean saveMultiByPrepared(List<T> list) {
+        return this.saveMultiByPrepared(list, list.size() - 1);
+    }
+
+
+    /**
+     * 首先获取类的关系，其次查询出第一主键，接着依次加1
+     * insert into table (fields) values (?,?,?) , (?,?,?)
+     */
+    public boolean saveMultiByPrepared(List<T> list, int saveTimes) {
+        int result = 0;
+        boolean gotId = false;
+        int entryId = 0;
+        try {
+            // 这里使用了类反射机制
+            List<String> params = new ArrayList<String>();
+            ParameterizedType type = (ParameterizedType) this.getClass()
+                    .getGenericSuperclass();
+            Class<?> clz = (Class<?>) type.getActualTypeArguments()[0];
+            StringBuilder sql = new StringBuilder()
+                    .append("insert into ")
+                    .append(clz.getSimpleName())
+                    .append(" values (?");
+            Field[] fields = clz.getDeclaredFields();
+
+            int startIndex = ApplicationConstant.EFFECTIVE_LINE_ZERO;
+            int endIndex = Math.min(startIndex + saveTimes, list.size() - 1);
+
+            //假设是存在10 3
+            //0 2 -> 3 5 -> 6 8 -> 9 9
+            for (; endIndex < list.size(); startIndex = endIndex, endIndex = Math.min(startIndex + saveTimes, list.size() - 1)) {
+                for (int i = startIndex; i <= endIndex; i++) {
+                    T obj = list.get(i);
+                    for (Field field : fields) {
+                        if (field.getName().contains("serialVersionUID")) {
+                            continue;
+                        }
+                        if (field.getName().contains("id") && !field.getName().contains("_id")) {
+                            if (!gotId) {
+                                String idSql = "select max(" + field.getName()
+                                        + ") as i from " + clz.getSimpleName();
+                                ArrayList<Map<String, String>> map = this.query(idSql);
+                                int id = 0;
+                                try {
+                                    id = (Integer.parseInt(map.get(0).get("i")));
+                                } catch (NumberFormatException e) {
+                                    System.out.println("First Data In");
+                                    id = 0;
+                                }
+                                gotId = true;
+                                params.add(++id + "");
+                                entryId = id;
+                                continue;
+                            } else {
+                                params.add(++entryId + "");
+                                continue;
+                            }
+
+                        }
+                        PropertyDescriptor pd = new PropertyDescriptor(field.getName(),
+                                clz);
+                        Method getMethod = pd.getReadMethod();
+                        getMethod.setAccessible(true);
+                        Object value = getMethod.invoke(obj);
+                        sql.append(",?");
+                        params.add(value.toString());
+                    }
+                    sql.append(i < list.size() - 1 ? ")," : ")");
+                }
+                pstmt = conn.prepareStatement(sql.toString());
+                // 占位符的第一个位置
+                int index = 1;
+                if (ApplicationConstant.notNull(params)) {
+                    for (String item : params) {
+                        pstmt.setObject(index++, item);
+                    }
+                }
+                result += pstmt.executeUpdate();
+                this.closeStmts();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return result == list.size();
     }
 
     public int deleteByPrepared(T t) {
@@ -484,6 +577,9 @@ public class BaseDaoUtilImpl<T> implements BaseDaoUtil<T> {
             if (stmt != null) {
                 stmt.close();
             }
+            if (pstmt != null) {
+                pstmt.close();
+            }
             if (conn != null) {
                 conn.close();
             }
@@ -492,6 +588,23 @@ public class BaseDaoUtilImpl<T> implements BaseDaoUtil<T> {
             System.out.println("Error:Close Connection");
         }
 
+    }
+
+    public void closeStmts() {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (pstmt != null) {
+                pstmt.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error:Close Connection");
+        }
     }
 
 }
