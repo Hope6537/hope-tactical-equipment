@@ -1,0 +1,25 @@
+#log-daily.sh
+#first create table========
+#建立日志表
+#CREATE EXTERNAL TABLE logtable (ip string, logtime string, url string) PARTITIONED BY (logdate string) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' LOCATION '/cleaned';
+#first end ========
+CURRENT=`/bin/date +%Y-%m-%d -d "-1 days"`;
+LOGNAME=`/bin/date +access_%Y_%m_%d.log -d "-1 days"`;
+rm /home/hope6537/logs/*.COMPLETED
+cp $CATALINA_HOME/logs/$LOGNAME /home/hope6537/logs
+#执行数据刷洗
+hadoop jar /home/hope6537/hope6537-utils-1.1-RELEASE.jar org.hope6537.log.Cleaner /flume/$CURRENT /cleaned/$CURRENT
+#在分区表中添加新分区
+hive -e "alter table logtable add partition (logdate=$CURRENT) location '/cleaned/$CURRENT'"
+#第二种方法
+hive -e "load data inpath '/cleaned/$CURRENT'  into table logtable partition (logdate=$CURRENT)";
+#得到pv
+hive -e "select count(*) from logtable where logdate = $CURRENT"
+#得到uv
+hive -e "select count(distinct ip) from logtable where logdate = $CURRENT"
+#得到新注册用户
+select count(*) from logtable where logdate = $CURRENT and instr(url, 'JiChuang_OA/member/register.hopedo')>0;"
+#得到重点用户表
+create table vip_$CURRENT row format delimited fields terminated by '\t' as select ip, count(*) as vtimes from logtable where logdate = $CURRENT  group by ip having vtimes >= 50 order by vtimes desc limit 20
+#将重点用户导出到mysql
+sqoop export --connect jdbc:mysql://hadoop1:3306/hive_source --username root --password 4236537 --export-dir "/user/hive/warehouse/vip_$CURRENT" --table vip --fields-terminated-by '\t'
