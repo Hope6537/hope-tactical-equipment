@@ -15,7 +15,51 @@ import java.util.UUID;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Hope6537 on 2015/2/9.
+ * 目标数据产生器
+ * 下面为Shell脚本和待查询语句
+ * <p>
+ * zkServer.sh start * 3
+ * start-dfs.sh
+ * start-yarn.sh
+ * <p>
+ * hadoop fs -mkdir /hive-data
+ * <p>
+ * 导入mysql数据库
+ * <p>
+ * sqoop export --connect jdbc:mysql://hadoop1:3306/hive_source --username root --password **** --export-dir "/hive-data/account" --table account --fields-terminated-by '\t'
+ * <p>
+ * sqoop export --connect jdbc:mysql://hadoop1:3306/hive_source --username root --password **** --export-dir "/hive-data/trade" --table trade --fields-terminated-by '\t'
+ * <p>
+ * <p>
+ * mysql語句
+ * <p>
+ * GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '****' WITH GRANT OPTION
+ * =================MYSQL===========================
+ * SELECT a.username , t.income,t.expenses,t.leftCharge
+ * FROM account AS a
+ * JOIN (SELECT
+ * account_id ,SUM(income) income ,
+ * SUM(expenses) expenses , SUM(income - expenses) leftCharge
+ * FROM trade  GROUP BY account_id)
+ * AS t ON  t.account_id = a.account;
+ * <p>
+ * 创建兩个外部表用于装载数据
+ * <p>
+ * create external table account(id bigint, account string, username string) row format delimited fields terminated by '\t' location '/hive-data/account';
+ * <p>
+ * create external table trade(id bigint, account_id bigint, income double, expenses double, time string) row format delimited fields terminated by '\t' location '/hive-data/trade';
+ * <p>
+ * 然后创建查询，并将查询结果写入HDFS中
+ * <p>
+ * CURRENT=`/bin/date +%y%m%d`
+ * <p>
+ * 注意 create as 时候不允许创建外部表，所以下语句不可用
+ * <br/>
+ * #create external table result row format delimited fields terminated by '\t' location '/hive-data/result' as select a.username , t.income , t.expenses , t.leftCharge FROM account AS a JOIN (select account_id ,SUM(income) as income , SUM(expenses) as expenses , SUM(income - expenses) as leftCharge FROM trade GROUP BY account_id) AS t on (t.account_id = a.account);
+ * <p>
+ * 但是可以定义表的位置
+ * <br/>
+ * create table result row format delimited fields terminated by '\t' location '/hive-data/result' as select account_id ,SUM(income) as income , SUM(expenses) as expenses , SUM(income - expenses) as leftCharge FROM trade GROUP BY account_id;
  */
 public class DataInit {
 
