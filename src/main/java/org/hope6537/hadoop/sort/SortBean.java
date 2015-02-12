@@ -6,6 +6,7 @@ import org.hope6537.date.DateFormatCalculate;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Created by Hope6537 on 2015/2/1.
@@ -99,7 +100,7 @@ public class SortBean implements WritableComparable<SortBean> {
                 return this.theIncreaseNumber > o.theIncreaseNumber ? -1 : 1;
             }
         } else {
-            return (int) DateFormatCalculate.compareDateSeconds(this.getTheDate(), o.getTheDate());
+            return (int) DateFormatCalculate.calculateTimeZone(this.getTheDate(), o.getTheDate(), DateFormatCalculate.BASIC_DATE_FORMAT, ChronoUnit.SECONDS);
         }
     }
 
