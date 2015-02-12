@@ -9,6 +9,7 @@ import org.hope6537.date.DateFormatCalculate;
  */
 public class StationData {
 
+
     private String imsi;
 
     private String location;
@@ -37,7 +38,9 @@ public class StationData {
                 throw new CastException("没有指定类型", Flag.TYPEERROR);
             }
         } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
             throw new CastException("数组越界", Flag.INDEXOUT);
+
         } catch (Exception e) {
             throw new CastException("转换构建错误", Flag.CASTERROR);
         }

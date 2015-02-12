@@ -11,7 +11,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.hope6537.context.ApplicationConstant;
 import org.hope6537.date.DateFormatCalculate;
 
@@ -60,8 +59,6 @@ public class StationDriver {
         job.setOutputKeyClass(NullWritable.class);
         job.setOutputValueClass(Text.class);
 
-        job.setOutputFormatClass(TextOutputFormat.class);
-
         job.waitForCompletion(true);
 
         return job.isSuccessful();
@@ -85,10 +82,12 @@ public class StationDriver {
 
             FileSplit fileSplit = (FileSplit) context.getInputSplit();
             String fileName = fileSplit.getPath().getName();
-            if (fileName.startsWith("POS")) {
+            if (fileName.startsWith("pos")) {
                 stationDataType = StationDataType.POS;
-            } else {
+            } else if (fileName.startsWith("net")) {
                 stationDataType = StationDataType.NET;
+            } else {
+                context.getCounter("Exception", "NoneTypeFile").increment(1);
             }
         }
 
@@ -156,15 +155,18 @@ public class StationDriver {
 
 
             for (String mapKey : map.keySet()) {
-                StringBuilder stringBuilder = new StringBuilder()
-                        .append(user)
-                        .append("\t")
-                        .append(timeZone)
-                        .append("\t")
-                        .append(mapKey)
-                        .append("\t")
-                        .append(map.get(mapKey));
-                context.write(NullWritable.get(), new Text(stringBuilder.toString()));
+                if (!mapKey.equals("end")) {
+                    StringBuilder stringBuilder = new StringBuilder()
+                            .append(user)
+                            .append("\t")
+                            .append(timeZone)
+                            .append("\t")
+                            .append(mapKey)
+                            .append("\t")
+                            .append(map.get(mapKey));
+                    context.write(NullWritable.get(), new Text(stringBuilder.toString()));
+                }
+
             }
 
         }
@@ -178,7 +180,7 @@ public class StationDriver {
             while (entryIterator.hasNext()) {
                 nextUpload = entryIterator.next();
                 //得出停留时间
-                double diff = nextUpload.getKey() - upload.getKey() / 60;
+                double diff = (nextUpload.getKey() - upload.getKey()) / 60;
                 if (diff <= 60.0) {
                     if (resultMap.containsKey(upload.getValue())) {
                         resultMap.put(upload.getValue(), resultMap.get(upload.getValue()) + diff);

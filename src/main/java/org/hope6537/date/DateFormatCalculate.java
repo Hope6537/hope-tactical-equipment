@@ -27,6 +27,16 @@ public class DateFormatCalculate {
     public static final String BASIC_DATE_FORMAT = "yyyy-MM-dd";
     public static final String BASIC_TIME_FORMAT = "HH:mm:ss";
 
+
+    @Test
+    public void testCastCurrentTime() {
+
+        long time1 = castToCurrentTime("2015-02-12 01:16:46");
+        long time2 = castToCurrentTime("2015-02-12 01:25:14");
+        System.out.println(time2 - time1);
+    }
+
+
     @Test
     public void testCreate() {
         //System.out.println(createNowTime());
