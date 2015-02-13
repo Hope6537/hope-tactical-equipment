@@ -26,6 +26,22 @@ import java.util.TreeMap;
  */
 public class StationDriver {
 
+    /**
+     * Shell脚本
+     * <p>
+     * start-dfs.sh
+     * start-yarn.sh
+     * <p>
+     * flume-ng agent -n a4 -c conf -f $FLUME_HOME/conf/station.conf -Dflume.root.logger=INFO,console
+     *
+     * hadoop jar hope6537-utils-1.1-RELEASE.jar org.hope6537.hadoop.station.StationDriver
+     * >>> /station_$CURRENT
+     * >>> /station_output_$CURRENT
+     * >>> 06-11-15-19-23
+     *
+     * sqoop export --connect jdbc:mysql://hadoop2master:3306/station --username root --password 4236537 --export-dir "/station_output_$CURRENT" --table timezone --fields-terminated-by '\t'
+     */
+
 
     public static void main(String[] args) throws Exception {
         if (args.length < 3) {
