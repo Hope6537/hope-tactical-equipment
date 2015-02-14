@@ -22,6 +22,7 @@
         <mysql.version>5.1.32</mysql.version>
         <hadoop.version>2.6.0</hadoop.version>
         <hbase.version>0.98.9-hadoop2</hbase.version>
+        <mahout.version>0.9</mahout.version>
     </properties>
 
 
@@ -492,6 +493,11 @@
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-mapreduce-client-core</artifactId>
             <version>${hadoop.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-core</artifactId>
+            <version>${mahout.version}</version>
         </dependency>
         <!--<dependency>
             <groupId>IKAnalyzer</groupId>

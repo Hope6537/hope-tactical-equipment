@@ -1,4 +1,4 @@
-package org.hope6537.hadoop.ii;
+package org.hope6537.hadoop.inverseindex;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
