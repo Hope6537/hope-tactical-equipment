@@ -4,7 +4,7 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
-import org.hope6537.hadoop.ConfigurationUtils;
+import org.hope6537.hadoop.ConfigurationFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class HdfsDemo {
     public void init() throws Exception {
         System.setProperty("hadoop.home.dir", "C:\\CoderDocuments\\hadoop-2.2.0");
         //fileSystem = FileSystem.get(new URI("hdfs://hadoop2master:9000"), new Configuration(), "hope6537");
-        fileSystem = FileSystem.get(new URI("hdfs://ns1"), ConfigurationUtils.getConfiguration(), "hope6537");
+        fileSystem = FileSystem.get(new URI("hdfs://ns1"), ConfigurationFactory.getConfiguration(), "hope6537");
     }
 
     @Test

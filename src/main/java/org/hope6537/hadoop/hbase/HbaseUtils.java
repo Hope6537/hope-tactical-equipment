@@ -8,7 +8,7 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.hope6537.hadoop.ConfigurationUtils;
+import org.hope6537.hadoop.ConfigurationFactory;
 import org.hope6537.hadoop.HadoopConstants;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class HbaseUtils {
     private HConnection connection;
 
     public HbaseUtils() {
-        this(ConfigurationUtils.getConfiguration(HadoopConstants.HBASE));
+        this(ConfigurationFactory.getConfiguration(HadoopConstants.HBASE));
     }
 
     public HbaseUtils(Configuration hbaseConfiguration) {
@@ -55,7 +55,7 @@ public class HbaseUtils {
 
     @Before
     public void init() {
-        hbaseConfiguration = ConfigurationUtils.getConfiguration(HadoopConstants.HBASE);
+        hbaseConfiguration = ConfigurationFactory.getConfiguration(HadoopConstants.HBASE);
         //指定用户和用户组
         //user = User.createUserForTesting(hbaseConfiguration, "hope6537", new String[]{"adm"});
     }

@@ -7,7 +7,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.mapred.JobConf;
-import org.hope6537.hadoop.ConfigurationUtils;
+import org.hope6537.hadoop.ConfigurationFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ public class HdfsUtils {
     private Configuration configuration;
 
     public static HdfsUtils getInstanceOfDistributed() {
-        return new HdfsUtils(HADOOP_NAMESERVICE_DIR, ConfigurationUtils.getConfiguration());
+        return new HdfsUtils(HADOOP_NAMESERVICE_DIR, ConfigurationFactory.getConfiguration());
     }
 
     public static HdfsUtils getInstanceOfPseudoDistributed(Configuration configuration) {
@@ -61,7 +61,7 @@ public class HdfsUtils {
     }
 
     public HdfsUtils() {
-        this(HADOOP_NAMESERVICE_DIR, ConfigurationUtils.getConfiguration());
+        this(HADOOP_NAMESERVICE_DIR, ConfigurationFactory.getConfiguration());
     }
 
     public static JobConf config() {
