@@ -19,6 +19,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+interface UserJob {
+
+    public boolean run(RecommendConfiguration conf) throws Exception;
+
+    public int getLevel();
+}
+
 /**
  * Created by Hope6537 on 2015/2/14.
  * 网站评分推荐MapReduce实现
@@ -54,28 +61,6 @@ import java.util.regex.Pattern;
 public class RecommendDriver {
 
     public static final Pattern DELIMITER = Pattern.compile("[\t,]");
-
-    public void run(RecommendConfiguration conf) throws Exception {
-
-        Recommend_1_BuildRatingMatrix step1 = new Recommend_1_BuildRatingMatrix();
-        Recommend_2_BuildSourceMatrix step2 = new Recommend_2_BuildSourceMatrix();
-        Recommend_3_RegroupMatrix step3 = new Recommend_3_RegroupMatrix();
-        Recommend_4_MultipleMatrix step4 = new Recommend_4_MultipleMatrix();
-        Recommend_5_FilterResult step5 = new Recommend_5_FilterResult();
-        System.err.println("Execute Step1");
-        if (step1.run(conf)) {
-            System.err.println("Execute Step2");
-            if (step2.run(conf)) {
-                System.err.println("Execute Step3");
-                if (step3.run(conf)) {
-                    System.err.println("Execute Step4");
-                    if(step4.run(conf)) {
-                        step5.run(conf);
-                    }
-                }
-            }
-        }
-    }
 
     public static void main(String[] args) throws Exception {
         HashMap<String, String> paths = new HashMap<>();
@@ -125,12 +110,39 @@ public class RecommendDriver {
         }
     }
 
+    public void run(RecommendConfiguration conf) throws Exception {
+
+        Recommend_1_BuildRatingMatrix step1 = new Recommend_1_BuildRatingMatrix();
+        Recommend_2_BuildSourceMatrix step2 = new Recommend_2_BuildSourceMatrix();
+        Recommend_3_RegroupMatrix step3 = new Recommend_3_RegroupMatrix();
+        Recommend_4_MultipleMatrix step4 = new Recommend_4_MultipleMatrix();
+        Recommend_5_FilterResult step5 = new Recommend_5_FilterResult();
+        System.err.println("Execute Step1");
+        if (step1.run(conf)) {
+            System.err.println("Execute Step2");
+            if (step2.run(conf)) {
+                System.err.println("Execute Step3");
+                if (step3.run(conf)) {
+                    System.err.println("Execute Step4");
+                    if (step4.run(conf)) {
+                        step5.run(conf);
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 class RecommendConfiguration {
 
     private Map<String, String> paths;
     private Configuration configuration;
+
+    public RecommendConfiguration(Map<String, String> paths, Configuration configuration) {
+        this.paths = paths;
+        this.configuration = configuration;
+    }
 
     public Map<String, String> getPaths() {
         return paths;
@@ -147,24 +159,19 @@ class RecommendConfiguration {
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }
-
-    public RecommendConfiguration(Map<String, String> paths, Configuration configuration) {
-        this.paths = paths;
-        this.configuration = configuration;
-    }
 }
 
 class JobHandler extends AbstractHandler {
 
     private RecommendConfiguration configuration;
 
-    public static JobHandler getInstance(int level, RecommendConfiguration configuration) {
-        return new JobHandler(level, configuration);
-    }
-
     public JobHandler(int level, RecommendConfiguration configuration) {
         super(level);
         this.configuration = configuration;
+    }
+
+    public static JobHandler getInstance(int level, RecommendConfiguration configuration) {
+        return new JobHandler(level, configuration);
     }
 
     @Override
@@ -208,19 +215,13 @@ abstract class AbstractHandler {
     protected abstract void response(UserJob job);
 }
 
-interface UserJob {
-
-    public boolean run(RecommendConfiguration conf) throws Exception;
-
-    public int getLevel();
-}
-
-
 /**
  * 步骤1 建立评分矩阵 Rating Matrix
  */
 class Recommend_1_BuildRatingMatrix implements UserJob {
 
+
+    private int level = 1;
 
     public boolean run(RecommendConfiguration conf) throws Exception {
 
@@ -244,8 +245,6 @@ class Recommend_1_BuildRatingMatrix implements UserJob {
 
         return job.isSuccessful();
     }
-
-    private int level = 1;
 
     @Override
     public int getLevel() {
@@ -634,6 +633,8 @@ class Recommend_4_MultipleMatrix implements UserJob {
 
 class Recommend_5_FilterResult implements UserJob {
 
+    private int level = 5;
+
     @Override
     public boolean run(RecommendConfiguration conf) throws Exception {
 
@@ -651,6 +652,11 @@ class Recommend_5_FilterResult implements UserJob {
         fitlerJob.waitForCompletion(true);
         return fitlerJob.isSuccessful();
 
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
     }
 
     public static class FilterMapper extends Mapper<LongWritable, Text, Text, Text> {
@@ -731,12 +737,5 @@ class Recommend_5_FilterResult implements UserJob {
                 context.write(resultKey, resultValue);
             }
         }
-    }
-
-    private int level = 5;
-
-    @Override
-    public int getLevel() {
-        return level;
     }
 }

@@ -2,7 +2,6 @@ package org.hope6537.hadoop;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.security.UserGroupInformation;
 import org.hope6537.context.ApplicationConstant;
 
 

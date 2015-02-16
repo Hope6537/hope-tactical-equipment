@@ -110,17 +110,7 @@ class TradeDriver extends BaseDaoUtilImpl<Trade> implements BaseDaoUtil<Trade> {
 class Account implements Serializable {
 
     private Integer id;
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
     private String account;
-
     private String username;
 
     public Account() {
@@ -128,6 +118,14 @@ class Account implements Serializable {
         account = randomStr.substring(0, 8) + "@" + randomStr.substring(10, 12) + ".com";
         username = randomStr.substring(14, 18);
 
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public Integer getId() {

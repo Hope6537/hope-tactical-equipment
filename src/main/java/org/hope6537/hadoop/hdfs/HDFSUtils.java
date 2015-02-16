@@ -30,14 +30,6 @@ public class HdfsUtils {
     private String hdfsDir;
     private Configuration configuration;
 
-    public static HdfsUtils getInstanceOfDistributed() {
-        return new HdfsUtils(HADOOP_NAMESERVICE_DIR, ConfigurationFactory.getConfiguration());
-    }
-
-    public static HdfsUtils getInstanceOfPseudoDistributed(Configuration configuration) {
-        return new HdfsUtils(HADOOP2MASTER_DIR, configuration);
-    }
-
     public HdfsUtils(String hdfsDir, Configuration configuration) {
         this(hdfsDir, configuration, "hope6537");
     }
@@ -62,6 +54,14 @@ public class HdfsUtils {
 
     public HdfsUtils() {
         this(HADOOP_NAMESERVICE_DIR, ConfigurationFactory.getConfiguration());
+    }
+
+    public static HdfsUtils getInstanceOfDistributed() {
+        return new HdfsUtils(HADOOP_NAMESERVICE_DIR, ConfigurationFactory.getConfiguration());
+    }
+
+    public static HdfsUtils getInstanceOfPseudoDistributed(Configuration configuration) {
+        return new HdfsUtils(HADOOP2MASTER_DIR, configuration);
     }
 
     public static JobConf config() {

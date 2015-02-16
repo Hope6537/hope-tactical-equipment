@@ -9,8 +9,8 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.log4j.Logger;
 import org.hope6537.context.ApplicationConstant;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -45,7 +45,8 @@ public class SumDriver {
 
         private SortBean sortBean = new SortBean();
         private Text keyText = new Text();
-        private Logger logger = Logger.getLogger(getClass());
+        protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
+
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {

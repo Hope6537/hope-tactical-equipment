@@ -4,6 +4,11 @@ import org.apache.hadoop.io.Text;
 import org.hope6537.context.ApplicationConstant;
 import org.hope6537.date.DateFormatCalculate;
 
+enum StationDataType {
+    POS,
+    NET
+}
+
 /**
  * Created by Hope6537 on 2015/2/12.
  */
@@ -57,11 +62,6 @@ public class StationData {
         result.set(location + "->" + time);
         return result;
     }
-}
-
-enum StationDataType {
-    POS,
-    NET
 }
 
 class CastException extends Exception {
