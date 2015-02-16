@@ -35,11 +35,13 @@ public class Emperor {
      * <p>Using: </p>
      */
     private static int countNumOfEmperor = 0;
+
     static {
         for (int i = 0; i < maxNumOfEmperor; i++) {
             emperorList.add(new Emperor("皇帝" + (i + 1)));
         }
     }
+
     private Emperor() {
 
     }

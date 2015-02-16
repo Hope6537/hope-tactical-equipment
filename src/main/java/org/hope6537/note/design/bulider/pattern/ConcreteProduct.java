@@ -7,7 +7,7 @@ public class ConcreteProduct extends Builder {
     @Override
     public void setPart() {
         /*
-		 * 产品类的逻辑处理
+         * 产品类的逻辑处理
 		 */
     }
 

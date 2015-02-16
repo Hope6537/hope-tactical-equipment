@@ -1,6 +1,7 @@
 package org.hope6537.spring;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -30,7 +31,7 @@ public class SpringHelper {
      */
     public SpringHelper(String path) {
         if (context == null) {
-            logger = Logger.getLogger(getClass());
+            logger = LoggerFactory.getLogger(getClass());
             context = new ClassPathXmlApplicationContext(path);
             logger.info("Active the Spring");
         }
@@ -38,7 +39,7 @@ public class SpringHelper {
 
     public SpringHelper(boolean bool) {
         if (context == null) {
-            logger = Logger.getLogger(getClass());
+            logger = LoggerFactory.getLogger(getClass());
             if (bool) {
                 context = new ClassPathXmlApplicationContext(
                         new String[]{"classpath:spring/spring-test.xml"});
@@ -53,7 +54,7 @@ public class SpringHelper {
 
     public SpringHelper(String[] paths) {
         if (context == null) {
-            logger = Logger.getLogger(getClass());
+            logger = LoggerFactory.getLogger(getClass());
             context = new ClassPathXmlApplicationContext(paths);
             logger.info("Active the Spring");
         }
@@ -68,7 +69,7 @@ public class SpringHelper {
             location = location.split(" ")[1];
             location = location.replace(".", "/");
             location += "/applicationContext.xml";
-            logger = Logger.getLogger(getClass());
+            logger = LoggerFactory.getLogger(getClass());
             context = new ClassPathXmlApplicationContext(location);
             logger.info("Active the Spring");
         }

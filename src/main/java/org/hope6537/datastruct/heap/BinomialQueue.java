@@ -156,7 +156,7 @@ public class BinomialQueue<AnyType extends Comparable<? super AnyType>> {
      */
     private Node<AnyType> combineTrees(Node<AnyType> t1, Node<AnyType> t2) {
         /*
-		 * 总而言之 是将较大的树的根下降一层 作为较小的树的左儿子 如果t1比t2要大 则翻转回来
+         * 总而言之 是将较大的树的根下降一层 作为较小的树的左儿子 如果t1比t2要大 则翻转回来
 		 */
         if (t1.element.compareTo(t2.element) > 0) {
             return combineTrees(t2, t1);

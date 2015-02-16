@@ -89,17 +89,6 @@ public class RandomWordsAccessFile {
             .split(" ");
 
     public static void main(String[] args) throws InterruptedException {
-        /*
-		 * ExecutorService exec = Executors . newCachedThreadPool (); ArrayList
-		 * < String > list = new ArrayList < String >(); for (int i = 0; i < 10;
-		 * i++) { exec .execute (new Exec (new File( "G:\\FuckData\\Test" + i +
-		 * ".txt" ), list )); } exec .execute (new Counting ()); TimeUnit .
-		 * SECONDS . sleep ( 200); System .out. println ( "ShutDownNow!" );
-		 * 
-		 * 
-		 * exec. shutdownNow ();
-		 */
-
         for (int u = 0; u < 100; u++) {
             File file = new File("G:\\FuckData\\Test" + u + ".log4hope6537");
             if (!file.exists()) {

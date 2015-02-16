@@ -104,7 +104,7 @@ class PairManager1 extends PairManager {
 
 class PairManager2 extends PairManager {
     /*
-	 * (non-Javadoc)
+     * (non-Javadoc)
 	 * 
 	 * @see org.hope6537.note.thinking_in_java.twenty_one.PairManager#increment()
 	 * 

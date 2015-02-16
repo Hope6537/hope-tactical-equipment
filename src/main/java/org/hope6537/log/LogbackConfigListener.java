@@ -1,3 +1,4 @@
+/*
 package org.hope6537.log;
 
 import ch.qos.logback.classic.LoggerContext;
@@ -9,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+*/
 /**
  * LogbackConfigListener
- */
+ *//*
+
 public class LogbackConfigListener implements ServletContextListener {
 
     private static final Logger logger = LoggerFactory.getLogger(LogbackConfigListener.class);
@@ -39,3 +42,4 @@ public class LogbackConfigListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent event) {
     }
 }
+*/

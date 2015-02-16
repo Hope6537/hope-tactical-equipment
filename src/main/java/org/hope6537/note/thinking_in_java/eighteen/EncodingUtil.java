@@ -43,54 +43,6 @@ public class EncodingUtil {
     }
 
     /**
-     * <pre>
-     * 通过使用迭代器的方法进行文件路径的遍历，最后生成可被容器识别的文件
-     * </pre>
-     * <p>Describe: 一个目录树的实体</p>
-     * <p>Using: </p>
-     * <p>DevelopedTime: 2014年7月23日下午3:10:39</p>
-     * <p>Company: ChangChun Unviersity JiChuang Team</p>
-     *
-     * @author Hope6537
-     * @version 1.0
-     * @see
-     */
-    public static class TreeInfo implements Iterable<File> {
-        /**
-         * Describe: 该List保存文件
-         */
-        public List<File> files = new ArrayList<File>();
-        /**
-         * Describe: 该List保存目录
-         */
-        public List<File> dirs = new ArrayList<File>();
-
-        @Override
-        public Iterator<File> iterator() {
-            return files.iterator();
-        }
-
-        /**
-         * <pre>
-         *
-         * </pre>
-         * <p>Describe: 如果有另一个目录树，添加的例程</p>
-         * <p>Using: </p>
-         * <p>How To Work: </p>
-         * <p>DevelopedTime: 2014年7月23日下午3:11:33 </p>
-         * <p>Author:Hope6537</p>
-         *
-         * @param other
-         * @see
-         */
-        void addAll(FileTreeInfo other) {
-            files.addAll(other.files);
-            dirs.addAll(other.dirs);
-        }
-
-    }
-
-    /**
      * <p>Describe: 遍历文件路径</p>
      * <p>Using: </p>
      * <p>How To Work: </p>
@@ -207,6 +159,87 @@ public class EncodingUtil {
     }
 
     /**
+     * <p>Describe: 使用标准输出流对文件进行写入操作,注意该方法为<b>覆盖写入</b></p>
+     * <p>Using: </p>
+     * <p>How To Work: </p>
+     * <p>DevelopedTime: 2014年7月26日下午2:12:22 </p>
+     * <p>Author:Hope6537</p>
+     *
+     * @param filename 文件的绝对路径
+     * @param text     待写入的内容
+     * @return 是否全部写入成功
+     * @see
+     */
+    @SuppressWarnings("unused")
+    private static boolean write(String filename, String text) {
+        boolean status = true;
+        try {
+            // 标准输出流
+            PrintWriter out = new PrintWriter(
+                    new File(filename).getAbsoluteFile());
+            try {
+                // 逐个字符串写入
+                out.write(text);
+            } finally {
+                out.close();
+            }
+        } catch (IOException e) {
+            status = false;
+            System.out.println("===写入文件失败===");
+            e.printStackTrace();
+        }
+        return status;
+    }
+
+    /**
+     * <pre>
+     * 通过使用迭代器的方法进行文件路径的遍历，最后生成可被容器识别的文件
+     * </pre>
+     * <p>Describe: 一个目录树的实体</p>
+     * <p>Using: </p>
+     * <p>DevelopedTime: 2014年7月23日下午3:10:39</p>
+     * <p>Company: ChangChun Unviersity JiChuang Team</p>
+     *
+     * @author Hope6537
+     * @version 1.0
+     * @see
+     */
+    public static class TreeInfo implements Iterable<File> {
+        /**
+         * Describe: 该List保存文件
+         */
+        public List<File> files = new ArrayList<File>();
+        /**
+         * Describe: 该List保存目录
+         */
+        public List<File> dirs = new ArrayList<File>();
+
+        @Override
+        public Iterator<File> iterator() {
+            return files.iterator();
+        }
+
+        /**
+         * <pre>
+         *
+         * </pre>
+         * <p>Describe: 如果有另一个目录树，添加的例程</p>
+         * <p>Using: </p>
+         * <p>How To Work: </p>
+         * <p>DevelopedTime: 2014年7月23日下午3:11:33 </p>
+         * <p>Author:Hope6537</p>
+         *
+         * @param other
+         * @see
+         */
+        void addAll(FileTreeInfo other) {
+            files.addAll(other.files);
+            dirs.addAll(other.dirs);
+        }
+
+    }
+
+    /**
      * <pre>
      * 通过使用迭代器的方法进行文件路径的遍历，最后生成可被容器识别的文件
      * </pre>
@@ -252,36 +285,5 @@ public class EncodingUtil {
             dirs.addAll(other.dirs);
         }
 
-    }    /**
-     * <p>Describe: 使用标准输出流对文件进行写入操作,注意该方法为<b>覆盖写入</b></p>
-     * <p>Using: </p>
-     * <p>How To Work: </p>
-     * <p>DevelopedTime: 2014年7月26日下午2:12:22 </p>
-     * <p>Author:Hope6537</p>
-     *
-     * @param filename 文件的绝对路径
-     * @param text     待写入的内容
-     * @return 是否全部写入成功
-     * @see
-     */
-    @SuppressWarnings("unused")
-    private static boolean write(String filename, String text) {
-        boolean status = true;
-        try {
-            // 标准输出流
-            PrintWriter out = new PrintWriter(
-                    new File(filename).getAbsoluteFile());
-            try {
-                // 逐个字符串写入
-                out.write(text);
-            } finally {
-                out.close();
-            }
-        } catch (IOException e) {
-            status = false;
-            System.out.println("===写入文件失败===");
-            e.printStackTrace();
-        }
-        return status;
     }
 }

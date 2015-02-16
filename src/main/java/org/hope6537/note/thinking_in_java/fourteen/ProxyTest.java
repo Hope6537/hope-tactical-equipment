@@ -169,7 +169,7 @@ class SimpleDynamicProxy {
         RealObject realobject = new RealObject();
         consumer(realobject);
         /*Interface proxy = (Interface) Proxy.newProxyInstance(Interface.class
-				.getClassLoader(), new Class[] { Interface.class },
+                .getClassLoader(), new Class[] { Interface.class },
 				new DynamicProxyHander(realobject));*/
         Interface proxy = (Interface) Proxy.newProxyInstance(Interface.class
                         .getClassLoader(), new Class[]{Interface.class},

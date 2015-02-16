@@ -21,6 +21,7 @@ public abstract class Tester<C> {
     volatile long writeTime = 0;
     CountDownLatch endLatch;
     Integer[] writeData;
+
     Tester(String testId, int nReaders, int nWriters) {
         this.testId = testId + " " + nReaders + "r " + nWriters + "w";
         this.nReaders = nReaders;

@@ -14,7 +14,7 @@ public class HeapSort {
      */
     private static int leftChild(int x) {
         /*
-		 * 这里堆不同的是  堆中元素的左儿子索引值是 2 * i
+         * 这里堆不同的是  堆中元素的左儿子索引值是 2 * i
 		 * 但是堆的根部元素是从索引1开始的
 		 * 而在堆排序中 索引根部元素是从索引0开始的 所以要+1
 		 */

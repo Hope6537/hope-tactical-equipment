@@ -1,6 +1,7 @@
 package org.hope6537.context;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 
@@ -26,7 +27,7 @@ public class ApplicationConstant {
     public static final String STATUS_JUDGE = "待审核";
     public static final String STATUS_NORMAL = "正常";
     public static final String STATUS_DIE = "不可用";
-    protected Logger logger = Logger.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     public static boolean notNull(Object o) {
         if (o instanceof String) {

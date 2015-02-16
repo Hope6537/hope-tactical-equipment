@@ -27,29 +27,6 @@ public class DateFormatCalculate {
     public static final String BASIC_DATE_FORMAT = "yyyy-MM-dd";
     public static final String BASIC_TIME_FORMAT = "HH:mm:ss";
 
-
-    @Test
-    public void testCastCurrentTime() {
-
-        long time1 = castToCurrentTime("2015-02-12 01:16:46");
-        long time2 = castToCurrentTime("2015-02-12 01:25:14");
-        System.out.println(time2 - time1);
-    }
-
-
-    @Test
-    public void testCreate() {
-        //System.out.println(createNowTime());
-        //System.out.println(calculateTimeZone(createNowTime(), createNextTimeByDays(1, BASIC_DATE_TIME_FORMAT), BASIC_DATE_TIME_FORMAT, ChronoUnit.MINUTES));
-//        System.out.println(castToCurrentTime(createNowTime()));
-//        System.out.println(System.currentTimeMillis());
-        String timeZone = timeInTimeLineSimple(new String[]{"00", "09", "17", "21"}, "2015-02-12 07:41:56");
-        String date = timeZone.substring(0, 11);
-        String timeLineEnd = timeZone.substring(timeZone.lastIndexOf('-') + 1);
-        System.out.println(date);
-        System.out.println(timeLineEnd);
-    }
-
     /**
      * <p>Describe: 提供当前时间的字符串，通过yyyy-MM-dd HH:mm:ss来定义格式</p>
      * <p>How To Work: 替换掉老版本，使用joda来格式化输出</p>
@@ -69,7 +46,6 @@ public class DateFormatCalculate {
         LocalDateTime time = LocalDateTime.parse(timeStr, formatter);
         return time.toEpochSecond(ZoneOffset.UTC);
     }
-
 
     /**
      * <p>Describe: 提供当前时间的字符串，通过formatter来定义格式</p>
@@ -289,6 +265,27 @@ public class DateFormatCalculate {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    @Test
+    public void testCastCurrentTime() {
+
+        long time1 = castToCurrentTime("2015-02-12 01:16:46");
+        long time2 = castToCurrentTime("2015-02-12 01:25:14");
+        System.out.println(time2 - time1);
+    }
+
+    @Test
+    public void testCreate() {
+        //System.out.println(createNowTime());
+        //System.out.println(calculateTimeZone(createNowTime(), createNextTimeByDays(1, BASIC_DATE_TIME_FORMAT), BASIC_DATE_TIME_FORMAT, ChronoUnit.MINUTES));
+//        System.out.println(castToCurrentTime(createNowTime()));
+//        System.out.println(System.currentTimeMillis());
+        String timeZone = timeInTimeLineSimple(new String[]{"00", "09", "17", "21"}, "2015-02-12 07:41:56");
+        String date = timeZone.substring(0, 11);
+        String timeLineEnd = timeZone.substring(timeZone.lastIndexOf('-') + 1);
+        System.out.println(date);
+        System.out.println(timeLineEnd);
     }
 
 }

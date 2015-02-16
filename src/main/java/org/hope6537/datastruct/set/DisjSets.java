@@ -61,7 +61,7 @@ public class DisjSets {
      */
     public void union(int root1, int root2) {
         /*
-		 * 如果root2的所在位置更深
+         * 如果root2的所在位置更深
 		 */
         if (s[root2] < s[root1]) {
             // 那么将root1插入进root2的树中 当做子树来存在

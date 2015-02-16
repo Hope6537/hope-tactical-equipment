@@ -20,6 +20,37 @@ public class TextFile extends ArrayList<String> {
     private static final long serialVersionUID = -7716867579398514830L;
 
     /**
+     * <p>Describe: 直接获取文件和分隔符。形成可读的ArrayList<p>
+     *
+     * @param filename 定义文件名称
+     * @param splitter 定义分割号名称
+     */
+    public TextFile(String filename, String splitter) {
+        super(Arrays.asList(read(filename).split(splitter)));
+        // 紧接着我们得到了一个按照分割符排列的ArrayList 通过get(index)即可调用
+        // 消除第一个空白行
+        if (get(0).equals("")) {
+            remove(0);
+        }
+    }
+
+
+    /**
+     * <p>Describe: 直接获取文件，分割符使用空格代替。形成可读的ArrayList<p>
+     *
+     * @param filename 定义文件名称
+     */
+    public TextFile(String filename) {
+        this(filename, "\n");
+    }
+
+    /**
+     * <p>Describe: 默认构造方法 <p>
+     */
+    public TextFile() {
+    }
+
+    /**
      * <p>Describe: 获得文件的字符串</p>
      * <p>Using: 用于从文件中获取信息，并生成字符串，供其他方法使用</p>
      * <p>How To Work: 使用缓冲器进行读操作</p>
@@ -56,31 +87,6 @@ public class TextFile extends ArrayList<String> {
         return sBuilder.toString();
     }
 
-
-    /**
-     * <p>Describe: 直接获取文件和分隔符。形成可读的ArrayList<p>
-     *
-     * @param filename 定义文件名称
-     * @param splitter 定义分割号名称
-     */
-    public TextFile(String filename, String splitter) {
-        super(Arrays.asList(read(filename).split(splitter)));
-        // 紧接着我们得到了一个按照分割符排列的ArrayList 通过get(index)即可调用
-        // 消除第一个空白行
-        if (get(0).equals("")) {
-            remove(0);
-        }
-    }
-
-    /**
-     * <p>Describe: 直接获取文件，分割符使用空格代替。形成可读的ArrayList<p>
-     *
-     * @param filename 定义文件名称
-     */
-    public TextFile(String filename) {
-        this(filename, "\n");
-    }
-
     /**
      * <p>Describe: 将字符串写入文件</p>
      * <p>Using: 用于I/O写操作</p>
@@ -111,12 +117,6 @@ public class TextFile extends ArrayList<String> {
             e.printStackTrace();
         }
         return status;
-    }
-
-    /**
-     * <p>Describe: 默认构造方法 <p>
-     */
-    public TextFile() {
     }
 
     public static void main(String[] args) {

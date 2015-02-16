@@ -14,6 +14,7 @@ public class OkHttpUtil {
     static {
         mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
     }
+
     private static final String CHARSET_NAME = "UTF-8";
 
     /**

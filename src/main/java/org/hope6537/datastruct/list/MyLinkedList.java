@@ -232,6 +232,7 @@ public class MyLinkedList<Object> implements Iterable<Object> {
         public Object data;
         public Node<Object> prev;
         public Node<Object> next;
+
         /**
          * @param @param d 数据
          * @param @param p 前指针

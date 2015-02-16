@@ -36,7 +36,7 @@ public class CloseResource {
         System.in.close();
     }
     /*
-	 * Waiting for Read Waiting for Read 关闭所有的线程 关闭java.net.SocketInputStream
+     * Waiting for Read Waiting for Read 关闭所有的线程 关闭java.net.SocketInputStream
 	 * Interrupting from io Exiting IO 关闭java.io.BufferedInputStream
 	 * Interrupting from io Exiting IO
 	 */

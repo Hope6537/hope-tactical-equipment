@@ -7,7 +7,7 @@ public class Director {
     public Product getProduct() {
         builder.setPart();
         /*
-		 * 设置不同的零件 产生不同的顺序
+         * 设置不同的零件 产生不同的顺序
 		 */
         return builder.buildProduct();
     }

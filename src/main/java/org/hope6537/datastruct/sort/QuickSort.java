@@ -45,7 +45,7 @@ public class QuickSort {
         }
         // 这样最后从小到大则是 left center right进行排列
         /*
-		 * 将中心的数据 即枢纽元和右侧-1位置的游标进行交换 因为left center right是符合排序序列的
+         * 将中心的数据 即枢纽元和右侧-1位置的游标进行交换 因为left center right是符合排序序列的
 		 * 所以排序的主体是从left+1到right-2的
 		 */
 

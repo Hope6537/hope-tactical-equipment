@@ -20,6 +20,7 @@ public class ProcessFiles {
      * @describe 一个是文件后缀名
      */
     private String ext;
+
     public ProcessFiles(Strategy strategy, String ext) {
         super();
         this.strategy = strategy;

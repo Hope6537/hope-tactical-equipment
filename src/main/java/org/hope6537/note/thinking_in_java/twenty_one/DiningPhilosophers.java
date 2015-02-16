@@ -71,6 +71,6 @@ public class DiningPhilosophers {
     }
 
 	/*
-	 * 
+     *
 	 */
 }

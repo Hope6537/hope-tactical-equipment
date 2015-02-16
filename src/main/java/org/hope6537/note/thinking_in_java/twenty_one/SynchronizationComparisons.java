@@ -22,12 +22,14 @@ abstract class Accumulator {
     public static long cycles = 50000L;
     public static ExecutorService exec = Executors.newFixedThreadPool(N * 2);
     protected static int[] preLoaded = new int[SIZE];
+
     static {
         // 载入随机数数组
         Random rand = new Random(47);
         for (int i = 0; i < SIZE; i++)
             preLoaded[i] = rand.nextInt();
     }
+
     private static CyclicBarrier barrier = new CyclicBarrier(N * 2 + 1);
     protected volatile int index = 0;
     protected volatile long value = 0;

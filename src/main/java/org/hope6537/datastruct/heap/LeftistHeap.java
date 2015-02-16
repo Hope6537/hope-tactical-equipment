@@ -116,7 +116,7 @@ public class LeftistHeap<AnyType extends Comparable<? super AnyType>> {
             h1.left = h2;
         } else {
             /*
-			 * 如果h1不是一个单节点 则将h1较小树的右子树和h2进行比较归并比较
+             * 如果h1不是一个单节点 则将h1较小树的右子树和h2进行比较归并比较
 			 * 最后在递归中 有一颗子树会遍历地仅剩下单节点 这时递归回来时 走的是上面if
 			 * 这样 就讲两个散树插入合并成一个树了。
 			 * 在原有H1 H2树上形成了新的结构

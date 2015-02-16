@@ -19,6 +19,10 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class Cleaner extends Configured implements Tool {
+    public static void main(String[] args) throws Exception {
+        ToolRunner.run(new Cleaner(), args);
+    }
+
     @Override
     public int run(String[] args) throws Exception {
         final String inputPath = args[0];
@@ -42,11 +46,6 @@ public class Cleaner extends Configured implements Tool {
         job.waitForCompletion(true);
         return 0;
     }
-
-    public static void main(String[] args) throws Exception {
-        ToolRunner.run(new Cleaner(), args);
-    }
-
 
     static class MyMapper extends Mapper<LongWritable, Text, LongWritable, Text> {
         LogParser parser = new LogParser();

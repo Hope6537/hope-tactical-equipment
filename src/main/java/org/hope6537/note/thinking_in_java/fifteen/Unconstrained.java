@@ -31,6 +31,6 @@ public class Unconstrained {
         b.f();
     }
     /*
-	 * output: other
+     * output: other
 	 */
 }

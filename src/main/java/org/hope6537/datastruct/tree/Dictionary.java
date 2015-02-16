@@ -232,7 +232,7 @@ public class Dictionary {
         Map<String, List<String>> a = Dictionary.computeAdjacentWords_word(list);
         Dictionary.printHighChangeables(a, 1);
         /*int count = 0;
-		for(String s : list){
+        for(String s : list){
 			System.out.print(s+" ");
 			count++;
 			if(count % 20 == 0){
