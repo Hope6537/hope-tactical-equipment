@@ -207,7 +207,7 @@ public class CriticalSection {
     }
 
 	/*
-	 * 通过这里我们可以看出来 在单位时间内 方法上锁和代码块上锁的线程访问量 在四核八线程的电脑上超级明显的差距
+     * 通过这里我们可以看出来 在单位时间内 方法上锁和代码块上锁的线程访问量 在四核八线程的电脑上超级明显的差距
 	 * pm1 : PairManipulator [Pair [x=105, y=105] checkCount = 3227] 
 	 * pm2 : PairManipulator [Pair [x=106, y=106] checkCount = 249052283]
 	 * 这正是性能调优的重要性 在安全的情况下，使得线程能更多的访问

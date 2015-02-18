@@ -40,7 +40,7 @@ public class HeapSort {
         int child = 0;  //子节点的下表
         AnyType tmp; //父节点的数据
         for (tmp = a[i]; leftChild(i) < n; i = child) {
-			/*System.out.println("a[i]="+a[i]);*/
+            /*System.out.println("a[i]="+a[i]);*/
             //从父节点开始循环 一直到最后一个具有子节点的节点为止
             child = leftChild(i);
             //将child赋值 是i的左儿子

@@ -24,7 +24,7 @@ public class RecommenderFilterOutdateResult {
     final static int RECOMMENDER_NUM = 3;
 
     public static void main(String[] args) throws TasteException, IOException {
-        String file = "datafile/job/pv.csv";
+        String file = "other/testdata/pv.csv";
         DataModel dataModel = RecommendFactory.buildDataModelNoPref(file);
         RecommenderBuilder rb1 = RecommenderEvaluator.userCityBlock(dataModel);
         RecommenderBuilder rb2 = RecommenderEvaluator.itemLoglikelihood(dataModel);
@@ -40,7 +40,7 @@ public class RecommenderFilterOutdateResult {
     }
 
     public static void filterOutdate(long uid, RecommenderBuilder recommenderBuilder, DataModel dataModel) throws TasteException, IOException {
-        Set<Long> jobids = getOutdateJobID("datafile/job/job.csv");
+        Set<Long> jobids = getOutdateJobID("other/testdata/job.csv");
         IDRescorer rescorer = new JobRescorer(jobids);
         List<RecommendedItem> list = recommenderBuilder.buildRecommender(dataModel).recommend(uid, RECOMMENDER_NUM, rescorer);
         RecommendFactory.showItems(uid, list, false);

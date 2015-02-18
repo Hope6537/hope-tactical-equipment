@@ -551,11 +551,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--<dependency>
-            <groupId>IKAnalyzer</groupId>
-            <artifactId>IKAnalyzer</artifactId>
-            <version>2012FF_hf1</version>
-        </dependency>-->
     </dependencies>
 
     <reporting>

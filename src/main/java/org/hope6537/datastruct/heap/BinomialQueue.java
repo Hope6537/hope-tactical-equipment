@@ -193,7 +193,7 @@ public class BinomialQueue<AnyType extends Comparable<? super AnyType>> {
         }
         // 这是上一次参加合并所遗留下来的 秩为i+1的树
         Node<AnyType> carry = null;
-		/*
+        /*
 		 * 秩从0开始 而j即节点的数量从1开始 一旦j的数量超过了应有数量 跳出 同时秩i的增长是++ 而j即树的个数增长是j*2的方式增加
 		 * 关于j的研究方式 是按照B0 B1 B2 .. Bi的节点的数量产生的 由于二项队列的特殊性 所以b0 为仅有一个节点的单体树 而b1 =
 		 * 2 b2 = 4 b3 = 8 个节点 所以i代表当前的树的阶数 而j代表该阶有几个节点 当到达底层时 停止循环

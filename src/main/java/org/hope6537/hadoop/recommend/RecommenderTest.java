@@ -17,10 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * 
- * @author bsspirit@gmail.com
- * {@link http://blog.fens.me/mahout-recommendation-api/} 
- *
+ * 使用评分推荐系统
  */
 public class RecommenderTest {
 
@@ -29,13 +26,13 @@ public class RecommenderTest {
 
     public static void main(String[] args) throws TasteException, IOException {
         RandomUtils.useTestSeed();
-        String file = "datafile/item.csv";
+        String file = "other/testdata/item.csv";
         DataModel dataModel = RecommendFactory.buildDataModel(file);
-        treeCluster(dataModel);
+        itemCF(dataModel);
     }
 
     public static void userCF(DataModel dataModel) throws TasteException {
-        UserSimilarity userSimilarity = RecommendFactory.userSimilarity(RecommendFactory.SIMILARITY.EUCLIDEAN, dataModel);
+        UserSimilarity userSimilarity = RecommendFactory.userSimilarity(RecommendFactory.SIMILARITY.CITYBLOCK, dataModel);
         UserNeighborhood userNeighborhood = RecommendFactory.userNeighborhood(RecommendFactory.NEIGHBORHOOD.NEAREST, userSimilarity, dataModel, NEIGHBORHOOD_NUM);
         RecommenderBuilder recommenderBuilder = RecommendFactory.userRecommender(userSimilarity, userNeighborhood, true);
 
@@ -51,7 +48,7 @@ public class RecommenderTest {
     }
 
     public static void itemCF(DataModel dataModel) throws TasteException {
-        ItemSimilarity itemSimilarity = RecommendFactory.itemSimilarity(RecommendFactory.SIMILARITY.EUCLIDEAN, dataModel);
+        ItemSimilarity itemSimilarity = RecommendFactory.itemSimilarity(RecommendFactory.SIMILARITY.CITYBLOCK, dataModel);
         RecommenderBuilder recommenderBuilder = RecommendFactory.itemRecommender(itemSimilarity, true);
 
         RecommendFactory.evaluate(RecommendFactory.EVALUATOR.AVERAGE_ABSOLUTE_DIFFERENCE, recommenderBuilder, null, dataModel, 0.7);

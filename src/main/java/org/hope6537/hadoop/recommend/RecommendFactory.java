@@ -54,13 +54,6 @@ public final class RecommendFactory {
     }
 
     /**
-     * 定义各种距离
-     */
-    public enum SIMILARITY {
-        PEARSON, EUCLIDEAN, COSINE, TANIMOTO, LOGLIKELIHOOD, SPEARMAN, CITYBLOCK, FARTHEST_NEIGHBOR_CLUSTER, NEAREST_NEIGHBOR_CLUSTER
-    }
-
-    /**
      * 构建距离算法类 基於UserCF类
      */
     public static UserSimilarity userSimilarity(SIMILARITY type, DataModel m) throws TasteException {
@@ -117,13 +110,6 @@ public final class RecommendFactory {
         }
     }
 
-    /**
-     * 构建近邻
-     */
-    public enum NEIGHBORHOOD {
-        NEAREST, THRESHOLD
-    }
-
     public static UserNeighborhood userNeighborhood(NEIGHBORHOOD type, UserSimilarity s, DataModel m, double num) throws TasteException {
         switch (type) {
             case NEAREST:
@@ -138,13 +124,6 @@ public final class RecommendFactory {
                  */
                 return new ThresholdUserNeighborhood(num, s, m);
         }
-    }
-
-    /**
-     * 构建推荐模型
-     */
-    public enum RECOMMENDER {
-        USER, ITEM
     }
 
     /**
@@ -165,12 +144,12 @@ public final class RecommendFactory {
         return dataModel -> new SlopeOneRecommender(dataModel);
     }
 
-    public static RecommenderBuilder itemKNNRecommender(final ItemSimilarity is, final Optimizer op, final int n) throws TasteException {
-        return dataModel -> new KnnItemBasedRecommender(dataModel, is, op, n);
-    }
-
     public static RecommenderBuilder svdRecommender(final Factorizer factorizer) throws TasteException {
         return dataModel -> new SVDRecommender(dataModel, factorizer);
+    }
+
+    public static RecommenderBuilder itemKNNRecommender(final ItemSimilarity is, final Optimizer op, final int n) throws TasteException {
+        return dataModel -> new KnnItemBasedRecommender(dataModel, is, op, n);
     }
 
     public static RecommenderBuilder treeClusterRecommender(final ClusterSimilarity cs, final int n) throws TasteException {
@@ -188,14 +167,6 @@ public final class RecommendFactory {
             }
             System.out.println();
         }
-    }
-
-    /**
-     * 算法的评估
-     * 根据结果距离统计 平均距离和平方距离[无太大影响]
-     */
-    public enum EVALUATOR {
-        AVERAGE_ABSOLUTE_DIFFERENCE, RMS
     }
 
     public static RecommenderEvaluator buildEvaluator(EVALUATOR type) {
@@ -227,6 +198,35 @@ public final class RecommendFactory {
         IRStatistics stats = evaluator.evaluate(rb, mb, m, null, topn, GenericRecommenderIRStatsEvaluator.CHOOSE_THRESHOLD, 1.0);
         // System.out.printf("Recommender IR Evaluator: %s\n", stats);
         System.out.printf("Recommender IR Evaluator: [Precision:%s,Recall:%s]\n", stats.getPrecision(), stats.getRecall());
+    }
+
+    /**
+     * 定义各种距离
+     */
+    public enum SIMILARITY {
+        PEARSON, EUCLIDEAN, COSINE, TANIMOTO, LOGLIKELIHOOD, SPEARMAN, CITYBLOCK, FARTHEST_NEIGHBOR_CLUSTER, NEAREST_NEIGHBOR_CLUSTER
+    }
+
+    /**
+     * 构建近邻
+     */
+    public enum NEIGHBORHOOD {
+        NEAREST, THRESHOLD
+    }
+
+    /**
+     * 构建推荐模型
+     */
+    public enum RECOMMENDER {
+        USER, ITEM
+    }
+
+    /**
+     * 算法的评估
+     * 根据结果距离统计 平均距离和平方距离[无太大影响]
+     */
+    public enum EVALUATOR {
+        AVERAGE_ABSOLUTE_DIFFERENCE, RMS
     }
 
 }

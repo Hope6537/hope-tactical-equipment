@@ -43,10 +43,9 @@ public class SumDriver {
 
     public static class SumMapper extends Mapper<LongWritable, Text, Text, SortBean> {
 
+        protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
         private SortBean sortBean = new SortBean();
         private Text keyText = new Text();
-        protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
-
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {

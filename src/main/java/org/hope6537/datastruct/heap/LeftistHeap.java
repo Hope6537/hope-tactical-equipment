@@ -126,7 +126,7 @@ public class LeftistHeap<AnyType extends Comparable<? super AnyType>> {
             h1.right = merge(h1.right, h2);
 
             if (h1.left.npl < h1.right.npl) {
-				/*
+                /*
 				 * 在合并的过程中 如果左节点的零差小于右节点的零差
 				 * 那么该节点左右子树交换
 				 */
