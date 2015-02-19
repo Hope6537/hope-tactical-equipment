@@ -1,4 +1,4 @@
-package org.hope6537.hadoop;
+package org.hope6537;
 
 import org.hope6537.context.ApplicationConstant;
 import org.hope6537.date.ChineseTimeString;

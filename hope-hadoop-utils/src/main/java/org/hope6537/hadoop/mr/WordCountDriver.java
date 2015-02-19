@@ -30,7 +30,7 @@ public class WordCountDriver {
         FileInputFormat.setInputPaths(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-        return job.waitForCompletion(true) ? 1 : 0;
+        return job.waitForCompletion(true) ? 0 : 1;
     }
 
     public static void main(String[] args) throws Exception {
