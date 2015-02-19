@@ -269,7 +269,6 @@ public class DateFormatCalculate {
 
     @Test
     public void testCastCurrentTime() {
-
         long time1 = castToCurrentTime("2015-02-12 01:16:46");
         long time2 = castToCurrentTime("2015-02-12 01:25:14");
         System.out.println(time2 - time1);
@@ -279,8 +278,8 @@ public class DateFormatCalculate {
     public void testCreate() {
         //System.out.println(createNowTime());
         //System.out.println(calculateTimeZone(createNowTime(), createNextTimeByDays(1, BASIC_DATE_TIME_FORMAT), BASIC_DATE_TIME_FORMAT, ChronoUnit.MINUTES));
-//        System.out.println(castToCurrentTime(createNowTime()));
-//        System.out.println(System.currentTimeMillis());
+        //System.out.println(castToCurrentTime(createNowTime()));
+        //System.out.println(System.currentTimeMillis());
         String timeZone = timeInTimeLineSimple(new String[]{"00", "09", "17", "21"}, "2015-02-12 07:41:56");
         String date = timeZone.substring(0, 11);
         String timeLineEnd = timeZone.substring(timeZone.lastIndexOf('-') + 1);
