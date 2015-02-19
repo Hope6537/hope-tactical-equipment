@@ -19,13 +19,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.hope6537</groupId>
-            <artifactId>hope-web-utils</artifactId>
-            <version>1.2-RELEASE</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hope6537</groupId>
+            <artifactId>hope-basic-utils</artifactId>
+            <version>1.2-RELEASE</version>
         </dependency>
         <!-- Hadoop -->
         <dependency>
