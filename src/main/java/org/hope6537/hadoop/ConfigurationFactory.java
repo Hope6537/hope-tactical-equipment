@@ -19,11 +19,13 @@ public class ConfigurationFactory {
         configuration.set("dfs.namenode.rpc-address.ns1.nn1", "hadoop1:9000");
         configuration.set("dfs.namenode.rpc-address.ns1.nn2", "hadoop2:9000");
         configuration.set("dfs.client.failover.proxy.provider.ns1", "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider");
+        configuration.set("hbase.zookeeper.quorum", "hadoop5,hadoop6,hadoop7");
         return configuration;
     }
 
     public static Configuration getConfigurationOfPseudoDistributed() {
         Configuration configuration = new Configuration();
+//        configuration.set("mapred.child.java.opts", "-Xmx200m -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=16888");
        /* UserGroupInformation user = UserGroupInformation.createRemoteUser("hope6537");
         configuration.set("hadoop.job.ugi", "hope6537");
         configuration.set("mapreduce.jobhistory.address", "hadoop2master:10020");

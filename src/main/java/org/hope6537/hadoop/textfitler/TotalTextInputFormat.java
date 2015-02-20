@@ -36,7 +36,8 @@ public class TotalTextInputFormat extends CombineFileInputFormat<Text, Text> {
      */
     @Override
     public RecordReader<Text, Text> createRecordReader(InputSplit split, TaskAttemptContext context) throws IOException {
-        CombineFileRecordReader<Text, Text> recordReader = new CombineFileRecordReader((CombineFileSplit) split, context, CombineFileRecordReader.class);
+        CombineFileRecordReader<Text, Text> recordReader = new CombineFileRecordReader<Text, Text>(
+                (CombineFileSplit) split, context, TotalTextRecordReader.class);
         return recordReader;
     }
 

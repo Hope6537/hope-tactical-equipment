@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * Created by Hope6537 on 2015/2/18.
  */
-public class TotalTextRecordReader extends RecordReader {
+public class TotalTextRecordReader extends RecordReader<Text, Text> {
 
     /**
      * 当前处理的分片
@@ -53,11 +53,12 @@ public class TotalTextRecordReader extends RecordReader {
     /**
      * @param combineFileSplit 待处理的分片器
      * @param context          保存任务和系统信息
-     * @param currentIndex     当前文件在Split中的索引
+     * @param index            当前文件在Split中的索引
      */
-    public TotalTextRecordReader(CombineFileSplit combineFileSplit, TaskAttemptContext context, int currentIndex) {
+    public TotalTextRecordReader(CombineFileSplit combineFileSplit,
+                                 TaskAttemptContext context, Integer index) {
         this.combineFileSplit = combineFileSplit;
-        this.currentIndex = currentIndex;
+        this.currentIndex = index;
         this.configuration = context.getConfiguration();
         this.totalLength = combineFileSplit.getPaths().length;
         this.isFinished = false;
@@ -98,12 +99,12 @@ public class TotalTextRecordReader extends RecordReader {
     }
 
     @Override
-    public Object getCurrentKey() throws IOException, InterruptedException {
+    public Text getCurrentKey() throws IOException, InterruptedException {
         return currentKey;
     }
 
     @Override
-    public Object getCurrentValue() throws IOException, InterruptedException {
+    public Text getCurrentValue() throws IOException, InterruptedException {
         return currentValue;
     }
 
