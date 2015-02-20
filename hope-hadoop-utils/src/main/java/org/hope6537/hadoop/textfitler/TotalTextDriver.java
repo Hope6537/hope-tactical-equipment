@@ -14,6 +14,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.hope6537.hadoop.ConfigurationFactory;
 import org.hope6537.hadoop.hdfs.HdfsUtils;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -59,6 +60,7 @@ public class TotalTextDriver {
 
         HdfsUtils hdfsUtils = HdfsUtils.getInstanceOfPseudoDistributed(configuration);
         hdfsUtils.rmrShowInConsole(args[1]);
+        hdfsUtils.closeFileSystem();
 
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
@@ -70,7 +72,7 @@ class TotalTextTokenizerMapper extends Mapper<Text, Text, Text, Text> {
 
     private Text resultKey = new Text();
     private Text resultValue = new Text();
-    private Analyzer analyzer;
+    private Analyzer analyzer = new IKAnalyzer();
 
     @Override
     protected void map(Text key, Text value, Context context) throws IOException, InterruptedException {

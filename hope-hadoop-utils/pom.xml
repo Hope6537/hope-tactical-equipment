@@ -23,6 +23,32 @@
             <artifactId>junit</artifactId>
         </dependency>
         <dependency>
+            <groupId>IKAnalyzer</groupId>
+            <artifactId>IKAnalyzer</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../other/lib/IKAnalyzer2012FF_u1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-highlighter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-memory</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.hope6537</groupId>
             <artifactId>hope-basic-utils</artifactId>
             <version>1.2-RELEASE</version>
