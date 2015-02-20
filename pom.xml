@@ -33,6 +33,13 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>IKAnalyzer</groupId>
+            <artifactId>IKAnalyzer</artifactId>
+            <version>2012FF_u1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/other/lib/IKAnalyzer2012FF_u1.jar</systemPath>
+        </dependency>
         <!-- shiro相关-->
         <dependency>
             <groupId>org.apache.shiro</groupId>
