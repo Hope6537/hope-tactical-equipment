@@ -21,29 +21,6 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 import java.io.IOException;
 import java.io.StringReader;
 
-/**
- * yarn-site.xml
- * <property>
- <name>yarn.nodemanager.resource.memory-mb</name>
- <value>10000</value>
- </property>
- <property>
- <name>yarn.scheduler.maximum-allocation-mb</name>
- <value>10000</value>
- </property>
- <property>
- <name>yarn.scheduler.minimum-allocation-mb</name>
- <value>3000</value>
- </property>
- <property>
- <name>mapreduce.reduce.memory.mb</name>
- <value>3000</value>
- </property>
- <property>
- <name>mapreduce.map.memory.mb</name>
- <value>3000</value>
- </property>
- */
 
 /**
  * Created by Hope6537 on 2015/2/18.
@@ -53,6 +30,29 @@ public class TotalTextDriver extends Configured implements Tool {
         int res = new TotalTextDriver().run(args);
         System.err.println(res);
     }
+    /*
+     * yarn-site.xml
+     * <property>
+     <name>yarn.nodemanager.resource.memory-mb</name>
+     <value>10000</value>
+     </property>
+     <property>
+     <name>yarn.scheduler.maximum-allocation-mb</name>
+     <value>10000</value>
+     </property>
+     <property>
+     <name>yarn.scheduler.minimum-allocation-mb</name>
+     <value>3000</value>
+     </property>
+     <property>
+     <name>mapreduce.reduce.memory.mb</name>
+     <value>3000</value>
+     </property>
+     <property>
+     <name>mapreduce.map.memory.mb</name>
+     <value>3000</value>
+     </property>
+     */
 
     @Override
     public int run(String[] args) throws Exception {

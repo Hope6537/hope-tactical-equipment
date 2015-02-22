@@ -1,0 +1,41 @@
+ #将数据转化为seq文件，以便让mahout读取
+ echo "Creating sequence files from 20newsgroups data"
+  ./bin/mahout seqdirectory \
+    -i ${WORK_DIR}/20news-all \
+    -o ${WORK_DIR}/20news-seq -ow
+  #将序列文件转换为向量
+  echo "Converting sequence files to vectors"
+  ./bin/mahout seq2sparse \
+    -i ${WORK_DIR}/20news-seq \
+    -o ${WORK_DIR}/20news-vectors  -lnorm -nv  -wt tfidf
+  #将数据分为8-2的训练:测试集
+  echo "Creating training and holdout set with a random 80-20 split of the generated vector dataset"
+  ./bin/mahout split \
+    -i ${WORK_DIR}/20news-vectors/tfidf-vectors \
+    --trainingOutput ${WORK_DIR}/20news-train-vectors \
+    --testOutput ${WORK_DIR}/20news-test-vectors  \
+    --randomSelectionPct 40 --overwrite --sequenceFiles -xm sequential
+  #训练朴素贝叶斯
+  echo "Training Naive Bayes model"
+  ./bin/mahout trainnb \
+    -i ${WORK_DIR}/20news-train-vectors -el \
+    -o ${WORK_DIR}/model \
+    -li ${WORK_DIR}/labelindex \
+    -ow $c
+  #使用训练集来测试分类效果
+  echo "Self testing on training set"
+  ./bin/mahout testnb \
+    -i ${WORK_DIR}/20news-train-vectors\
+    -m ${WORK_DIR}/model \
+    -l ${WORK_DIR}/labelindex \
+    -ow -o ${WORK_DIR}/20news-testing $c
+  #使用测试集来测试训练效果
+  echo "Testing on holdout set"
+  ./bin/mahout testnb \
+    -i ${WORK_DIR}/20news-test-vectors\
+    -m ${WORK_DIR}/model \
+    -l ${WORK_DIR}/labelindex \
+    -ow -o ${WORK_DIR}/20news-testing $c
+
+  现在的问题就是如何转化seq文件?
+  如何处理中文分词?

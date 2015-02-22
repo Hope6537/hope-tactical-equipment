@@ -21,3 +21,7 @@
 	result = foreach tu generate td3::account as account, ui::name, td3::income, td3::expenses, td3::surplus;
 	
 	store result into '/result' using PigStorage(',');
+
+	processed = load '/text_clear' as (category:chararray,doc:chararray);test = sample processed 0.2;jnt = join processed by (category,doc) left outer , test by (category,doc);filt_test = filter jnt by test::category is null;train = foreach filt_test generate processed::category as category , processed::doc as doc;store train into '/train';
+
+
