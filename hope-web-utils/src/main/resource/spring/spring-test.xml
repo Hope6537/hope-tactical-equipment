@@ -1,16 +1,25 @@
+<!--
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://www.springframework.org/schema/beans"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
-	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
-    <!--<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+<beans xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.1.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
     &lt;!&ndash; SessionFactory使用自定义数据源 必须使用自定义的数据源 在这里dataSource定义了之后就没有必要使用Hibernate的配置文件定义了 &ndash;&gt;
     <context:property-placeholder location="classpath:config.properties"/>
     <context:component-scan base-package="org.jichuang.hope6537.*.dao"/>
     <context:component-scan base-package="org.jichuang.hope6537.*.service"/>
-    <context:component-scan base-package="org.hope6537.*.test"/>-->
-    <!--<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+    <context:component-scan base-package="org.hope6537.*.test"/>
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
         <property name="url" value="${jdbc_url}"/>
         <property name="username" value="${jdbc_username}"/>
@@ -41,34 +50,34 @@
         <property name="logAbandoned" value="true"/>
         &lt;!&ndash; 监控数据库 &ndash;&gt;
         <property name="filters" value="mergeStat"/>
-    </bean>-->
+    </bean>
 
-    <!--  配置hibernate SessionFactory-->
-    <!-- <bean id="sessionFactory"
-           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-         <property name="dataSource" ref="dataSource"/>
-         <property name="hibernateProperties">
-             <props>
-                 <prop key="current_session_context_class">thread</prop>
-                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                 <prop key="hibernate.hbm2ddl.auto">update</prop>
-             </props>
-         </property>
-         <property name="configLocations">
-             <list>
-                 <value>
-                     classpath*:hibernate/hibernate.cfg.xml
-                 </value>
-             </list>
-         </property>
-     </bean>
-     <bean id="transactionManager"
-           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-         <property name="sessionFactory">
-             <ref bean="sessionFactory"/>
-         </property>
-     </bean>-->
-    <!--<aop:config>
+    &lt;!&ndash;  配置hibernate SessionFactory&ndash;&gt;
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="current_session_context_class">thread</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+        <property name="configLocations">
+            <list>
+                <value>
+                    classpath*:hibernate/hibernate.cfg.xml
+                </value>
+            </list>
+        </property>
+    </bean>
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+    <aop:config>
         <aop:pointcut
                 expression="execution(* org.jichuang.hope6537.*.service.impl.*.*(..))"
                 id="dao"/>
@@ -80,5 +89,5 @@
             <tx:method name="select*" read-only="true"/>
             <tx:method name="*" propagation="REQUIRED"/>
         </tx:attributes>
-    </tx:advice>-->
-</beans>
+    </tx:advice>
+</beans>-->

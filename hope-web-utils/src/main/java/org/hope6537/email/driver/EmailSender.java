@@ -1,4 +1,4 @@
-package org.hope6537.email;
+package org.hope6537.email.driver;
 
 import org.apache.commons.lang.StringUtils;
 
