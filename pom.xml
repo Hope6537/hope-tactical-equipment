@@ -86,6 +86,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.42</version>
+        </dependency>
         <!-- mysql end -->
         <!-- 代理模式 -->
         <dependency>
