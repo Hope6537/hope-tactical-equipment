@@ -25,6 +25,7 @@
         <dependency>
             <groupId>IKAnalyzer</groupId>
             <artifactId>IKAnalyzer</artifactId>
+            <version>2012FF_u1</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/../other/lib/IKAnalyzer2012FF_u1.jar</systemPath>
         </dependency>
