@@ -19,6 +19,12 @@ public class AESLocker {
         assertEquals("sdqwdqwdqwdqw", s2);
     }
 
+    @Test
+    public void testDecrypt(){
+        System.out.println(encrypt("4236537"));
+        System.out.println(decrypt("Q3uKBgPV28Du3/JmWir12Q=="));
+    }
+
     public static String encrypt(String data) {
         try {
             return encrypt(data, "Hope6537JiChuang");

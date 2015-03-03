@@ -1,4 +1,4 @@
-package org.hope6537.math.unionfind;
+package org.hope6537.datastruct.unionfind;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

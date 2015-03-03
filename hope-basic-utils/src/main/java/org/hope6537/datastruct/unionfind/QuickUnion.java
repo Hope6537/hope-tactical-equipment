@@ -1,4 +1,4 @@
-package org.hope6537.math.unionfind;
+package org.hope6537.datastruct.unionfind;
 
 public class QuickUnion extends AbstractUnionFind {
 

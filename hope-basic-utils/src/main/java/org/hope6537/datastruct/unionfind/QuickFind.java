@@ -1,4 +1,4 @@
-package org.hope6537.math.unionfind;
+package org.hope6537.datastruct.unionfind;
 
 /**
  * Created by Hope6537 on 2015/2/23.
