@@ -9,7 +9,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -74,6 +74,7 @@ public class TotalTextDriver extends Configured implements Tool {
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
+        job.setOutputFormatClass(SequenceFileOutputFormat.class);
         //但是要注意的是我们的输入路径是一个二级目录顶，所以我们需要迭代深化进每个目录，给到InputFormat中
         Path input = new Path(args[0]);
         Path output = new Path(args[1]);
@@ -92,7 +93,7 @@ public class TotalTextDriver extends Configured implements Tool {
             return 1;
         }
 
-        FileOutputFormat.setOutputPath(job, output);
+        SequenceFileOutputFormat.setOutputPath(job, output);
 
         return job.waitForCompletion(true) ? 0 : 1;
     }

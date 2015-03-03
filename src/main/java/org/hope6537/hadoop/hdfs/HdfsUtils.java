@@ -27,6 +27,8 @@ public class HdfsUtils {
     private FileSystem fileSystem;
     private String username;
 
+
+
     private String hdfsDir;
     private Configuration configuration;
 

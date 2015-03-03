@@ -13,7 +13,14 @@
             </excludes>
             <!-- very small jar -->
             <includes>
-                <include>org.wltea.*:*</include>
+                <include>org.apache.lucene:*</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <unpack>true</unpack>
+            <scope>system</scope>
+            <includes>
+                <include>org.wltea:*</include>
             </includes>
         </dependencySet>
     </dependencySets>
