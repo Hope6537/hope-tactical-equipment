@@ -33,7 +33,6 @@ public class DepthFirstSearch implements GraphSearch {
         return marked[vetrex];
     }
 
-    @Override
     public int count() {
         return count;
     }

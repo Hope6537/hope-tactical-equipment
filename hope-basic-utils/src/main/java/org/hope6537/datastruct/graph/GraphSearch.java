@@ -9,6 +9,4 @@ public interface GraphSearch {
 
     boolean marked(int vetrex);
 
-    int count();
-
 }
