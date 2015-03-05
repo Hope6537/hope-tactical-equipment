@@ -11,20 +11,6 @@ import static org.junit.Assert.assertEquals;
 
 public class AESLocker {
 
-    @Test
-    public void testAES() {
-        String s1 = encrypt("sdqwdqwdqwdqw");
-        System.out.println(s1);
-        String s2 = decrypt(s1);
-        assertEquals("sdqwdqwdqwdqw", s2);
-    }
-
-    @Test
-    public void testDecrypt(){
-        System.out.println(encrypt("4236537"));
-        System.out.println(decrypt("Q3uKBgPV28Du3/JmWir12Q=="));
-    }
-
     public static String encrypt(String data) {
         try {
             return encrypt(data, "Hope6537JiChuang");
@@ -42,7 +28,6 @@ public class AESLocker {
             return null;
         }
     }
-
 
     private static String encrypt(String data, String key) throws Exception {
         try {
@@ -96,5 +81,19 @@ public class AESLocker {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Test
+    public void testAES() {
+        String s1 = encrypt("sdqwdqwdqwdqw");
+        System.out.println(s1);
+        String s2 = decrypt(s1);
+        assertEquals("sdqwdqwdqwdqw", s2);
+    }
+
+    @Test
+    public void testDecrypt() {
+        System.out.println(encrypt("4236537"));
+        System.out.println(decrypt("Q3uKBgPV28Du3/JmWir12Q=="));
     }
 }

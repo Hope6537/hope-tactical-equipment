@@ -9,11 +9,9 @@ import java.util.Stack;
  */
 public class BreadthFirstPaths implements GraphPath, GraphSearch {
 
-    protected boolean[] marked;
-
-    protected int[] edgeTo;
-
     protected final int start;
+    protected boolean[] marked;
+    protected int[] edgeTo;
 
     public BreadthFirstPaths(BasicGraph graph, int start) {
         marked = new boolean[graph.getVetrex()];

@@ -11,12 +11,6 @@ public class Bag<Item> implements Iterable<Item> {
     private int N;               // number of elements in bag
     private Node<Item> first;    // beginning of bag
 
-    // helper linked list class
-    private static class Node<Item> {
-        private Item item;
-        private Node<Item> next;
-    }
-
     /**
      * Initializes an empty bag.
      */
@@ -49,11 +43,17 @@ public class Bag<Item> implements Iterable<Item> {
         return new ListIterator<Item>(first);
     }
 
+    // helper linked list class
+    private static class Node<Item> {
+        private Item item;
+        private Node<Item> next;
+    }
+
     /**
      * 这个迭代器没有实现remove方法
      */
     private class ListIterator<Item> implements Iterator<Item> {
-        
+
         private Node<Item> current;
 
         public ListIterator(Node<Item> first) {

@@ -6,11 +6,9 @@ package org.hope6537.datastruct.graph;
 public class DepthFirstConnectedCount implements ConnectedCount {
 
     protected boolean[] marked;
-
+    protected int count;
     //所在连通分量的标示符
     private int[] id;
-
-    protected int count;
 
     public DepthFirstConnectedCount(BasicGraph graph) {
         marked = new boolean[graph.getVetrex()];

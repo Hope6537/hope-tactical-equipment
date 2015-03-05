@@ -15,6 +15,12 @@ public class SSHUtil {
     private String hostname;
     private String password;
 
+    public SSHUtil(String userId, String hostname, String password) {
+        this.userId = userId;
+        this.hostname = hostname;
+        this.password = password;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -36,12 +42,6 @@ public class SSHUtil {
     }
 
     public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public SSHUtil(String userId, String hostname, String password) {
-        this.userId = userId;
-        this.hostname = hostname;
         this.password = password;
     }
 

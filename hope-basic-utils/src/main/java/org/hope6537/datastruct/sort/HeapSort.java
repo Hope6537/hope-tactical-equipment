@@ -51,7 +51,7 @@ public class HeapSort {
             }
             if (tmp.compareTo(a[child]) < 0) {
                 //其中最大的子节点如果大于根
-				/*System.out.println("a[child]="+a[child]);*/
+                /*System.out.println("a[child]="+a[child]);*/
                 a[i] = a[child];
                 //那么父子互换  形成递增序列
             } else {

@@ -21,6 +21,26 @@ public class SFTPUtil {
     private ChannelSftp channel;
     private org.slf4j.Logger logger;
 
+    public SFTPUtil(String userId, String hostname, String password) {
+        logger = LoggerFactory.getLogger(getClass());
+        this.userId = userId;
+        this.hostname = hostname;
+        this.password = password;
+        // 建立连接
+        logger.info("init connection");
+        jSch = new JSch();
+        try {
+            Session session = jSch.getSession(userId, hostname, 22);
+            session.setPassword(password);
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
+            this.init();
+        } catch (JSchException e) {
+            logger.error("connection failed");
+            e.printStackTrace();
+        }
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -43,26 +63,6 @@ public class SFTPUtil {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public SFTPUtil(String userId, String hostname, String password) {
-        logger = LoggerFactory.getLogger(getClass());
-        this.userId = userId;
-        this.hostname = hostname;
-        this.password = password;
-        // 建立连接
-        logger.info("init connection");
-        jSch = new JSch();
-        try {
-            Session session = jSch.getSession(userId, hostname, 22);
-            session.setPassword(password);
-            session.setConfig("StrictHostKeyChecking", "no");
-            session.connect();
-            this.init();
-        } catch (JSchException e) {
-            logger.error("connection failed");
-            e.printStackTrace();
-        }
     }
 
     /**

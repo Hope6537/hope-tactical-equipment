@@ -7,8 +7,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Scanner;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Hope6537 on 2015/3/4.
@@ -23,26 +24,14 @@ public class SymbolGraphTest {
         SymbolGraph symbolGraph = new SymbolGraph(stream, split);
         BasicGraph basicGraph = symbolGraph.getGraph();
         Scanner s = new Scanner("JFK\r\nLAX");
+        String result = "";
         while (s.hasNextLine()) {
             String source = s.nextLine();
-            System.out.println(source);
             for (int w : basicGraph.adj(symbolGraph.index(source))) {
-                System.out.println("\t" + symbolGraph.name(w));
+                result += symbolGraph.name(w) + " ";
             }
         }
+        assertEquals(result, "ORD ATL MCO LAS PHX ");
     }
-
-    @Test
-    public void testScanner() {
-        Scanner scanner = new Scanner("Ssd sdsd sdsd sds ds \r\n dqwdqwd dqwdqwd dqw dqw");
-        while (scanner.hasNextLine()) {
-            System.out.println(Arrays.toString(scanner.nextLine().split(" ")));
-        }
-        scanner.reset();
-        while (scanner.hasNextLine()) {
-            System.out.println(Arrays.toString(scanner.nextLine().split(" ")));
-        }
-    }
-
 
 }
