@@ -34,4 +34,14 @@ public class SymbolGraphTest {
         assertEquals(result, "ORD ATL MCO LAS PHX ");
     }
 
+    @Test
+    public void testDegrees() throws IOException {
+        InputStream in = SymbolGraph.class.getResourceAsStream("data/routes.txt");
+        String stream = IOUtils.toString(in);
+        String split = " ";
+        SymbolGraph symbolGraph = new SymbolGraph(stream, split);
+        symbolGraph.printDegreesOnConsole("JFK","LAS DFW");
+
+    }
+
 }

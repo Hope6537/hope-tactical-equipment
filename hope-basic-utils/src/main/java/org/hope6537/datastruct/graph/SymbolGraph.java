@@ -77,4 +77,34 @@ public class SymbolGraph {
         return graph;
     }
 
+    public void printDegreesOnConsole(String source, String target) {
+        BasicGraph basicGraph = this.getGraph();
+        if (!this.contains(source)) {
+            System.out.println(source + "不存在于图中");
+            return;
+        }
+        int start = this.index(source);
+        BreadthFirstPaths bfs = new BreadthFirstPaths(basicGraph, start);
+        Scanner scanner = new Scanner(target);
+        while (scanner.hasNext()) {
+            String sink = scanner.next();
+            if (this.contains(sink)) {
+                int tar = this.index(sink);
+                if (bfs.hasPathTo(tar)) {
+                    System.out.println(source + "->" + sink);
+                    for (int vetrex : bfs.pathTo(tar)) {
+                        System.out.println("\t ->" + this.name(vetrex));
+                    }
+                } else {
+                    System.out.println(source + " <->" + sink + "两点未连接");
+                }
+            } else {
+                System.out.println(sink + "不在图中");
+            }
+        }
+
+
+    }
 }
+
+
