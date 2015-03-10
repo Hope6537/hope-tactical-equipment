@@ -40,7 +40,7 @@ public class HdfsUtilsTest {
 
     @Test
     public void test_03_Put() throws IOException {
-        boolean res = hdfsUtils.put("D:/hdfs_put.txt", "/hdfs_client_test/hdfs_put.txt");
+        boolean res = hdfsUtils.put("D:/[Lukool][DBXV][20150306_15-04-46].jpg", "/hdfs_client_test/hdfs_put");
         hdfsUtils.lsShowInConsole("/hdfs_client_test");
         hdfsUtils.closeFileSystem();
         assertTrue(res);
@@ -48,7 +48,7 @@ public class HdfsUtilsTest {
 
     @Test
     public void test_04_Get() throws IOException {
-        boolean res = hdfsUtils.get("/hdfs_client_test/hdfs_put.txt", "D:/hdfs_get.txt");
+        boolean res = hdfsUtils.get("/hdfs_client_test/hdfs_put", "D:/hdfs_get");
         hdfsUtils.lsShowInConsole("/hdfs_client_test");
         hdfsUtils.closeFileSystem();
         assertTrue(res);

@@ -16,7 +16,7 @@ public class RPCClient {
             PublicInterface proxy = RPC.getProxy(
                     PublicInterface.class,
                     100,
-                    new InetSocketAddress("192.168.1.127", 6537),
+                    new InetSocketAddress("127.0.0.1", 6537),
                     new Configuration());
             String res = proxy.getMeg("C:/");
             System.out.println(res);

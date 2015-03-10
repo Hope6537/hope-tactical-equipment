@@ -17,7 +17,7 @@ public class RPCServer implements PublicInterface {
             Server server = new RPC.Builder(configuration)
                     .setProtocol(PublicInterface.class)
                     .setInstance(new RPCServer())
-                    .setBindAddress("192.168.1.127")
+                    .setBindAddress("127.0.0.1")
                     .setPort(6537).build();
             server.start();
         } catch (IOException e) {

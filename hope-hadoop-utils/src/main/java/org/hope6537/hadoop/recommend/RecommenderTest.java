@@ -50,10 +50,8 @@ public class RecommenderTest {
     public static void itemCF(DataModel dataModel) throws TasteException {
         ItemSimilarity itemSimilarity = RecommendFactory.itemSimilarity(RecommendFactory.SIMILARITY.CITYBLOCK, dataModel);
         RecommenderBuilder recommenderBuilder = RecommendFactory.itemRecommender(itemSimilarity, true);
-
         RecommendFactory.evaluate(RecommendFactory.EVALUATOR.AVERAGE_ABSOLUTE_DIFFERENCE, recommenderBuilder, null, dataModel, 0.7);
         RecommendFactory.statsEvaluator(recommenderBuilder, null, dataModel, 2);
-
         LongPrimitiveIterator iter = dataModel.getUserIDs();
         while (iter.hasNext()) {
             long uid = iter.nextLong();

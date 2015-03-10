@@ -12,6 +12,54 @@ import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
 import java.io.IOException;
 
+class RecommenderType {
+
+    private RecommendFactory.NEIGHBORHOOD neighborhood;
+    private RecommendFactory.RECOMMENDER recommender;
+    private RecommendFactory.EVALUATOR evaluator;
+    private RecommendFactory.SIMILARITY similarity;
+
+    public RecommenderType(RecommendFactory.NEIGHBORHOOD neighborhood, RecommendFactory.RECOMMENDER recommender, RecommendFactory.EVALUATOR evaluator, RecommendFactory.SIMILARITY similarity) {
+        this.neighborhood = neighborhood;
+        this.recommender = recommender;
+        this.evaluator = evaluator;
+        this.similarity = similarity;
+    }
+
+    public RecommendFactory.NEIGHBORHOOD getNeighborhood() {
+        return neighborhood;
+    }
+
+    public void setNeighborhood(RecommendFactory.NEIGHBORHOOD neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public RecommendFactory.RECOMMENDER getRecommender() {
+        return recommender;
+    }
+
+    public void setRecommender(RecommendFactory.RECOMMENDER recommender) {
+        this.recommender = recommender;
+    }
+
+    public RecommendFactory.EVALUATOR getEvaluator() {
+        return evaluator;
+    }
+
+    public void setEvaluator(RecommendFactory.EVALUATOR evaluator) {
+        this.evaluator = evaluator;
+    }
+
+    public RecommendFactory.SIMILARITY getSimilarity() {
+        return similarity;
+    }
+
+    public void setSimilarity(RecommendFactory.SIMILARITY similarity) {
+        this.similarity = similarity;
+    }
+}
+
+
 public class RecommenderEvaluator {
 
     final static int NEIGHBORHOOD_NUM = 2;
