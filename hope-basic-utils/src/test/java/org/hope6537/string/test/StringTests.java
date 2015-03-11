@@ -1,5 +1,7 @@
 package org.hope6537.string.test;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import org.hope6537.string.KMPSearch;
 import org.junit.Test;
 
@@ -17,8 +19,12 @@ public class StringTests {
             int offset = kmpSearch.search(txt);
             System.out.println(offset);
         }
+    }
 
-
+    @Test
+    public void testJson() {
+        String json = "";
+        JSONArray jsonObject = JSON.parseArray("");
     }
 
 }
