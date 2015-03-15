@@ -18,13 +18,15 @@ public class Driver {
     @Test
     public void testJson() throws IOException {
 
-        InputStream in = DataModel.class.getResourceAsStream("data.txt");
+        InputStream in = DataModel.class.getResourceAsStream("data2.txt");
         String data = IOUtils.toString(in);
+        data = "[" + data + "]";
         JSONArray array = JSON.parseArray(data);
         ArrayList<DataModel> dataModels = new ArrayList<>(array.size());
         for (int i = 0; i < array.size(); i++) {
             JSONObject obj = array.getJSONObject(i);
-            dataModels.add(new DataModel(obj.getString("title"),
+            dataModels.add(new DataModel(
+                    obj.getString("title"),
                     obj.getString("date"),
                     obj.getString("abs"),
                     obj.getString("applicant"),

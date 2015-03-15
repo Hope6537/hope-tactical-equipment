@@ -1,5 +1,6 @@
 package org.hope6537.file;
 
+import org.hope6537.context.ApplicationConstant;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -133,10 +134,30 @@ public class FileUtil {
         while ((length = is.read(buffer)) > 0) {
             os.write(buffer, 0, length);
         }
-        ;
         is.close();
         os.close();
         return true;
+    }
+
+    public static boolean copyFileToServerAndHDFS(InputStream in, OutputStream server, OutputStream hdfs, int bufferSize) {
+        if (ApplicationConstant.isNull(in) || ApplicationConstant.isNull(hdfs) || ApplicationConstant.isNull(hdfs)) {
+            return false;
+        }
+        byte[] buffer = new byte[bufferSize];
+        try {
+            long count = 0;
+            int n = 0;
+            while (-1 != (n = in.read(buffer))) {
+                server.write(buffer, 0, n);
+                hdfs.write(buffer, 0, n);
+                count += n;
+            }
+            return bufferSize == count;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     /**
