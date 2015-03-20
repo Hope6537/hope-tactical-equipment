@@ -7,8 +7,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import static org.junit.Assert.assertEquals;
-
 public class AESLocker {
 
     public static String encrypt(String data) {
@@ -83,17 +81,9 @@ public class AESLocker {
         }
     }
 
-    @Test
-    public void testAES() {
-        String s1 = encrypt("sdqwdqwdqwdqw");
-        System.out.println(s1);
-        String s2 = decrypt(s1);
-        assertEquals("sdqwdqwdqwdqw", s2);
-    }
 
     @Test
     public void testDecrypt() {
-        System.out.println(encrypt("4236537"));
         System.out.println(decrypt("Q3uKBgPV28Du3/JmWir12Q=="));
     }
 }

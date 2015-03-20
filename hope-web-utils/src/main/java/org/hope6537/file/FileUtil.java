@@ -1,10 +1,12 @@
 package org.hope6537.file;
 
 import org.hope6537.context.ApplicationConstant;
+import org.hope6537.security.MD5Util;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * Created by Administrator on 2014/10/10.
@@ -139,8 +141,8 @@ public class FileUtil {
         return true;
     }
 
-    public static boolean copyFileToServerAndHDFS(InputStream in, OutputStream server, OutputStream hdfs, int bufferSize) {
-        if (ApplicationConstant.isNull(in) || ApplicationConstant.isNull(hdfs) || ApplicationConstant.isNull(hdfs)) {
+    public static boolean copyFileToServerAndHDFSNoHadoop(InputStream in, OutputStream server, OutputStream hdfs, int bufferSize) {
+        if (ApplicationConstant.isNull(in) || ApplicationConstant.isNull(server)) {
             return false;
         }
         byte[] buffer = new byte[bufferSize];
@@ -149,13 +151,39 @@ public class FileUtil {
             int n = 0;
             while (-1 != (n = in.read(buffer))) {
                 server.write(buffer, 0, n);
-                hdfs.write(buffer, 0, n);
+                //hdfs.write(buffer, 0, n);
                 count += n;
             }
-            return bufferSize == count;
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+
+    }
+
+
+    public static synchronized String copyFileToServerAndHDFS(InputStream in, OutputStream server, OutputStream hdfs, int bufferSize) {
+        if (ApplicationConstant.isNull(in) || ApplicationConstant.isNull(server) || ApplicationConstant.isNull(hdfs)) {
+            return null;
+        }
+        String md5 = null;
+        byte[] buffer = new byte[bufferSize];
+        try {
+            long count = 0;
+            int n = 0;
+            while (-1 != (n = in.read(buffer))) {
+                if (count <= 4096) {
+                    md5 = MD5Util.string2MD5(Arrays.toString(buffer));
+                }
+                server.write(buffer, 0, n);
+                hdfs.write(buffer, 0, n);
+                count += n;
+            }
+            return md5;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
 
     }

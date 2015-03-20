@@ -23,16 +23,13 @@ public class HdfsUtils {
 
     public static final String HADOOP2MASTER_DIR = "hdfs://hadoop2master:9000";
     public static final String HADOOP_NAMESERVICE_DIR = "hdfs://ns1";
+    public static final String JICHUANG_MASTER_DIR = "hdfs://jichuang:9000";
     public Logger logger;
     private FileSystem fileSystem;
     private String username;
 
     private String hdfsDir;
     private Configuration configuration;
-
-    public HdfsUtils(String hdfsDir, Configuration configuration) {
-        this(hdfsDir, configuration, "hope6537");
-    }
 
     public HdfsUtils(String hdfsDir, Configuration configuration, String username) {
         this.hdfsDir = hdfsDir;
@@ -49,11 +46,17 @@ public class HdfsUtils {
     }
 
     public HdfsUtils(Configuration configuration) {
+
         this(HADOOP_NAMESERVICE_DIR, configuration);
     }
 
     public HdfsUtils() {
+
         this(HADOOP_NAMESERVICE_DIR, ConfigurationFactory.getConfiguration());
+    }
+
+    public HdfsUtils(String hdfsDir, Configuration configuration) {
+        this(hdfsDir, configuration, "hope6537");
     }
 
     public static HdfsUtils getInstanceOfDistributed() {
@@ -63,6 +66,11 @@ public class HdfsUtils {
     public static HdfsUtils getInstanceOfPseudoDistributed(Configuration configuration) {
         return new HdfsUtils(HADOOP2MASTER_DIR, configuration);
     }
+
+    public static HdfsUtils getInstanceOfJiChuang(Configuration configuration) {
+        return new HdfsUtils(JICHUANG_MASTER_DIR, configuration);
+    }
+
 
     public static JobConf config() {
         //设置Configuration配置,获取classpath下的配置文件

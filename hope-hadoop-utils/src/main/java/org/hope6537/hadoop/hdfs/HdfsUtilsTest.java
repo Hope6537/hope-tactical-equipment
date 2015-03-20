@@ -21,7 +21,7 @@ public class HdfsUtilsTest {
 
     @Before
     public void init() {
-        hdfsUtils = HdfsUtils.getInstanceOfPseudoDistributed(new Configuration());
+        hdfsUtils = HdfsUtils.getInstanceOfJiChuang(new Configuration());
     }
 
     @Test
