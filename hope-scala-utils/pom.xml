@@ -5,7 +5,7 @@
     <parent>
         <artifactId>hope6537-utils</artifactId>
         <groupId>org.hope6537</groupId>
-        <version>1.2-RELEASE</version>
+        <version>1.2.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.hope6537</groupId>
             <artifactId>hope-basic-utils</artifactId>
-            <version>1.2-RELEASE</version>
+            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>

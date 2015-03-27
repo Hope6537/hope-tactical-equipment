@@ -6,7 +6,7 @@
 
     <groupId>org.hope6537</groupId>
     <artifactId>hope6537-utils</artifactId>
-    <version>1.2-RELEASE</version>
+    <version>1.2.1</version>
     <modules>
         <module>hope-hadoop-utils</module>
         <module>hope-web-utils</module>
@@ -68,7 +68,6 @@
     </dependencyManagement>
 
     <dependencies>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
