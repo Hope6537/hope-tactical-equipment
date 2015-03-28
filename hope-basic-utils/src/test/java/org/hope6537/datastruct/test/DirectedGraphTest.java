@@ -1,7 +1,7 @@
 package org.hope6537.datastruct.test;
 
 import org.hope6537.datastruct.graph.DirectedGraph;
-import org.hope6537.datastruct.graph.SymbolGraph;
+import org.hope6537.datastruct.graph.Topological;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class DirectedGraphTest {
 
     @Test
     public void testInitGraph() throws IOException {
-        InputStream in = SymbolGraph.class.getResourceAsStream("data/tinyDirectedGraph.txt");
+        InputStream in = DirectedGraph.class.getResourceAsStream("data/tinyDG.txt");
         Scanner scanner = new Scanner(in);
         DirectedGraph directedGraph = new DirectedGraph(scanner);
         Iterable<Integer> res = directedGraph.adj(3);
@@ -25,7 +25,7 @@ public class DirectedGraphTest {
 
     @Test
     public void testDirectedReachable() throws IOException {
-        InputStream in = SymbolGraph.class.getResourceAsStream("data/tinyDirectedGraph.txt");
+        InputStream in = DirectedGraph.class.getResourceAsStream("data/tinyDG.txt");
         Scanner scanner = new Scanner(in);
         DirectedGraph directedGraph = new DirectedGraph(scanner);
         Set<Integer> input = new HashSet<>();
@@ -33,6 +33,17 @@ public class DirectedGraphTest {
         input.add(2);
         input.add(6);
         directedGraph.thisGraphDirectedTo(input).forEach(System.out::println);
+    }
+
+    @Test
+    public void testTopologicalTest() throws IOException {
+        InputStream in = DirectedGraph.class.getResourceAsStream("data/tinyDAG.txt");
+        Scanner scanner = new Scanner(in);
+        DirectedGraph graph = new DirectedGraph(scanner);
+        Topological top = new Topological(graph);
+        assertTrue(top.isDAG());
+        top.getOrder().forEach(System.out::println);
+
     }
 
 }
