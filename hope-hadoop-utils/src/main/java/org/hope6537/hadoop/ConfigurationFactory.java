@@ -24,17 +24,6 @@ public class ConfigurationFactory {
 
     public static Configuration getConfigurationOfPseudoDistributed() {
         Configuration configuration = new Configuration();
-       /* UserGroupInformation user = UserGroupInformation.createRemoteUser("hope6537");
-        configuration.set("hadoop.job.ugi", "hope6537");
-        configuration.set("mapreduce.jobhistory.address", "hadoop2master:10020");
-        configuration.set("mapreduce.framework.name", "yarn");
-        configuration.set("yarn.nodemanager.aux-services", "mapreduce_shuffle");
-        configuration.set("dfs.replication", "1");
-
-        configuration.set("fs.defaultFS", "hdfs://hadoop2master:9000");
-        configuration.set("hadoop.tmp.dir", "/home/hope6537/hadoop/hadoop-2.6.0/tmp");
-        configuration.set("hadoop.tmp.dir", "C:/CoderDocuments/hadoop/hadoop-2.6.0/tmp");
-        configuration.set("dfs.permissions", "false");*/
         return configuration;
     }
 

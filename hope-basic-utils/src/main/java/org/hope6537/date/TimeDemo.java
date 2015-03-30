@@ -2,16 +2,20 @@ package org.hope6537.date;
 
 public class TimeDemo {
 
-    private Long start;
-    private Long end;
+    private double start;
+    private double end;
 
     public TimeDemo() {
         start = System.currentTimeMillis();
     }
 
+    public void start() {
+        start = System.currentTimeMillis();
+    }
+
     public Double end() {
         end = System.currentTimeMillis();
-        return (end - start * 1.0 / 1000);
+        return (end - start * 1.0);
     }
 
 
@@ -53,5 +57,10 @@ public class TimeDemo {
                 break;
         }
         return localTime + localTimeStap;
+    }
+
+    public void clear() {
+        start = 0.0;
+        end = 0.0;
     }
 }
