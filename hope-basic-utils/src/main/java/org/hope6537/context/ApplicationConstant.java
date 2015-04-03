@@ -30,6 +30,7 @@ public class ApplicationConstant {
     public static final String STATUS_NORMAL = "正常";
     public static final String STATUS_DIE = "不可用";
 
+    public static final java.util.regex.Pattern DELIMITER = java.util.regex.Pattern.compile("[\t,]");
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 

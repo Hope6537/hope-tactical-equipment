@@ -1,4 +1,4 @@
-package org.hope6537.hadoop;
+package org.hope6537.hadoop.textfitler;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
