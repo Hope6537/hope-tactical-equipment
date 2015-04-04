@@ -12,17 +12,12 @@ import org.hope6537.context.ApplicationConstant;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Map;
 
-/**
- * Created by Hope6537 on 2015/3/31.
- */
 public class AdjacencyMatrix {
 
-    public static final int nums = 25;
-    public static final double d = 0.85;
 
-
-    public int run(final String input, final String output) throws Exception {
+    public int run(Map<String, String> jobPathMap) throws Exception {
 
         Job job = Job.getInstance();
         job.setJarByClass(AdjacencyMatrix.class);
@@ -36,8 +31,8 @@ public class AdjacencyMatrix {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
-        FileInputFormat.setInputPaths(job, new Path(input));
-        FileOutputFormat.setOutputPath(job, new Path(output));
+        FileInputFormat.setInputPaths(job, new Path(jobPathMap.get("input_people")));
+        FileOutputFormat.setOutputPath(job, new Path(jobPathMap.get("tmp1")));
 
         return job.waitForCompletion(true) ? 0 : 1;
     }
@@ -58,27 +53,29 @@ public class AdjacencyMatrix {
 
         @Override
         protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-            float[] G = new float[nums];
-            Arrays.fill(G, (float) (1 - d));
-            float[] A = new float[nums];
-            int sum = 0;
-            for (Text value : values) {
-                int index = Integer.parseInt(value.toString());
-                A[index - 1] = 1;
+            float[] G = new float[Driver.nums];// 概率矩阵列
+            Arrays.fill(G, (float) (1 - Driver.d) / G.length);
+
+            float[] A = new float[Driver.nums];// 近邻矩阵列
+            int sum = 0;// 链出数量
+            for (Text val : values) {
+                int idx = Integer.parseInt(val.toString());
+                A[idx - 1] = 1;
                 sum++;
             }
 
-            if (sum == 0) {
+            if (sum == 0) {// 分母不能为0
                 sum = 1;
             }
 
-            StringBuilder buffer = new StringBuilder();
-            for (int i = 0; i < nums; i++) {
-                buffer.append(",").append(G[i] + d * A[i] / sum);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < A.length; i++) {
+                sb.append(",").append((float) (G[i] + Driver.d * A[i] / sum));
             }
-            Text value = new Text(buffer.toString().substring(1));
-            System.err.println(key + "->" + value);
-            context.write(key, value);
+
+            Text v = new Text(sb.toString().substring(1));
+            System.out.println(key + ":" + v.toString());
+            context.write(key, v);
         }
     }
 

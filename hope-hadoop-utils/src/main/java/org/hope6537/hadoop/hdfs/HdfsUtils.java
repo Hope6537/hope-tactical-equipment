@@ -120,6 +120,21 @@ public class HdfsUtils {
         }
     }
 
+    public boolean rename(String file, String newName) {
+        Path path = new Path(file);
+        Path newNamePath = new Path(file);
+        try {
+            if (!fileSystem.exists(path)) {
+                fileSystem.rename(path, newNamePath);
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("make directory error");
+            return false;
+        }
+    }
+
     public boolean rmr(String folder) {
         Path path = new Path(folder);
         try {
@@ -234,91 +249,6 @@ public class HdfsUtils {
             System.out.println("Create: " + folder + "Failed!");
         }
     }
-
-    private static Path checkDest(String srcName, FileSystem dstFS, Path dst, boolean overwrite) throws IOException {
-        if (dstFS.exists(dst)) {
-            FileStatus sdst = dstFS.getFileStatus(dst);
-            if (sdst.isDirectory()) {
-                if (null == srcName) {
-                    throw new IOException("Target " + dst + " is a directory");
-                }
-                return checkDest(null, dstFS, new Path(dst, srcName), overwrite);
-            } else if (!overwrite) {
-                throw new IOException("Target " + dst + " already exists");
-            }
-        }
-        return dst;
-    }
-
-    private static void checkDependencies(FileSystem srcFS, Path src, FileSystem dstFS, Path dst)
-            throws IOException {
-        if (srcFS == dstFS) {
-            String srcq = src.makeQualified(srcFS).toString() + Path.SEPARATOR;
-            String dstq = dst.makeQualified(dstFS).toString() + Path.SEPARATOR;
-            if (dstq.startsWith(srcq)) {
-                if (srcq.length() == dstq.length()) {
-                    throw new IOException("Cannot copy " + src + " to itself.");
-                } else {
-                    throw new IOException("Cannot copy " + src + " to its subdirectory " +
-                            dst);
-                }
-            }
-        }
-    }
-
-    /**
-     * Copy files between FileSystems.
-     */
-    public static boolean copyBetweenFileSystem(FileSystem srcFS, FileStatus srcStatus,
-                                                FileSystem dstFS, Path dst,
-                                                boolean deleteSource,
-                                                boolean overwrite,
-                                                Configuration conf) throws IOException {
-        //得到源地址
-        Path src = srcStatus.getPath();
-        //得到是否合法
-        dst = checkDest(src.getName(), dstFS, dst, overwrite);
-        //如果目标文件是一个目录
-        if (srcStatus.isDirectory()) {
-            //检查复制合法性,合法就创建目录
-            checkDependencies(srcFS, src, dstFS, dst);
-            if (!dstFS.mkdirs(dst)) {
-                return false;
-            }
-            FileStatus contents[] = srcFS.listStatus(src);
-            //获得当前目录的子文件
-            for (int i = 0; i < contents.length; i++) {
-                //然后递归调用本方法
-                copyBetweenFileSystem(srcFS, contents[i], dstFS,
-                        new Path(dst, contents[i].getPath().getName()),
-                        deleteSource, overwrite, conf);
-            }
-        } else {
-            //如果目标是文件
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                //输入流
-                in = srcFS.open(src);
-                //输出流，同时是否覆盖
-                out = dstFS.create(dst, overwrite);
-                //然后获取输入，输出，配置文件,写入
-                IOUtils.copyBytes(in, out, conf, true);
-            } catch (IOException e) {
-                IOUtils.closeStream(out);
-                IOUtils.closeStream(in);
-                throw e;
-            }
-        }
-        //如果要删除源文件
-        if (deleteSource) {
-            return srcFS.delete(src, true);
-        } else {
-            return true;
-        }
-
-    }
-
 
     /**
      * 在控制台显示ls效果
