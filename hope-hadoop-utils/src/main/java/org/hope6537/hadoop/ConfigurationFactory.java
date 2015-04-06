@@ -26,6 +26,7 @@ public class ConfigurationFactory {
 
     public static Configuration getConfigurationOfPseudoDistributed() {
         Configuration configuration = new Configuration();
+        configuration.set("mapred.child.java.opts", "-Xmx200m -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=16888");
         configuration.set("io.compression.codecs", "org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.GzipCodec,com.hadoop.compression.lzo.LzopCodec");
         configuration.set("io.compression.codec.lzo.class", "com.hadoop.compression.lzo.LzoCodec");
         return configuration;

@@ -15,6 +15,9 @@ public class Driver extends Configured implements Tool {
     public static final double d = 0.85;
 
     public static void main(String[] args) throws Exception {
+        args = new String[]{
+                "/peoplerank", "/peoplerank_out"
+        };
         ToolRunner.run(ConfigurationFactory.getConfigurationOfPseudoDistributed(), new Driver(), args);
         System.exit(0);
     }
@@ -22,7 +25,6 @@ public class Driver extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
-        int step1 = 0;
         getConf().set("io.compression.codecs", "org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.GzipCodec,com.hadoop.compression.lzo.LzopCodec");
         getConf().set("io.compression.codec.lzo.class", "com.hadoop.compression.lzo.LzoCodec");
         if (args.length < 2) {
@@ -30,7 +32,10 @@ public class Driver extends Configured implements Tool {
             System.err.println("确认输入和输出路径");
             return 0;
         }
-        HdfsUtils hdfsUtils = HdfsUtils.getInstanceOfPseudoDistributed(ConfigurationFactory.getConfigurationOfPseudoDistributed());
+        AdjacencyMatrix step1 = new AdjacencyMatrix();
+        PeopleRank step2 = new PeopleRank();
+        NormalData step3 = new NormalData();
+        HdfsUtils hdfsUtils = HdfsUtils.getInstanceOfJiChuang(ConfigurationFactory.getConfigurationOfPseudoDistributed());
         final String input = args[0];
         final String output = args[1];
         System.err.println("the input path is " + input);
@@ -45,12 +50,17 @@ public class Driver extends Configured implements Tool {
         jobPathMap.put("result", output);
         System.err.println("remove directories");
         jobPathMap.keySet().stream().
-                filter(key -> !(key.startsWith("input") || key.startsWith("tmp1"))).forEach(key -> hdfsUtils.rmrShowInConsole(jobPathMap.get(key)));
-        hdfsUtils.closeFileSystem();
-        //int step1 = new AdjacencyMatrix().run(jobPathMap);
-        if (step1 == 0) {
-            int step2 = new PeopleRank().run(jobPathMap);
-            return step2;
+                filter(key -> !(key.startsWith("input"))).forEach(key -> hdfsUtils.rmrShowInConsole(jobPathMap.get(key)));
+
+        int res1 = step1.run(jobPathMap);
+        if (res1 == 0) {
+            int res2 = 0;
+            for (int i = 0; i < 10; i++) {
+                res2 += step2.run(jobPathMap, hdfsUtils);
+            }
+            if (res2 == 0) {
+                step3.run(jobPathMap);
+            }
         }
         return 1;
     }

@@ -42,18 +42,19 @@ public class PeopleRank {
         FileOutputFormat.setOutputPath(job, new Path(jobPathMap.get("tmp2")));
 
         int res = job.waitForCompletion(true) ? 0 : 1;
+
         if (res == 0) {
             hdfsUtils.rmrShowInConsole(jobPathMap.get("input_pr"));
-            return hdfsUtils.rename(jobPathMap.get("tmp2"), jobPathMap.get("input_pr")) ? 0 : 1;
+            hdfsUtils.renameShowInConsole(jobPathMap.get("tmp2"), jobPathMap.get("input_pr"));
         }
         return res;
     }
 
+
     private static class StepMapper extends Mapper<LongWritable, Text, Text, Text> {
 
         private String flag;
-        private Text resultKey = new Text();
-        private Text resultValue = new Text();
+
 
         @Override
         protected void setup(Context context) throws IOException, InterruptedException {
@@ -63,6 +64,8 @@ public class PeopleRank {
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+            Text resultKey = new Text();
+            Text resultValue = new Text();
             System.err.println(value.toString());
             String[] tokens = ApplicationConstant.DELIMITER.split(value.toString());
             if (flag.equals("tmp1")) {
@@ -75,7 +78,7 @@ public class PeopleRank {
             } else if (flag.equals("pr")) {
                 for (int i = 1; i <= Driver.nums; i++) {
                     resultKey.set(String.valueOf(i));
-                    resultValue.set(String.valueOf("B" + tokens[0] + "," + tokens[1]));
+                    resultValue.set(String.valueOf("B:" + tokens[0] + "," + tokens[1]));
                     context.write(resultKey, resultValue);
                 }
             }
@@ -94,18 +97,19 @@ public class PeopleRank {
                 System.err.println(key + "->" + line);
                 String value = line.toString();
                 String[] token = ApplicationConstant.DELIMITER.split(value.substring(2));
-                if (value.startsWith("A: ")) {
+                if (value.startsWith("A:")) {
                     mapA.put(Integer.parseInt(token[0]), Float.parseFloat(token[1]));
-                } else if (value.startsWith("B:")) {
+                }
+                if (value.startsWith("B:")) {
                     mapB.put(Integer.parseInt(token[0]), Float.parseFloat(token[1]));
                 }
             }
             for (Integer index : mapA.keySet()) {
                 float a = mapA.get(index);
-                float b = mapA.get(index);
+                float b = mapB.get(index);
                 pr += a * b;
             }
-            resultValue.set(String.valueOf(scaleFloat(pr)));
+            resultValue.set(String.valueOf(pr));
             context.write(key, resultValue);
         }
     }

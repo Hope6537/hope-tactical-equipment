@@ -85,9 +85,11 @@ public class HdfsUtils {
     public FileSystem getFileSystem() {
         try {
             fileSystem.getStatus();
-        } catch (IOException e) {
+        } catch (Exception e) {
+            System.out.println("restart fileSystem");
             logger.warn("restart fileSystem");
             try {
+                this.fileSystem = null;
                 this.fileSystem = FileSystem.get(URI.create(hdfsDir), configuration, username);
             } catch (Exception e1) {
                 logger.error("create fileSystem error");
@@ -102,15 +104,16 @@ public class HdfsUtils {
     public FileStatus[] ls(String folder) throws IOException {
         Path path = new Path(folder);
         FileSystem fs = getFileSystem();
-        FileStatus[] list = fileSystem.listStatus(path);
+        FileStatus[] list = fs.listStatus(path);
         return list;
     }
 
     public boolean mkdirs(String folder) {
         Path path = new Path(folder);
+        FileSystem fs = getFileSystem();
         try {
-            if (!fileSystem.exists(path)) {
-                fileSystem.mkdirs(path);
+            if (!fs.exists(path)) {
+                fs.mkdirs(path);
             }
             return true;
         } catch (IOException e) {
@@ -122,11 +125,10 @@ public class HdfsUtils {
 
     public boolean rename(String file, String newName) {
         Path path = new Path(file);
-        Path newNamePath = new Path(file);
+        Path newNamePath = new Path(newName);
+        FileSystem fs = getFileSystem();
         try {
-            if (!fileSystem.exists(path)) {
-                fileSystem.rename(path, newNamePath);
-            }
+            fs.rename(path, newNamePath);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -137,8 +139,9 @@ public class HdfsUtils {
 
     public boolean rmr(String folder) {
         Path path = new Path(folder);
+        FileSystem fs = getFileSystem();
         try {
-            fileSystem.deleteOnExit(path);
+            fs.delete(path, true);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -149,7 +152,8 @@ public class HdfsUtils {
 
     public boolean put(String local, String remote) {
         try {
-            fileSystem.copyFromLocalFile(new Path(local), new Path(remote));
+            FileSystem fs = getFileSystem();
+            fs.copyFromLocalFile(new Path(local), new Path(remote));
             logger.info("upload file " + local + " to " + remote);
             return true;
         } catch (IOException e) {
@@ -161,7 +165,8 @@ public class HdfsUtils {
 
     public boolean put(InputStream local, String remote) {
         try {
-            OutputStream out = fileSystem.create(new Path(remote), false);
+            FileSystem fs = getFileSystem();
+            OutputStream out = fs.create(new Path(remote), false);
             IOUtils.copyBytes(local, out, configuration, true);
             return true;
         } catch (IOException e) {
@@ -173,7 +178,8 @@ public class HdfsUtils {
 
     public OutputStream getHdfsOutPutStream(String path) {
         try {
-            OutputStream out = fileSystem.create(new Path(path), false);
+            FileSystem fs = getFileSystem();
+            OutputStream out = fs.create(new Path(path), false);
             return out;
         } catch (IOException e) {
             e.printStackTrace();
@@ -183,7 +189,8 @@ public class HdfsUtils {
 
     public InputStream getHdfsInputStream(String path) {
         try {
-            InputStream in = fileSystem.open(new Path(path));
+            FileSystem fs = getFileSystem();
+            InputStream in = fs.open(new Path(path));
             return in;
         } catch (IOException e) {
             e.printStackTrace();
@@ -194,7 +201,8 @@ public class HdfsUtils {
 
     public boolean get(String remote, String local) throws IOException {
         try {
-            fileSystem.copyToLocalFile(new Path(remote), new Path(local));
+            FileSystem fs = getFileSystem();
+            fs.copyToLocalFile(new Path(remote), new Path(local));
             logger.info("download file " + remote + " from " + local);
             return true;
         } catch (IOException e) {
@@ -207,9 +215,10 @@ public class HdfsUtils {
     public InputStream cat(String remoteFile) throws IOException {
         Path path = new Path(remoteFile);
         FSDataInputStream fsdis = null;
+        FileSystem fs = getFileSystem();
         logger.info("cat: " + remoteFile);
         try {
-            fsdis = fileSystem.open(path);
+            fsdis = fs.open(path);
             return fsdis;
         } finally {
             IOUtils.closeStream(fsdis);
@@ -230,6 +239,16 @@ public class HdfsUtils {
         this.cat(remoteFile, System.out);
 
     }
+
+    public void renameShowInConsole(String file, String newName) {
+        System.out.println("File: " + file + "->" + newName);
+        if (this.rename(file, newName)) {
+            System.out.println("rename success!");
+        } else {
+            System.out.println("rename failed!");
+        }
+    }
+
 
     public void rmrShowInConsole(String folder) {
         boolean result = this.rmr(folder);

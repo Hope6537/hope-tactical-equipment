@@ -55,11 +55,38 @@ public class HdfsUtilsTest {
     }
 
     @Test
-    public void test_05_Rmr() throws IOException {
+    public void test_05_Rename() throws IOException {
+        boolean res = hdfsUtils.rename("/hdfs_client_test2", "/hdfs_client_test");
+        hdfsUtils.closeFileSystem();
+        assertTrue(res);
+    }
+
+    @Test
+    public void test_06_Rmr() throws IOException {
         boolean res = hdfsUtils.rmr("/hdfs_client_test");
         hdfsUtils.lsShowInConsole("/");
         hdfsUtils.closeFileSystem();
         assertTrue(res);
+    }
+
+    @Test
+    public void test() {
+        hdfsUtils.rmrShowInConsole("/peoplerank/pr");
+        hdfsUtils.rmrShowInConsole("/peoplerank/tmp2");
+        hdfsUtils.mkdirsShowInConsole("/peoplerank/pr");
+        hdfsUtils.mkdirsShowInConsole("/peoplerank/tmp2");
+        hdfsUtils.rmrShowInConsole("/peoplerank/pr");
+        hdfsUtils.renameShowInConsole("/peoplerank/tmp2", "/peoplerank/pr");
+    }
+
+    @Test
+    public void test2() {
+
+    }
+
+    @Test
+    public void test3() {
+
     }
 }
 
