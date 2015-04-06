@@ -527,8 +527,8 @@ def update(sql, *args):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     create_engine("root", "4236537", 'test')
-    update('drop table if exists user')
-    update('create table user (id int primary key, name text, email text, passwd text, last_modified real)')
+    update('DROP TABLE IF EXISTS user')
+    update('CREATE TABLE user (id INT PRIMARY KEY, name TEXT, email TEXT, passwd TEXT, last_modified REAL)')
     import doctest
 
     doctest.testmod()

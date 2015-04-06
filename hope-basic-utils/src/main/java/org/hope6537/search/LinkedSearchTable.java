@@ -10,18 +10,6 @@ public class LinkedSearchTable<Key, Value> extends SearchTable<Key, Value> {
 
     private Node first;
 
-    private class Node {
-        Key key;
-        Value value;
-        Node next;
-
-        public Node(Key key, Value value, Node next) {
-            this.key = key;
-            this.value = value;
-            this.next = next;
-        }
-    }
-
     @Override
     public void put(Key key, Value value) {
         for (Node x = first; x != null; x = x.next) {
@@ -64,5 +52,17 @@ public class LinkedSearchTable<Key, Value> extends SearchTable<Key, Value> {
             size++;
         }
         return size;
+    }
+
+    private class Node {
+        Key key;
+        Value value;
+        Node next;
+
+        public Node(Key key, Value value, Node next) {
+            this.key = key;
+            this.value = value;
+            this.next = next;
+        }
     }
 }

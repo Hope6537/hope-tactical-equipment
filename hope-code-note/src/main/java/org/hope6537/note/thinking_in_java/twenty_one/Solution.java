@@ -10,6 +10,11 @@ public class Solution {
     public Solution() {
     }
 
+    public static void main(String[] args) throws Exception {
+        Solution pc = new Solution();
+        pc.start();
+    }
+
     public void start() {
         new Adder().start();
         new Geter().start();
@@ -55,10 +60,5 @@ public class Solution {
             }
 
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        Solution pc = new Solution();
-        pc.start();
     }
 }

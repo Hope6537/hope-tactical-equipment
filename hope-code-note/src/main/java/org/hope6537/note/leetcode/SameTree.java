@@ -24,6 +24,11 @@ public class SameTree {
         }
     }
 
+    @Test
+    public void testTrain() {
+        isSameTree(new TreeNode(0), new TreeNode(0));
+    }
+
     public static class TreeNode {
         int val;
         TreeNode left;
@@ -32,10 +37,5 @@ public class SameTree {
         TreeNode(int x) {
             val = x;
         }
-    }
-
-    @Test
-    public void testTrain() {
-        isSameTree(new TreeNode(0), new TreeNode(0));
     }
 }

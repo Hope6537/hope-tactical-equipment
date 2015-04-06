@@ -19,6 +19,11 @@ import java.util.Map;
 
 public class PeopleRank {
 
+    public static String scaleFloat(float f) {// 保留6位小数
+        DecimalFormat df = new DecimalFormat("##0.000000");
+        return df.format(f);
+    }
+
     public int run(Map<String, String> jobPathMap, HdfsUtils hdfsUtils) throws Exception {
 
         Job job = Job.getInstance();
@@ -43,7 +48,6 @@ public class PeopleRank {
         }
         return res;
     }
-
 
     private static class StepMapper extends Mapper<LongWritable, Text, Text, Text> {
 
@@ -104,10 +108,5 @@ public class PeopleRank {
             resultValue.set(String.valueOf(scaleFloat(pr)));
             context.write(key, resultValue);
         }
-    }
-
-    public static String scaleFloat(float f) {// 保留6位小数
-        DecimalFormat df = new DecimalFormat("##0.000000");
-        return df.format(f);
     }
 }

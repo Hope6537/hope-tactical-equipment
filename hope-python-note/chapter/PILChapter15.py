@@ -2,7 +2,6 @@
 import random
 
 import ImageDraw
-
 import ImageFilter
 import ImageFont
 

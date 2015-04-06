@@ -1,6 +1,4 @@
 # encoding:UTF-8
-import threading
-import time
 
 __author__ = 'Hope6537'
 

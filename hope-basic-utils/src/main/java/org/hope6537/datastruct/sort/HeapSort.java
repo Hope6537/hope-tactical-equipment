@@ -58,7 +58,7 @@ public class HeapSort {
                 break;
             }
         }
-		/*
+        /*
 		 * 循环完成 将取出来的节点元素值放在数组的最后 即删除掉的堆存储空间 来放置
 		 */
         a[i] = tmp;

@@ -329,8 +329,8 @@ class Model(dict):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
     db.create_engine('root', '4236537', 'test')
-    db.update('drop table if exists user')
-    db.update('create table user (id int primary key, name text, email text, passwd text, last_modified real)')
+    db.update('DROP TABLE IF EXISTS user')
+    db.update('CREATE TABLE user (id INT PRIMARY KEY, name TEXT, email TEXT, passwd TEXT, last_modified REAL)')
     import doctest
 
     doctest.testmod()

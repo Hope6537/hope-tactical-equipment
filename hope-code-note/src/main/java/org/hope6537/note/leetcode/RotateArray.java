@@ -7,14 +7,6 @@ import org.junit.Test;
  */
 public class RotateArray {
 
-    public void rotate(int[] nums, int k) {
-        int n = nums.length;
-        k %= n;
-        reserve(nums, 0, n - k);
-        reserve(nums, n - k, n);
-        reserve(nums, 0, n);
-    }
-
     public static void reserve(int[] nums, int start, int end) {
         for (int i = start; i < (start + end) / 2; i++) {
             nums[i] ^= nums[start + end - i - 1];
@@ -29,6 +21,13 @@ public class RotateArray {
         i ^= k;
     }
 
+    public void rotate(int[] nums, int k) {
+        int n = nums.length;
+        k %= n;
+        reserve(nums, 0, n - k);
+        reserve(nums, n - k, n);
+        reserve(nums, 0, n);
+    }
 
     @Test
     public void test() {

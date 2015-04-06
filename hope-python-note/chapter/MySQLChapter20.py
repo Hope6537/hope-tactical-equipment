@@ -16,7 +16,7 @@ cursor.close()
 
 # 执行查询
 cursor = conn.cursor()
-cursor.execute('select * from user where id = 1')
+cursor.execute('SELECT * FROM user WHERE id = 1')
 values = cursor.fetchall()
 print(values)
 cursor.close()

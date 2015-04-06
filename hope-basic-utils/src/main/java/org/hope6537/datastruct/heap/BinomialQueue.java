@@ -244,7 +244,7 @@ public class BinomialQueue<AnyType extends Comparable<? super AnyType>> {
                     rhs.theTrees[i] = null;
                     break;
                 case 7:
-				/*
+                /*
 				 * 这是最热闹的了 t1 t2 和 延迟树都处在同一个秩上 那么首先将延迟树付给当前秩。因为这样做是合法的
 				 */
                     theTrees[i] = carry;

@@ -44,7 +44,7 @@ list = [x * x for x in range(1, 11)];
 print(list)
 print(list)
 # ->也可以按照条件进行生成
-#->for循环后面还可以加上if判断，这样我们就可以筛选出偶数
+# ->for循环后面还可以加上if判断，这样我们就可以筛选出偶数
 list = [x for x in range(1, 11) if x % 2 == 0]
 print(list)
 #->还可以使用两层循环，可以生成全排列 即声明两个for

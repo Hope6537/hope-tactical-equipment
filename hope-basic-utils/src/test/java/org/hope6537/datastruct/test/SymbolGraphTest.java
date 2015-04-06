@@ -40,7 +40,7 @@ public class SymbolGraphTest {
         String stream = IOUtils.toString(in);
         String split = " ";
         SymbolGraph symbolGraph = new SymbolGraph(stream, split);
-        symbolGraph.printDegreesOnConsole("JFK","LAS DFW");
+        symbolGraph.printDegreesOnConsole("JFK", "LAS DFW");
 
     }
 
