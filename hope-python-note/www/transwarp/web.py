@@ -1,9 +1,9 @@
 # encoding:UTF-8
-import threading
+from cookielib import _debug
 
 __author__ = 'Hope6537'
 
-import types, os, re, cgi, sys, time, datetime, functools, mimetypes, threading, logging, urllib, traceback
+import types, os, re, cgi, sys, datetime, functools, mimetypes, threading, logging, urllib, traceback
 
 try:
     from cStringIO import StringIO
@@ -585,6 +585,10 @@ class StaticFileRoute(object):
         fext = os.path.splitext(fpath)[1]
         ctx.response.content_type = mimetypes.types_map.get(fext.lower(), 'application/octet-stream')
         return _static_file_generator(fpath)
+
+
+def static_file_handler(param):
+    pass
 
 
 def favicon_handler():
