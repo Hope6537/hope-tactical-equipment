@@ -1,5 +1,4 @@
 DROP DATABASE IF EXISTS awesome;
-
 CREATE DATABASE awesome;
 
 USE awesome;
@@ -19,7 +18,6 @@ CREATE TABLE users (
   KEY `idx_created_at` (`created_at`),
   PRIMARY KEY (`id`)
 )
-  ENGINE = innodb
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE blogs (
@@ -34,7 +32,6 @@ CREATE TABLE blogs (
   KEY `idx_created_at` (`created_at`),
   PRIMARY KEY (`id`)
 )
-  ENGINE = innodb
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE comments (
@@ -48,5 +45,4 @@ CREATE TABLE comments (
   KEY `idx_created_at` (`created_at`),
   PRIMARY KEY (`id`)
 )
-  ENGINE = innodb
   DEFAULT CHARSET = utf8;

@@ -15,9 +15,12 @@ public class Driver extends Configured implements Tool {
     public static final double d = 0.85;
 
     public static void main(String[] args) throws Exception {
-        args = new String[]{
-                "/peoplerank", "/peoplerank_out"
-        };
+        if (args == null) {
+            System.err.println("将使用默认参数");
+            args = new String[]{
+                    "/peoplerank", "/peoplerank_out"
+            };
+        }
         ToolRunner.run(ConfigurationFactory.getConfigurationOfPseudoDistributed(), new Driver(), args);
         System.exit(0);
     }
@@ -38,8 +41,8 @@ public class Driver extends Configured implements Tool {
         HdfsUtils hdfsUtils = HdfsUtils.getInstanceOfJiChuang(ConfigurationFactory.getConfigurationOfPseudoDistributed());
         final String input = args[0];
         final String output = args[1];
-        System.err.println("the input path is " + input);
-        System.err.println("the output path is " + output);
+        System.err.println("数据路径为" + input);
+        System.err.println("结果输出路径为" + output);
 
         Map<String, String> jobPathMap = new ConcurrentHashMap<>();
         jobPathMap.put("input", input);
@@ -56,6 +59,7 @@ public class Driver extends Configured implements Tool {
         if (res1 == 0) {
             int res2 = 0;
             for (int i = 0; i < 10; i++) {
+                System.err.println("第" + i + "矩阵迭代");
                 res2 += step2.run(jobPathMap, hdfsUtils);
             }
             if (res2 == 0) {

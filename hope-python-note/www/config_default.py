@@ -2,10 +2,10 @@
 __author__ = 'Hope6537'
 configs = {
     'db': {
-        'host': '127.0.0.1',
+        'host': 'localhost',
         'port': 3306,
-        'user': 'www-data',
-        'password': 'www-data',
+        'user': 'root',
+        'password': 'root',
         'database': 'awesome'
     },
     'session': {
