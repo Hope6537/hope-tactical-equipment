@@ -35,7 +35,9 @@ hope6537-utils
             * ->station 基站数据分析<br/>
             * ->tel 电话抽取<br/>
             * ->textfitler 文章分类器-分词步骤<br/>
+            * ->peoplerank 社交网络重要任务挖掘<br/>
     * —>hope-python-note python工程和笔记<br/>
+    * —>hope-swift-note swift<br/>
     * —>hope-web-utils hibernate(myBatis)+spring(MVC)构建模块和web工具类以及资源配置文件<br/>
         * ->org.hope6537<br/>
             * ->ajax Ajax工具类，异步交互前端发送对象<br/>
