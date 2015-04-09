@@ -1,4 +1,4 @@
-package org.hope6537.note.design.abstract_factory.human;
+package org.hope6537.note.design.factory.abstracts;
 
 /**
  * <p>Describe: 定义实体类型</p>

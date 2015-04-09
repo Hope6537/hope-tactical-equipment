@@ -1,4 +1,4 @@
-package org.hope6537.note.design.modelfunction.hummer;
+package org.hope6537.note.design.template.hummer;
 
 /**
  * <pre>

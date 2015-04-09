@@ -1,19 +1,18 @@
-package org.hope6537.note.design.modelfunction.hummer;
+package org.hope6537.note.design.template.hummer;
 
 /**
  * <pre>
- * 主要是修改了run方法的执行流程
  * </pre>
- * <p>Describe: 修改后的悍马模型</p>
+ * <p>Describe: 模板方法抽象实例类</p>
  * <p>Using: </p>
- * <p>DevelopedTime: 2014年9月12日下午3:50:09</p>
+ * <p>DevelopedTime: 2014年9月12日下午3:48:22</p>
  * <p>Company: ChangChun Unviersity JiChuang Team</p>
  *
  * @author Hope6537
  * @version 1.0
  * @see
  */
-public abstract class HummerModel_G {
+public abstract class AbstractHummerModel {
     /**
      * <p>Describe: start</p>
      */
@@ -30,15 +29,13 @@ public abstract class HummerModel_G {
     public abstract void alarm();
 
     /**
-     * <p>Describe: 主要在这里更改了业务流程</p>
+     * <p>Describe: run</p>
      */
     public void run() {
         System.out.println(this.getClass().getSimpleName() + " run");
         start();
         engineboom();
-        if (isAlarm()) {
-            alarm();
-        }
+        alarm();
         stop();
     }
 
@@ -46,8 +43,4 @@ public abstract class HummerModel_G {
      * <p>Describe: engineboom</p>
      */
     public abstract void engineboom();
-
-    protected boolean isAlarm() {
-        return true;
-    }
 }

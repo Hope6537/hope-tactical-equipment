@@ -19,9 +19,9 @@ public class SingleTonFactory {
     static {
         try {
             Class cl = Class.forName(SingleTon.class.getName());
-            @SuppressWarnings("unchecked")
             // 选择无参构造器
-                    Constructor constructor = cl.getDeclaredConstructor();
+            @SuppressWarnings("unchecked")
+            Constructor constructor = cl.getDeclaredConstructor();
             // 生产一个实例对象
             constructor.setAccessible(true);
             singleTon = (SingleTon) constructor.newInstance();

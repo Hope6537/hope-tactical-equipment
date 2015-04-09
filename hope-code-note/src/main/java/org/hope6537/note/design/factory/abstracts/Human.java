@@ -1,4 +1,4 @@
-package org.hope6537.note.design.abstract_factory.human;
+package org.hope6537.note.design.factory.abstracts;
 
 public interface Human {
 

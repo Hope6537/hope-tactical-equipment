@@ -1,4 +1,4 @@
-package org.hope6537.note.design.modelfunction.hummer;
+package org.hope6537.note.design.template.hummer;
 
 /**
  * <p>Describe: H1型号的模型</p>

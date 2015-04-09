@@ -65,5 +65,5 @@
  *父类建立框架，子类在重写了父类的部分方法之后，在调用从父类中继承的方法，产生不同的<b>结果</b>
  *</pre>
  */
-package org.hope6537.note.design.modelfunction.hummer;
+package org.hope6537.note.design.template.hummer;
 

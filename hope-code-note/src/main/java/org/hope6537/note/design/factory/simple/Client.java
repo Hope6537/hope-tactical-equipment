@@ -3,7 +3,7 @@ package org.hope6537.note.design.factory.simple;
 import org.hope6537.note.design.factory.human.Human;
 import org.hope6537.note.design.factory.human.WhiteHuman;
 
-public class NvWa {
+public class Client {
 
     public static void main(String[] args) {
         System.out.println("First");
