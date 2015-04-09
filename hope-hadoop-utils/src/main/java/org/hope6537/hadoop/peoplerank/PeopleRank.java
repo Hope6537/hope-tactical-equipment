@@ -54,7 +54,8 @@ public class PeopleRank {
     private static class StepMapper extends Mapper<LongWritable, Text, Text, Text> {
 
         private String flag;
-
+        private Text resultKey = new Text();
+        private Text resultValue = new Text();
 
         @Override
         protected void setup(Context context) throws IOException, InterruptedException {
@@ -64,8 +65,6 @@ public class PeopleRank {
 
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            Text resultKey = new Text();
-            Text resultValue = new Text();
             System.err.println(value.toString());
             String[] tokens = ApplicationConstant.DELIMITER.split(value.toString());
             if (flag.equals("tmp1")) {
@@ -109,7 +108,7 @@ public class PeopleRank {
                 float b = mapB.get(index);
                 pr += a * b;
             }
-            resultValue.set(String.valueOf(pr));
+            resultValue.set(String.valueOf(scaleFloat(pr)));
             context.write(key, resultValue);
         }
     }
