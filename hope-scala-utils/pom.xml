@@ -12,7 +12,7 @@
     <artifactId>hope-scala-utils</artifactId>
 
     <properties>
-        <scala.library.version>2.11.6</scala.library.version>
+        <scala.library.version>2.11.4</scala.library.version>
     </properties>
     <dependencies>
         <dependency>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>${scala.library.version}</version>
+            <version>2.11.4</version>
         </dependency>
     </dependencies>
     <repositories>
