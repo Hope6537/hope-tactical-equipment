@@ -11,9 +11,13 @@ public class Client {
 
         Receiver receiver = new RevicerImpl1();
 
-        Command command = new CommandImpl1(receiver);
+        Command command = new CommandImpl1();
+        Command command2 = new CommandImpl2(receiver);
 
         invoker.setCommand(command);
+        invoker.action();
+
+        invoker.setCommand(command2);
         invoker.action();
     }
 
