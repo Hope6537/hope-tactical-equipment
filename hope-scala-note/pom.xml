@@ -9,10 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>hope-scala-utils</artifactId>
+    <artifactId>hope-scala-note</artifactId>
 
     <properties>
-        <scala.library.version>2.11.4</scala.library.version>
+        <scala.library.version>2.11.6</scala.library.version>
     </properties>
     <dependencies>
         <dependency>
@@ -20,11 +20,36 @@
             <artifactId>hope-basic-utils</artifactId>
             <version>1.2.1</version>
         </dependency>
-        <!-- <dependency>
-             <groupId>org.scala-lang</groupId>
-             <artifactId>scala-library</artifactId>
-             <version>2.11.4</version>
-         </dependency>-->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.library.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-scalaz_2.9.3</artifactId>
+            <version>3.2.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor_2.11</artifactId>
+            <version>2.3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor-tests_2.11</artifactId>
+            <version>2.3.9</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-native_2.9.3</artifactId>
+            <version>3.2.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-jackson_2.9.3</artifactId>
+            <version>3.2.9</version>
+        </dependency>-->
     </dependencies>
     <!--<repositories>
         <repository>
