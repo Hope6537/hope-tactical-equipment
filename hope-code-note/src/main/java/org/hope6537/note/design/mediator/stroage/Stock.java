@@ -5,11 +5,11 @@ package org.hope6537.note.design.mediator.stroage;
  */
 public class Stock extends AbstractColleague {
 
+    private static int COMPUTER_NUMBER = 100;
+
     public Stock(AbstractMediator mediator) {
         super(mediator);
     }
-
-    private static int COMPUTER_NUMBER = 100;
 
     public void increase(int number) {
         COMPUTER_NUMBER += number;

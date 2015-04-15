@@ -21,11 +21,11 @@ public class Thing implements Cloneable {
         return thing;
     }
 
-    public void setValue(String value) {
-        this.arrayList.add(value);
-    }
-
     public ArrayList<String> getValue() {
         return this.arrayList;
+    }
+
+    public void setValue(String value) {
+        this.arrayList.add(value);
     }
 }

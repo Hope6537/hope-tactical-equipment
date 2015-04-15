@@ -4,17 +4,6 @@ import org.junit.Test;
 
 public class Client {
 
-    @Test
-    public void test() {
-        Component root = new Composite();
-        root.doSomething();
-        Composite branch = new Composite();
-        Leaf leaf = new Leaf();
-        root.add(branch);
-        branch.add(leaf);
-        display(root);
-    }
-
     public static void display(Component root) {
         root.getChildren().forEach(item -> {
             if (item instanceof Leaf) {
@@ -24,6 +13,17 @@ public class Client {
                 display(item);
             }
         });
+    }
+
+    @Test
+    public void test() {
+        Component root = new Composite();
+        root.doSomething();
+        Composite branch = new Composite();
+        Leaf leaf = new Leaf();
+        root.add(branch);
+        branch.add(leaf);
+        display(root);
     }
 
 }

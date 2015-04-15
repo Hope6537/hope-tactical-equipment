@@ -17,6 +17,24 @@ interface IOuterUserBaseInfo {
 
 }
 
+/**
+ * 家庭信息接口
+ */
+interface IOuterUserHomeInfo {
+
+    public Map<String, String> getUserHomeInfo();
+
+}
+
+/**
+ * 工作信息接口
+ */
+interface IOuterUserOfficeInfo {
+
+    public Map<String, String> getUserOfficeInfo();
+
+}
+
 class OuterUserBaseInfo implements IOuterUserBaseInfo {
 
     @Override
@@ -28,15 +46,6 @@ class OuterUserBaseInfo implements IOuterUserBaseInfo {
     }
 }
 
-/**
- * 家庭信息接口
- */
-interface IOuterUserHomeInfo {
-
-    public Map<String, String> getUserHomeInfo();
-
-}
-
 class OuterUserHomeInfo implements IOuterUserHomeInfo {
 
     @Override
@@ -46,15 +55,6 @@ class OuterUserHomeInfo implements IOuterUserHomeInfo {
         result.put("address", "alibaba");
         return result;
     }
-}
-
-/**
- * 工作信息接口
- */
-interface IOuterUserOfficeInfo {
-
-    public Map<String, String> getUserOfficeInfo();
-
 }
 
 class OuterUserOfficeInfo implements IOuterUserOfficeInfo {
