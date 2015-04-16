@@ -18,9 +18,9 @@ class HelloObject /*private 此时主构造器私有，只能通过其他辅助�
 (val constructorValue1: String, private var _level: Int, @BeanProperty var test: Int) {
 
   pointer =>
-  private var privateValue: String = "Hello"
-  var value2: String = "World"
   val value3: String = constructorValue1 + "->" + _level
+  var value2: String = "World"
+  private var privateValue: String = "Hello"
 
   /**
    * 辅助构造器
@@ -75,9 +75,6 @@ class HelloObject /*private 此时主构造器私有，只能通过其他辅助�
 
 object HelloObject extends App {
 
-  //伴生apply方法
-  def apply(n: Char) = new HelloObject(n.toString, 0, 0);
-
   def testHelloWorld() = {
     //调用伴生方法
     val extenison = HelloObject('a')
@@ -94,6 +91,9 @@ object HelloObject extends App {
     println(hello.getTest)
     println(hello.getInformation)
   }
+
+  //伴生apply方法
+  def apply(n: Char) = new HelloObject(n.toString, 0, 0);
 
   testHelloWorld()
 

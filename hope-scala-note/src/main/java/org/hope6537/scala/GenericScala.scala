@@ -13,36 +13,6 @@ import java.text.SimpleDateFormat
  */
 object GenericScala extends App {
 
-  abstract class Stack[T] {
-
-    def push(x: T): Stack[T] = new NonEmptyStack[T](x, this)
-
-    def isEmpty: Boolean
-
-    def top: T
-
-    def pop: Stack[T]
-
-  }
-
-  class EmptyStack[T] extends Stack[T] {
-
-    override def isEmpty: Boolean = true
-
-    override def top: T = sys.error("empty")
-
-    override def pop: Stack[T] = sys.error("empty")
-  }
-
-  class NonEmptyStack[T](elem: T, rest: Stack[T]) extends Stack[T] {
-
-    override def isEmpty: Boolean = false
-
-    override def top: T = elem
-
-    override def pop: Stack[T] = rest
-  }
-
   def testStack(): Unit = {
     val m = new EmptyStack[Int]
     val n = new EmptyStack[Array[Char]]
@@ -156,6 +126,36 @@ object GenericScala extends App {
     //闭包用法
     //val f: String => Char = (a: String) => a.charAt(0)
     //cc.printResult(f)
+  }
+
+  abstract class Stack[T] {
+
+    def push(x: T): Stack[T] = new NonEmptyStack[T](x, this)
+
+    def isEmpty: Boolean
+
+    def top: T
+
+    def pop: Stack[T]
+
+  }
+
+  class EmptyStack[T] extends Stack[T] {
+
+    override def isEmpty: Boolean = true
+
+    override def top: T = sys.error("empty")
+
+    override def pop: Stack[T] = sys.error("empty")
+  }
+
+  class NonEmptyStack[T](elem: T, rest: Stack[T]) extends Stack[T] {
+
+    override def isEmpty: Boolean = false
+
+    override def top: T = elem
+
+    override def pop: Stack[T] = rest
   }
 
   //testStack()

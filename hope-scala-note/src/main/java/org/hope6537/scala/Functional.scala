@@ -54,6 +54,12 @@ class Functional {
     val f1 = (a: Int) => a
     val f2 = (a: Int) => a * 2
     val f3 = (a: Int) => a * 3
+    val conn: Connection = new Connection()
+    val t1 = mul(1)
+    val t2 = mul(2)
+    val t3 = mul(3)
+    withClose(conn, conn =>
+      println("do something with Connection"))
 
     def sum_functional(f: Int => Int, a: Int, b: Int): Int = {
       if (a > b) 0 else f(a) + sum_functional(f, a + 1, b)
@@ -66,15 +72,6 @@ class Functional {
         closeAble.close()
       }
     }
-
-    class Connection {
-      def close() = println("close Connection")
-    }
-
-    val conn: Connection = new Connection()
-    withClose(conn, conn =>
-      println("do something with Connection"))
-
 
     /**
      * 函数柯里化
@@ -97,9 +94,9 @@ class Functional {
      */
     def mul(a: Int) = (b: Int) => b * a
 
-    val t1 = mul(1)
-    val t2 = mul(2)
-    val t3 = mul(3)
+    class Connection {
+      def close() = println("close Connection")
+    }
 
   }
 
@@ -113,6 +110,9 @@ class Functional {
    *
    */
   class ControlAbstract {
+
+    //在重新计算
+    val m = two(5)
 
     /**
      * @param a a是算法的初始值或称预测值
@@ -138,6 +138,11 @@ class Functional {
       next
     }
 
+    /**
+     * 定义函数和参数
+     */
+    def two(b: Double): Double = SQ2(a => (a + b / a) / 2)(1)
+
     def SQ2(f: Double => Double)(a: Double) = {
       def inSQ(guess: Double): Double = {
         val next = f(guess)
@@ -148,17 +153,9 @@ class Functional {
       inSQ(a)
     }
 
-    /**
-     * 定义函数和参数
-     */
-    def two(b: Double): Double = SQ2(a => (a + b / a) / 2)(1)
-
-    //在重新计算
-    val m = two(5)
+    def accuracy_SQ2(guess: Double, next: Double) = (guess - next) * (guess - next) > 0.00001
 
     def accuracy(b: Double, next: Double): Boolean = (b - next * next) * (b - next * next) > 0.00001
-
-    def accuracy_SQ2(guess: Double, next: Double) = (guess - next) * (guess - next) > 0.00001
   }
 
 }

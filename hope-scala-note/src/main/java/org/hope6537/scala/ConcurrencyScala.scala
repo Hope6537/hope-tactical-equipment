@@ -50,13 +50,13 @@ class ConcurrencyScala {
      */
     class Handler(socket: Socket) extends Runnable {
 
-      def message = (Thread.currentThread().getName + "\n").getBytes("UTF-8")
-
       override def run(): Unit = {
         socket.getOutputStream.write(message)
         socket.getOutputStream.close()
         println(Thread.currentThread().getName)
       }
+
+      def message = (Thread.currentThread().getName + "\n").getBytes("UTF-8")
     }
 
     new NetWorkService(2020, 2).run()
@@ -94,13 +94,13 @@ class ConcurrencyScala {
      */
     class Handler(socket: Socket) extends Runnable {
 
-      def message = (Thread.currentThread().getName + "\n").getBytes("UTF-8")
-
       override def run(): Unit = {
         socket.getOutputStream.write(message)
         socket.getOutputStream.close()
         println(message)
       }
+
+      def message = (Thread.currentThread().getName + "\n").getBytes("UTF-8")
     }
 
     new NetWorkService(2021, 2).run()

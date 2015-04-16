@@ -7,6 +7,17 @@ class ExtendScala {
 
 
   /**
+   * 不能被实例的类叫做抽象类
+   */
+  abstract class abstractClass {
+
+    var username: String
+    var password: String
+
+    def sign()
+  }
+
+  /**
    * 在继承中可能会出现子类篡改父类值的现象
    * 特别是这些值可能会在构造时被使用、例如开数组的等操作
    * 那么就应该
@@ -15,13 +26,13 @@ class ExtendScala {
    */
   class month {
 
-    private var i: Int = 0
     val e = 0
     val t = 0
     /**
      * 不可变
      */
     final var password = 123
+    private var i: Int = 0
 
     def method() = {
       println("super")
@@ -69,17 +80,6 @@ class ExtendScala {
       println("this")
     }
 
-  }
-
-  /**
-   * 不能被实例的类叫做抽象类
-   */
-  abstract class abstractClass {
-
-    var username: String
-    var password: String
-
-    def sign()
   }
 
 
