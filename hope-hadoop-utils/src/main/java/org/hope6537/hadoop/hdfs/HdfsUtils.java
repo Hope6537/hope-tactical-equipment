@@ -16,9 +16,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
-/**
- * Created by Hope6537 on 2015/2/13.
- */
 public class HdfsUtils {
 
     public static final String HADOOP2MASTER_DIR = "hdfs://hadoop2master:9000";

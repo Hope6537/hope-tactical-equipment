@@ -10,9 +10,6 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by Hope6537 on 2015/2/13.
- */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class HdfsUtilsTest {
 

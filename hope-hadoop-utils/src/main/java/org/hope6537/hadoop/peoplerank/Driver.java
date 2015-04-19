@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Driver extends Configured implements Tool {
 
-    public static final int nums = 25;
+    public static final int nums = 85;
     public static final double d = 0.85;
 
     public static void main(String[] args) throws Exception {

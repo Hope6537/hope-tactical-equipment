@@ -14,9 +14,6 @@ import java.net.URI;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by Hope6537 on 2015/1/28.
- */
 public class HdfsDemo {
 
     FileSystem fileSystem;
