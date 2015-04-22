@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Hope6537 on 2015/3/29.
+ * 二分顺序查找表
  */
 public class BinaryOrderSearchTable<Key extends Comparable<? super Key>, Value> extends OrderSearchTable<Key, Value> {
 
@@ -14,6 +14,7 @@ public class BinaryOrderSearchTable<Key extends Comparable<? super Key>, Value> 
 
     private int count;
 
+    @SuppressWarnings("unchecked")
     public BinaryOrderSearchTable(int capacity) {
         keys = (Key[]) new Comparable[capacity];
         values = (Value[]) new Object[capacity];
@@ -107,7 +108,6 @@ public class BinaryOrderSearchTable<Key extends Comparable<? super Key>, Value> 
 
     @Override
     public void delete(Key key) {
-
     }
 
     @Override
