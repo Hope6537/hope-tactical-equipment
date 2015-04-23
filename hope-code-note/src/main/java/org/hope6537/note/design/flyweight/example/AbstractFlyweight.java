@@ -5,9 +5,8 @@ package org.hope6537.note.design.flyweight.example;
  */
 public abstract class AbstractFlyweight {
 
-    private String intrinsic;
-
     protected final String EXTRINSIC;
+    private String intrinsic;
 
     protected AbstractFlyweight(String extrinsic) {
         EXTRINSIC = extrinsic;

@@ -47,7 +47,7 @@ print(list)
 # ->for循环后面还可以加上if判断，这样我们就可以筛选出偶数
 list = [x for x in range(1, 11) if x % 2 == 0]
 print(list)
-#->还可以使用两层循环，可以生成全排列 即声明两个for
+# ->还可以使用两层循环，可以生成全排列 即声明两个for
 list = [m + n for m in 'ABC' for n in 'XYZ']
 print(list)
 #->运用列表生成式，可以写出非常简洁的代码。例如，列出当前目录下的所有文件和目录名，可以通过一行代码实现

@@ -9,6 +9,7 @@ configs = config_default.configs
 
 import config_default
 
+
 class Dict(dict):
     '''
     Simple dict but support access as x.y style.
@@ -53,6 +54,7 @@ configs = config_default.configs
 
 try:
     import config_override
+
     configs = merge(configs, config_override.configs)
 except ImportError:
     pass

@@ -13,24 +13,6 @@ public class RedBlackBinarySearchTree<Key extends Comparable<? super Key>, Value
     private Node root;
 
     /**
-     * 红黑树的节点表示
-     */
-    private class Node {
-        Key key;
-        Value value;
-        Node left, right;
-        int n;
-        boolean color;
-
-        public Node(Key key, Value value, int n, boolean color) {
-            this.key = key;
-            this.value = value;
-            this.n = n;
-            this.color = color;
-        }
-    }
-
-    /**
      * 红黑树节点判定
      */
     private boolean isRed(Node x) {
@@ -106,7 +88,6 @@ public class RedBlackBinarySearchTree<Key extends Comparable<? super Key>, Value
         h.right.color = BLACK;
     }
 
-
     /**
      * 右旋转h
      */
@@ -119,5 +100,23 @@ public class RedBlackBinarySearchTree<Key extends Comparable<? super Key>, Value
         x.n = h.n;
         h.n = 1 + size(h.left) + size(h.right);
         return x;
+    }
+
+    /**
+     * 红黑树的节点表示
+     */
+    private class Node {
+        Key key;
+        Value value;
+        Node left, right;
+        int n;
+        boolean color;
+
+        public Node(Key key, Value value, int n, boolean color) {
+            this.key = key;
+            this.value = value;
+            this.n = n;
+            this.color = color;
+        }
     }
 }

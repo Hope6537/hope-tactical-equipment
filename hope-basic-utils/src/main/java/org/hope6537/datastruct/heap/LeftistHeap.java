@@ -133,7 +133,7 @@ public class LeftistHeap<AnyType extends Comparable<? super AnyType>> {
                 swapChildren(h1);
             }
             /*
-			 * 在合并成功的例程里 将合并的零差根据右子树插入的情况+1
+             * 在合并成功的例程里 将合并的零差根据右子树插入的情况+1
 			 */
             h1.npl = h1.right.npl + 1;
         }

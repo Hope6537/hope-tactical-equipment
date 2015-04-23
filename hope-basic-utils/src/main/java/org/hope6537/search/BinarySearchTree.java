@@ -12,21 +12,6 @@ public class BinarySearchTree<Key extends Comparable<? super Key>, Value> {
 
     private Node root;
 
-    private class Node {
-
-        private Key key;
-        private Value value;
-        private Node left, right;
-        //以该节点为根的子树中节点的总数
-        private int n;
-
-        public Node(Key key, Value value, int n) {
-            this.key = key;
-            this.value = value;
-            this.n = n;
-        }
-    }
-
     public int size() {
         return size(root);
     }
@@ -99,7 +84,6 @@ public class BinarySearchTree<Key extends Comparable<? super Key>, Value> {
         }
         return min(root.right);
     }
-
 
     /**
      * 向边界取整
@@ -186,7 +170,6 @@ public class BinarySearchTree<Key extends Comparable<? super Key>, Value> {
         return x;
     }
 
-
     /**
      * 删除最大键
      */
@@ -251,6 +234,21 @@ public class BinarySearchTree<Key extends Comparable<? super Key>, Value> {
         }
         if (compareHigh <= 0 && compareHigh >= 0) {
             queue.add(x.key);
+        }
+    }
+
+    private class Node {
+
+        private Key key;
+        private Value value;
+        private Node left, right;
+        //以该节点为根的子树中节点的总数
+        private int n;
+
+        public Node(Key key, Value value, int n) {
+            this.key = key;
+            this.value = value;
+            this.n = n;
         }
     }
 

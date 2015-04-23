@@ -245,7 +245,7 @@ public class BinomialQueue<AnyType extends Comparable<? super AnyType>> {
                     break;
                 case 7:
                 /*
-				 * 这是最热闹的了 t1 t2 和 延迟树都处在同一个秩上 那么首先将延迟树付给当前秩。因为这样做是合法的
+                 * 这是最热闹的了 t1 t2 和 延迟树都处在同一个秩上 那么首先将延迟树付给当前秩。因为这样做是合法的
 				 */
                     theTrees[i] = carry;
                     // 因为t1 和 t2 合并后 秩会变大 所以延迟树直接赋给当前二项队列没有问题
