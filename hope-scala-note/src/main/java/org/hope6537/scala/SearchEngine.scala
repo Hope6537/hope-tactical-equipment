@@ -1,6 +1,7 @@
 package org.hope6537.scala
 
-import java.util.concurrent.{BlockingQueue, ConcurrentMap, Executors, LinkedBlockingQueue}
+import java.io.InputStream
+import java.util.concurrent.{BlockingQueue, Executors, LinkedBlockingQueue}
 
 import scala.collection.mutable
 import scala.io.Source
@@ -15,14 +16,14 @@ class SearchEngine {
   /**
    * 倒排索引
    */
-  class InvertedIndex(val userMap: Map[String, User]) {
+  class InvertedIndex(val userMap: mutable.Map[String, User]) {
 
     /**
      * 另外一种方法就是替换掉线程不安全容器
      */
-    //def this() = this(mutable.HashMap[String, User])
+    def this() = this(new mutable.HashMap[String, User])
 
-    def this() = this(ConcurrentMap[String, User])
+    //def this() = this(new ConcurrentMap[String, User])
 
     def tokenizeName(name: String): mutable.Seq[String] = {
       name.split(" ").map(_.toLowerCase)
@@ -80,13 +81,22 @@ class SearchEngine {
   /**
    * 我们可以构造一个生产者和消费者模型来使用它
    */
-  class Producer(path: String, queue: BlockingQueue[String]) extends Runnable {
+  class Producer(path: AnyRef, queue: BlockingQueue[String]) extends Runnable {
     override def run() {
-      Source.fromFile(path, "Utf-8").getLines().foreach {
-        line => queue.put(line)
+      path match {
+        case path: String =>
+          Source.fromFile(path, "Utf-8").getLines().foreach {
+            line => queue.put(line)
+          }
+        case path: InputStream =>
+          Source.fromInputStream(path, "Utf-8").getLines().foreach {
+            line => queue.put(line)
+          }
       }
+      println(queue.toString);
     }
   }
+
 
   abstract class Consumer(queue: BlockingQueue[String]) extends Runnable {
     override def run() {
@@ -104,20 +114,27 @@ class SearchEngine {
   /**
    * 一个生产者线程
    */
-  val producer: Producer = new Producer("users.txt", queue)
+
+  val producer: Producer = new Producer(this.getClass.getResourceAsStream("users.txt"), queue)
   new Thread(producer).start()
+
 
   class IndexerConsumer(index: InvertedIndex, queue: BlockingQueue[String]) extends Consumer(queue) with UserMaker {
     override def consume(x: String): Unit = index.add(makeUser(x))
   }
 
+}
+
+object SearchEngineDriver extends App {
+
+  val searchEngine = new SearchEngine
   val cores = 9
-  val index = new InvertedIndex
+  val index = new searchEngine.InvertedIndex
   val pool = Executors.newFixedThreadPool(cores)
 
   for (i <- 0 to cores) {
-    pool.submit(new IndexerConsumer(index, queue))
+    pool.submit(new searchEngine.IndexerConsumer(index, searchEngine.queue))
   }
-
-
 }
+
+
