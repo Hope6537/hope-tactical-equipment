@@ -11,11 +11,11 @@
 *.iml
 *.patch
 .idea/
-bison-webapp/src/main/webapp/js/bower_components/
 
 # Others
 META-INF/
 target/
 logs/
-webapp/admin_assets/img/upload
-webapp/frontend_assets/img/upload
+*.pyc
+*.jar
+hope-python-note/www/static/bower_plugins

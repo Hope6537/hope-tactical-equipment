@@ -56,7 +56,7 @@ value, origin = my_abs(-12)
 print value
 print origin
 
-#可变参数
+# 可变参数
 def calc(*numbers):
     sum = 0
     for n in numbers:

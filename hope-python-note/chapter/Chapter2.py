@@ -50,7 +50,7 @@ print(list)
 # ->还可以使用两层循环，可以生成全排列 即声明两个for
 list = [m + n for m in 'ABC' for n in 'XYZ']
 print(list)
-#->运用列表生成式，可以写出非常简洁的代码。例如，列出当前目录下的所有文件和目录名，可以通过一行代码实现
+# ->运用列表生成式，可以写出非常简洁的代码。例如，列出当前目录下的所有文件和目录名，可以通过一行代码实现
 import os
 
 list = [d for d in os.listdir('C:/')]  # os.listdir可以列出文件和目录
