@@ -3,7 +3,7 @@ hope6537-utils
 常用的POM依赖和一些工具类，使用Maven进行模块划分，层次结构如下<br/>
 
 * hope6537-utils(parent)<br/>
-    * 1.2-RELEASE<br/>
+    * 1.2.1-RELEASE<br/>
     * —>hope-basic-utils 基本工具类模块，可以随处引用，集成父模块依赖，自身无特殊依赖<br/>
         * ->org.hope6537<br/>
             * ->context 应用程序上下文，常量<br/>
@@ -19,6 +19,12 @@ hope6537-utils
     * —>hope-code-note 部分学习笔记<br/>
         * ->org.hope6537.note<br/>
             * ->design 设计模式笔记<br/>
+               * -> adapter 适配器模式<br/>
+               * -> bridge 桥梁模式<br/>
+               * -> builder 建造者模式<br/>
+               * -> chain 责任链模式<br/>
+               * -> command 命令模式<br/>
+               * -> composite 组件模式<br/>
             * ->effectivejava 《Effective Java》笔记<br/>
             * ->java8 jdk8新特性<br/>
             * ->thinking_in_java 《Thinking in Java》笔记<br/>
