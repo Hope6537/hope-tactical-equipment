@@ -69,12 +69,9 @@ public class AESLocker {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             SecretKeySpec keyspec = new SecretKeySpec(key.getBytes(), "AES");
             IvParameterSpec ivspec = new IvParameterSpec(iv.getBytes());
-
             cipher.init(Cipher.DECRYPT_MODE, keyspec, ivspec);
-
             byte[] original = cipher.doFinal(encrypted1);
-            String originalString = new String(original).trim();
-            return originalString;
+            return new String(original).trim();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

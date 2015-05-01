@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 /**
  * Created by Zhaopeng-Rabook on 15-1-9.
@@ -30,7 +31,8 @@ public class ApplicationConstant {
     public static final String STATUS_NORMAL = "正常";
     public static final String STATUS_DIE = "不可用";
 
-    public static final java.util.regex.Pattern DELIMITER = java.util.regex.Pattern.compile("[\t,]");
+
+    public static final Pattern DELIMITER = Pattern.compile("[\t,]");
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -94,6 +96,7 @@ public class ApplicationConstant {
         quick3Sort(a, 0, a.length - 1);
     }
 
+    @SuppressWarnings("unchecked")
     private static void quick3Sort(Comparable[] a, int lo, int hi) {
         if (lo >= hi) {
             return;
@@ -182,10 +185,7 @@ public class ApplicationConstant {
 
         private static void merge(Comparable[] a, int lo, int mid, int hi) {
             int i = lo, j = mid + 1;
-            for (int k = lo; k <= hi; k++) {
-                aux[k] = a[k];
-            }
-
+            System.arraycopy(a, lo, aux, lo, hi + 1 - lo);
             for (int k = lo; k <= hi; k++) {
                 //左半边用尽，取右半边元素
                 if (i > mid) {

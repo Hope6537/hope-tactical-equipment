@@ -226,8 +226,8 @@ public class DateFormatCalculate {
         System.out.println("End" + endTime);
         SimpleDateFormat s1 = new SimpleDateFormat("yyyy/MM/dd");
         SimpleDateFormat s2 = new SimpleDateFormat("yyyy/MM/dd");
-        Date d1 = new Date();
-        Date d2 = new Date();
+        Date d1;
+        Date d2;
         try {
             d1 = s1.parse(startTime);
             d2 = s2.parse(endTime);
@@ -259,8 +259,7 @@ public class DateFormatCalculate {
             d2 = s2.parse(endTime);
             double t1 = d1.getTime();
             double t2 = d2.getTime();
-            double second = (t1 - t2 / (1000));
-            return second;
+            return (t1 - t2 / (1000));
         } catch (Exception e) {
             e.printStackTrace();
             return -1;

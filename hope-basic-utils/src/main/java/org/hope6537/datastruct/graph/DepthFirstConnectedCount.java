@@ -42,7 +42,7 @@ public class DepthFirstConnectedCount implements ConnectedCount {
     }
 
     @Override
-    public boolean connectied(int v, int w) {
+    public boolean connected(int v, int w) {
         return id[v] == id[w];
     }
 

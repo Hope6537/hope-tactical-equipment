@@ -25,6 +25,7 @@ public class BasicGraph {
      */
     protected Bag<Integer>[] adj;
 
+    @SuppressWarnings("unchecked")
     public BasicGraph(int vetrex) {
         this.vetrex = vetrex;
         this.edge = 0;

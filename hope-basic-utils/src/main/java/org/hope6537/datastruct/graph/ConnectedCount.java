@@ -8,7 +8,7 @@ public interface ConnectedCount {
     /**
      * w 和 v 联通么？
      */
-    boolean connectied(int v, int w);
+    boolean connected(int v, int w);
 
     /**
      * 联通分量数

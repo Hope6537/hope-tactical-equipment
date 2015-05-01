@@ -21,7 +21,7 @@ public class ClassUtils {
         List<Class> returnClassList = new ArrayList<>();
         String packageName = fatherClass.getPackage().getName();
         List<Class> classes = getClasses(packageName);
-        returnClassList.addAll(classes.stream().filter(c -> fatherClass.isAssignableFrom(c) && !fatherClass.equals(c)).collect(Collectors.toList()));
+        returnClassList.addAll(classes.stream().filter(item -> fatherClass.isAssignableFrom(item) && !fatherClass.equals(item)).collect(Collectors.toList()));
         return returnClassList;
     }
 

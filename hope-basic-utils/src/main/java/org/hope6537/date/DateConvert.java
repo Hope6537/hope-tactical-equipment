@@ -13,7 +13,7 @@ public class DateConvert
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             return df.parse(p.trim());
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return null;
     }

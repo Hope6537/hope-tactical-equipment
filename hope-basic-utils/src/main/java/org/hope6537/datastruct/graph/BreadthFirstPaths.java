@@ -22,16 +22,16 @@ public class BreadthFirstPaths implements GraphPath, GraphSearch {
 
     @Override
     public void search(BasicGraph graph, int vetrex) {
-        Queue<Integer> quene = new LinkedList<>();
+        Queue<Integer> queue = new LinkedList<>();
         marked[vetrex] = true;
-        quene.add(vetrex);
-        while (!quene.isEmpty()) {
-            int temp_v = quene.poll();
+        queue.add(vetrex);
+        while (!queue.isEmpty()) {
+            int temp_v = queue.poll();
             for (int w : graph.adj(temp_v)) {
                 if (!marked[w]) {
                     edgeTo[w] = temp_v;
                     marked[w] = true;
-                    quene.add(w);
+                    queue.add(w);
                 }
             }
         }
