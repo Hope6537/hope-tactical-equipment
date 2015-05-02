@@ -1,6 +1,9 @@
 package org.hope6537.note.design.bulider.pattern;
 
-public class ConcreteProduct extends Builder {
+/**
+ * 具体建造者
+ */
+public class ConcreteBuilder extends Builder {
 
     private Product product = new Product();
 

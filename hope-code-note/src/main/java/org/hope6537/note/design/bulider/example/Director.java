@@ -18,8 +18,4 @@ public class Director {
         return (BenzModel) this.benzBuilder.getCarModel();
     }
 
-	/*
-     * 下面的如上方法
-	 */
-
 }

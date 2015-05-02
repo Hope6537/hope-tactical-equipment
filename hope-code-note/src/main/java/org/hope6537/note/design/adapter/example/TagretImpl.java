@@ -1,7 +1,7 @@
 package org.hope6537.note.design.adapter.example;
 
 /**
- * Created by Hope6537 on 2015/4/10.
+ * 目标实现类
  */
 public class TagretImpl implements Target {
 

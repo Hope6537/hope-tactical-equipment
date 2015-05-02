@@ -55,7 +55,7 @@ public abstract class AbstractAutoCompleteService implements AutoCompleteService
      * @return
      */
     protected List<AutoComplete> getMatchAutoCompleteList(AutoComplete autoCompleteParam, List<AutoComplete> autoCompleteList) {
-        List<AutoComplete> autoCompleteResultList = new ArrayList<AutoComplete>();
+        List<AutoComplete> autoCompleteResultList = new ArrayList<>();
         if (autoCompleteList == null || autoCompleteList.size() <= 0) {
             return autoCompleteList;
         }

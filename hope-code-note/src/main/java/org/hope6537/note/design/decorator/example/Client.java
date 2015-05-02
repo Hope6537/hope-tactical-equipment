@@ -3,7 +3,7 @@ package org.hope6537.note.design.decorator.example;
 import org.junit.Test;
 
 /**
- * 具体执行类
+ * 修饰器模式
  */
 public class Client {
 

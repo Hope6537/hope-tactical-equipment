@@ -1,7 +1,7 @@
 package org.hope6537.note.design.adapter.example;
 
 /**
- * Created by Hope6537 on 2015/4/10.
+ * 适配器，衔接被适配类和目标类
  */
 public class Adapter extends Adaptee implements Target {
 

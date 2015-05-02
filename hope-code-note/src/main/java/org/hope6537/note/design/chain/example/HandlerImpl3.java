@@ -1,7 +1,7 @@
 package org.hope6537.note.design.chain.example;
 
 /**
- * Created by Hope6537 on 2015/4/10.
+ * 具体责任人
  */
 public class HandlerImpl3 extends Handler {
     @Override

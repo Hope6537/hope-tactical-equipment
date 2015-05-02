@@ -1,7 +1,7 @@
 package org.hope6537.note.design.command.example;
 
 /**
- * Created by Hope6537 on 2015/4/9.
+ * 具体的接受类
  */
 public class RevicerImpl2 extends Receiver {
     @Override

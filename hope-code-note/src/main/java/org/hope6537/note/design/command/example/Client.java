@@ -2,6 +2,9 @@ package org.hope6537.note.design.command.example;
 
 import org.junit.Test;
 
+/**
+ * 命令模式场景类
+ */
 public class Client {
 
     @Test

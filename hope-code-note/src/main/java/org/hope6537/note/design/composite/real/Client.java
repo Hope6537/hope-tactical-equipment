@@ -2,6 +2,9 @@ package org.hope6537.note.design.composite.real;
 
 import org.junit.Test;
 
+/**
+ * 透明组合模式、好处是不会进行强制的类型转化，符合依赖倒转原则
+ */
 public class Client {
 
     public static void display(Component root) {

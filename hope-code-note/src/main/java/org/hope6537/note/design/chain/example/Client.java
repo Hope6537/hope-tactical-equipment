@@ -3,7 +3,7 @@ package org.hope6537.note.design.chain.example;
 import org.junit.Test;
 
 /**
- * Created by Hope6537 on 2015/4/10.
+ * 责任链模式场景类
  */
 public class Client {
 
