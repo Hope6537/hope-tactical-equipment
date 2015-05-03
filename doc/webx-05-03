@@ -1,0 +1,1334 @@
+1、依旧是PipeLine
+
+    ->创建一个Value 这个东西就是流程的执行部分->有点总例程的感觉
+    public class MyValve implements Valve {需要实现接口
+        public void invoke(PipelineContext pipelineContext) throws Exception {
+            System.out.println("valve started.");
+            //这一步部分是类似于链调用？指向下一个流程？
+            pipelineContext.invokeNext(); // 调用后序valves
+            System.out.println("valve ended.");
+        }
+    }
+    xml配置如下
+    <services:pipeline xmlns="http://www.alibaba.com/schema/services/pipeline/valves">
+        <valve class="com.alibaba.myapp.pipeline.MyValve" />
+    </services:pipeline>‘
+
+    ->在代码中执行PipeLine
+    @Autowired 通过注入的方式来得到管道对象
+    private Pipeline myPipeline;
+    //具体的执行例程
+    public void invokePipeline() {
+        //获得控制器？
+        //PipelineInvocationHandle对象代表此次执行pipeline的状态
+        //虽然Pipeline对象是线程安全的，可被所有线程所共享。
+        //但PipelineInvocationHandle对象不是线程安全的，每次执行pipeline时，均需要取得新的invocation对象。
+        PipelineInvocationHandle invocation = myPipeline.newInvocation();
+        invocation.invoke();
+        System.out.println(invocation.isFinished());
+        System.out.println(invocation.isBroken());
+    }
+
+    ->调用子流程
+    public class MyNestableValve implements Valve {
+        //获得一个子流程对象，可能是注入的
+        private Pipeline subPipeline;
+
+        public void setSubPipeline(Pipeline subPipeline) {
+            this.subPipeline = subPipeline;
+        }
+
+        public void invoke(PipelineContext pipelineContext) throws Exception {
+            // 发起子流程，以当前流程的pipelineContext为参数
+            // 根据当前流程来获得控制器对象，来控制子流程的工作状况
+            PipelineInvocationHandle subInvocation = subPipeline.newInvocation(pipelineContext);
+            // 调用子流程
+            subInvocation.invoke();
+
+            System.out.println(subInvocation.isFinished());
+            System.out.println(subInvocation.isBroken());
+            // 别忘了调用后序的valves
+            pipelineContext.invokeNext();
+        }
+    }
+
+    ->中断PipeLine 就是调用一次breakPipeLine
+    pipelineContext.breakPipeline(0); // level=0，中断当前pipeline
+    pipelineContext.breakPipeline(1); // level=1，中断上一级pipeline
+    pipelineContext.breakPipeline("label"); // 中断到指定label的上级pipeline
+    // 以上调用相当于：
+    pipelineContext.breakPipeline(pipelineContext.findLabel("label"));
+    pipelineContext.breakPipeline(Pipeline.TOP_LABEL); // 终止所有pipelines
+
+
+    ->流程控制
+        ->loop 无条件循环
+        <services:pipeline>
+            定义循环变量loopCounterName，这个变量值将被保存在PipelineContext中（名称为count），且可被其它的valve所访问。
+            定义maxLoopCount=10最大循环圈数，以避免循环失控。
+            <loop loopCounterName="count" maxLoopCount="10">
+                <valve />、
+                 无条件循环一定要和<break>、<break-if>或<break-unless>等valve相配合。
+                 不然会出现死循环的
+                <break-if test="..." />
+            </loop>
+        </services:pipeline>
+
+        ->while 有条件循环
+        <services:pipeline>
+            定义循环变量loopCounterName，这个变量值将被保存在PipelineContext中，且可被其它的valve所访问。
+            通过判断循环变量“count <= 2”，循环2次。
+            <while loopCounterName="count" test="count<= 2">
+                <valve />
+            </while>
+            定义maxLoopCount=10，以避免循环失控。
+            <while maxLoopCount="10">
+                可以自定义任意条件。
+                <conditions:condition class="..." />
+                <valve />
+            </while>
+        </services:pipeline>
+
+        ->if 单条件分支
+        <services:pipeline>
+            <if test="1 == 2">
+                <valve />
+            </if>
+            <if>
+                自定义条件类，但是这个类是怎么用的啊？
+                <conditions:condition class="..." />
+                <valve />
+            </if>
+        </services:pipeline>
+
+        ->choose when otherwise 多条件分支
+        <services:pipeline>
+            <choose>
+                <when test="1 == 2">
+                    <valve />
+                </when>
+                <when>
+                    <conditions:condition class="..." />
+                    <valve />
+                </when>
+                当所有的条件都不符合时，执行该分支
+                <otherwise>
+                    <valve />
+                </otherwise>
+            </choose>
+        </services:pipeline>
+
+        ->break 无条件中断
+        <services:pipeline>
+            <loop>
+                <valve />
+                直接暴力中断
+                <break />
+                <valve />
+            </loop>
+
+            <loop>
+                <valve />
+                <loop>
+                    中断上一层循环
+                    <break levels="1" />
+                </loop>
+                <valve />
+            </loop>
+            ->即到这里
+
+            <loop label="MY_LOOP">
+                <valve />
+                <loop>
+                    中断指定Label
+                    <break toLabel="MY_LOOP" />
+                </loop>
+                <valve />
+            </loop>
+            ->即中断到这里
+        </services:pipeline>
+
+        ->break-if break-unless 有条件中断
+         <services:pipeline>
+            <loop loopCounterName="count">
+                <valve />
+                使用条件 用test控制
+                <break-if test="count &gt; 2" />
+                <valve />
+            </loop>
+
+            <loop label="MY_LOOP">
+                <valve />
+                <break-if toLabel="MY_LOOP">
+                    这个真是有点逗，具体依靠这个类么？那么这个类一定会实现某个接口
+                    <conditions:condition class="..." />
+                </break-if>
+                <valve />
+            </loop>
+
+            <loop loopCounterName="count">
+                <valve />
+                //<break-unless>和<break-if>的条件相反：除非count<=2，否则中断。
+                <break-unless test="count<= 2" />
+                <valve />
+            </loop>
+        </services:pipeline>
+
+        ->exit 无条件退出流程
+        <services:pipeline>
+            <loop>
+                <valve />
+                <loop>
+                    <exit />
+                </loop>
+                <valve />
+            </loop>
+        </services:pipeline>
+        exit的意思就是放弃WebX的控制权，交还给Servlet Engine
+
+        ->try-catch-finally 异常捕获和最终处理
+        <services:pipeline>
+            <try-catch-finally>
+                <try>
+                    <valve />
+                </try>
+                //捕获相关的异常，在Value类里进行处理
+                <catch exceptionName="myexception">
+                    <valve />
+                </catch>
+                <finally>
+                    <valve />
+                </finally>
+            </try-catch-finally>
+        </services:pipeline>
+
+        ->sub-pipeline 创建子流程
+        <services:pipeline>
+            <valve />
+            <sub-pipeline label="mylabel">
+                <valve />
+            </sub-pipeline>
+            <valve />
+        </services:pipeline>
+
+    ->好了~不出我所料，conditions这个东西一定是个条件接口~嘿嘿
+    使用的方式如下
+    public interface Condition {
+        /**
+         * 如满足条件，则返回<code>true</code>。
+         */
+        boolean isSatisfied(PipelineStates pipelineStates);
+    }
+    那么子类就会实现这个接口来进行控制
+
+    ->使用JEXL表达式来控制
+    <if>
+        可以访问设置的变量
+        <conditions:jexl-condition expr="loopCount == 2" />
+        <break />
+    </if>
+    以上配置可以简化为：
+
+    <if test="loopCount == 2">
+        <break />
+    </if>
+    JEXL表达式是Apache的一个小项目，表达式语法详见：http://commons.apache.org/jexl/reference/syntax.html。
+    在JEXL表达式中，你可以使用pipelineContext.getAttribute()所能取得的所有状态值。
+    例如，loop循环时，如果你设置了loopCounterName，那么循环计数器就可以被JEXL表达式所访问。
+    除此之外，Webx还提供了三个组合式的条件。
+
+    ->组合条件式
+    <all-of> 相当于&&
+        <condition1 />
+        <condition2 />
+        <condition3 />
+    </all-of>
+
+    <any-of> 相当于||
+        <condition1 />
+        <condition2 />
+        <condition3 />
+    </any-of>
+
+    <none-of> 相当于!
+        <condition1 />
+        <condition2 />
+        <condition3 />
+    </none-of>
+
+2、Request Context功能
+
+    ->这个东西在我看来就是个request+response的组合体
+
+    ->首先我们来研究下basic标签,提供基础特性的标签，我们可以在<basic>中指定的任何一个Interceptor接口，以便干预特定的事件：
+        ->RequestContextLifecycleInterceptor	拦截“预处理（prepare）”和“提交（commit）”事件。
+        ->ResponseHeaderInterceptor	拦截所有对response header的修改。
+        ->HeaderNameInterceptor	拦截所有对header的修改、添加操作。可修改header name，或拒绝对header的修改。
+        ->HeaderValueInterceptor	拦截所有对header的修改、添加操作。可修改header value，或拒绝对header的修改。
+        ->CookieInterceptor	拦截所有对cookie的添加操作。可修改或拒绝cookie对象。需要注意的是，有两种方法可以添加cookie：通过cookie对象，或者直接写response header。对于后者，需要使用CookieHeaderValueInterceptor才能拦截得到。
+        ->CookieHeaderValueInterceptor	拦截所有通过添加header来创建cookie的操作。可修改或拒绝该cookie。
+        ->RedirectLocaitonInterceptor	拦截所有外部重定向的操作。可修改或拒绝重定向URL。
+        ->StatusMessageInterceptor	拦截所有设置status message的操作。可以修改或拒绝该message。
+
+        ->具体配置Interceptor
+        //我们要配置的是什么？！大声告诉我？！ request-contexts的服务呀！
+        <services:request-contexts xmlns="http://www.alibaba.com/schema/services/request-contexts">
+            <basic>
+                //在这里配置具体的拦截器
+                <request-contexts:interceptors
+                    xmlns="http://www.alibaba.com/schema/services/request-contexts/basic/interceptors">
+                        //在这里大肆配置，不要个逼脸了
+                        <interceptor class="...Interceptor1" />
+                        <interceptor class="...Interceptor2" />
+                </request-contexts:interceptors>
+            </basic>
+        </services:request-contexts>
+        ->默认拦截器
+        就算我们非常根笔的不配置，那么还是会有一个默认的拦截器来执行基本的工作的那就是：ResponseHeaderSecurityFilter。这个类实现了下列功能：
+            ->1、避免CRLF攻击
+            避免header name和value中出现CRLF字符 ── 在header中嵌入CRLF（回车换行）字符是一种常见的攻击手段。攻击者嵌入CRLF以后，使服务器对HTTP请求发生错误判断，从而执行攻击者的恶意代码。
+            事实上，现在的servlet引擎如tomcat已经可以防御这种攻击。但作为框架，并不能依赖于特定的servlet引擎，所以加上这个额外的安全检查，确保万无一失。
+            ->2、将状态码加密
+            ->3、限制Cookie的大小
+
+            当然我们也可以自定义一些参数
+            <request-contexts:interceptors
+                        xmlns="http://www.alibaba.com/schema/services/request-contexts/basic/interceptors">
+                <interceptor class="...Interceptor1" />
+                <interceptor class="...Interceptor2" />
+                设置最大Cookie大小
+                <response-header-security-filter maxSetCookieSize="5K" />
+            </request-contexts:interceptors>
+
+    ->set-locale标签，主要是用于国际化。<set-locale>提供了一个机制，确保Web应用能够设置正确的区域和编码。要注意的是：
+        ->输入编码必须在第一个读取request参数的调用之前设置好，否则就无效。只有把<set-locale>作为Request Contexts服务的一环，才有可能确保读取request参数之前，设置好输入编码。
+
+        ->使用方法，设定默认值
+        <services:request-contexts xmlns="http://www.alibaba.com/schema/services/request-contexts">
+            <set-locale defaultLocale="zh_CN" defaultCharset="GB18030" />
+            ...
+        </services:request-contexts>
+
+        ->但是如果我们需要出现临时覆盖的情况该如何去做呢？
+        <set-locale>提供的方法是，在URL中指定输入编码，并覆盖默认值。URL->http://localhost:8081/myapp/myform?_input_charset=UTF-8
+        在Post表单中使用这种方法
+        <form action="http://localhost:8081/myapp/myform?_input_charset=UTF-8" method="POST">
+            <input type="hidden" name="param1" value="value1"/>
+            <input type="hidden" name="param2" value="value2"/>
+        </form>
+        而在js中进行Ajax提交的时候也需要注意到这一点，要设置URL后缀
+        var xhreq = new XMLHttpRequest();
+        xhreq.open("post", "/myapp/myform?_input_charset=UTF-8", true);
+        ...
+        xhreq.send("a=1&b=2");
+        同时输出编码也可以临时改变
+        http://localhost:8081/myapp/myform?_output_charset=UTF-8
+
+        ->覆盖至Session的编码
+        http://localhost:8081/myapp?_lang=zh_CN:UTF-8 这样就会记录在Session中，直到作废
+
+        ->基本配置
+        <set-locale defaultLocale="..." 默认地区
+                    defaultCharset="..." 默认编码
+                    inputCharsetParam="_input_charset" 临时改变参数
+                    outputCharsetParam="_output_charset"
+                    paramKey="_lang" 持久改变参数
+                    sessionKey="_lang" 在Session中记录的方式 />
+
+    ->parser 解析参数标签
+
+        首先我们来看下基本的配置
+        <services:request-contexts xmlns="http://www.alibaba.com/schema/services/request-contexts">
+            <parser />
+        </services:request-contexts>
+        <services:upload sizeMax="5M" fileSizeMax="2M" />
+        他会自动解析所有类型的请求，包括：
+        ->GET请求
+        ->普通的POST请求（Content Type：application/x-www-form-urlencoded）
+        ->可上传文件的POST请求（Content Type：multipart/form-data）
+
+        ->关于获取参数　我们有两种经典的方式
+        @Autowired
+        HttpServletRequest request;
+        String s = request.getParameter("myparam");
+
+        @Autowired
+        ParserRequestContext parser;
+        String s = parser.getParameters().getString("myparam");
+        按照喜好（实际功能）决定吧～
+
+        ->ParserRequestContext的优越性
+
+            ->1、直接获取指定参数，不需要强制转换
+            // myparam=true, myparam=false
+            parser.getParameters().getBoolean("myparam");
+            // myparam=123
+            parser.getParameters().getInt("myparam");
+
+            ->2、提供默认值功能
+            如果参数值未提供，或者值为空，则返回指定默认值。
+            parser.getParameters().getBoolean("myparam", false);
+            parser.getParameters().getString("myparam", "no_value");
+            parser.getParameters().getInt("myparam", -1);
+
+            ->3、取得文件对象（麻麻再也不用担心文件上传费劲了）
+            FileItem对象（这是Apache Jakarta 项目commons-fileupload所定义的接口）。
+            FileItem fileItem = parser.getParameters().getFileItem("myfile");
+            FileItem[] fileItems = parser.getParameters().getFileItems("myfile");
+
+            ->4、以及访问Cookie的方式
+            parser.getCookies().getString("mycookie");
+
+        ->那么我们重点介绍下上传文件吧~
+
+            首先表单请求，multipart/form-data自然是少不了的
+            配置upload服务
+            <services:upload sizeMax="5M" HTTP请求的最大尺寸（字节，支持K/M/G），超过此尺寸的请求将被抛弃。值-1表示没有限制。
+                             fileSizeMax="2M" 单个文件允许的最大尺寸（字节，支持K/M/G），超过此尺寸的文件将被抛弃。值-1表示没有限制。
+                             repository="/tmp" 暂存上传文件的目录。 注意，这个目录是用Spring ResourceLoader装载的，
+                                                而不是一个物理路径。关于ResourceLoader，详见ResourceLoading服务的文档。
+                             sizeThreshold="10K" 将文件放在内存中的阈值（字节，支持K/M/G），小于此值的文件被保存在内存中 -> 用于提升性能
+                             keepFormFieldInMemory="true" 是否将普通的form field保持在内存里？ 默认为false，但当sizeThreshold为0时，默认为true。 />
+            当然，我们还要注意的是，如果出现了抛弃请求的情况，那么该请求其他所有的参数将被抛弃
+            而如果是因为fileSizeMax而被抛弃，那么我们还能访问其他的参数
+
+            ->指定特定上传服务
+            <parser uploadServiceRef="myUpload" />
+
+        ->那么如果我们作死自己解析上传请求呢？
+
+            ->1、关闭上传服务
+            <parser autoUpload="false">
+            ->2、手工调用解析
+            parser.getParameters().parseUpload();
+            我们可以指定和默认不同的参数
+
+            UploadParameters params = new UploadParameters();
+
+            params.applyDefaultValues();
+            params.setSizeMax(new HumanReadableSize("10M"));
+            params.setFileSizeMax(new HumanReadableSize("1M"));
+            params.setRepository(new File("mydir"));
+
+            //根据规则解析上传文件
+            parser.getParameters().parseUpload(params);
+
+        ->其他功能
+
+            ->1、大小写自动转换
+            取得参数myProductId的值的方法（很碉堡啊~）
+            request.getParameter("MyProductId");
+            request.getParameter("myProductId");
+            request.getParameter("my_product_id");
+            request.getParameter("MY_PRODUCT_ID");
+            request.getParameter("MY_productID");
+            假如不希望具备这种灵活性，则需要修改配置以关闭大小写转换功能：
+            <parser caseFolding="none">
+
+            ->2、参数值两端去掉空白
+            我们可以这样配置来关闭该功能
+            <parser trimming="false">
+
+            ->3、关闭entity解码
+            <parser unescapeParameters="false">
+            预期就会出现这样的情况 param="&#20320;&#22909;"
+
+            ->4、取得对象参数，这个真是个爆好的功能啊
+            在后面接上参数的类对象
+            MyEnum myEnum = params.getObjectOfType("myparam", MyEnum.class);
+            对于无法自动解析的，或者说是非JavaBean对象
+            Date birthday = params.getObjectOfType("birthday", Date.class);
+            那么我们可以自定义规则
+            <parser>
+                <property-editor-registrar
+                    PropertyEditorRegistrar是Spring提供的一种类型注册机制
+                    class="com.alibaba.citrus.service.configuration.support.CustomDateRegistrar"
+                    p:format="yyyy-MM-dd" p:locale="zh_CN" p:timeZone="GMT+8" />
+            </parser>
+            但是如果出现类型转换的异常该怎么办呐？
+            配置这个就能抛出异常
+            <parser converterQuiet="false">
+
+            MyEnum myEnum = null;
+
+            try {
+                myEnum = params.getObjectOfType("myparam", MyEnum.class);
+            } catch (TypeMismatchException e) {
+                ...
+            }
+
+            ->5、解析GET请求的参数 两种主要的方式
+            使用Servlet引擎原来的解码机制 <parser useServletEngineParser="true" />
+            使用固定的charset来解码GET请求<parser URIEncoding="UTF-8" useBodyEncodingForURI="false" />
+
+            ->6、参数的过滤
+            <parser>
+                <filters>
+                    <parser-filters:uploaded-file-whitelist extensions="jpg, gif, png" />
+                </filters>
+            </parser>
+            上面的配置将会禁止文件名后缀不在列表中的文件被上传到服务器上。如果做得更好一点，你甚至可以对上传文件进行病毒扫描。
+            目前，<parser>支持两种过滤器接口：ParameterValueFilter和UploadedFileFilter。
+            前者用来对普通的参数值进行过滤（例如排除可能造成攻击的HTML代码）；
+            后者用来对上传文件的file item对象进行过滤，就像刚才的uploaded-file-whitelist 白名单机制
+
+    ->buffered 缓存机制 缓存response中的内容
+
+        Buffer使用时候需要注意的问题
+            ->BufferedRequestContext主要包括了两条用来操作buffer栈的指令：push和pop。
+            ->每次push就会在栈顶创建一个新的buffer。
+            ->每次pop就会弹出栈顶buffer，并返回其内容。当最后一个buffer被弹出时，就会自动push一个新的buffer，从而确保任何时候栈都非空。
+            ->所有写入response.getWriter()和response.getOutputStream()输出流的数据，将被保存在栈顶的buffer中。
+            ->Push和pop必须成对出现。如果在commit时发现栈内有两个或两个以上的buffer存在，说明有push/pop未匹配，则报错。
+            ->Commit时，将仅存的栈顶buffer提交给浏览器。
+        ->buffered还有一个重要的作用，就是可以用来支持基于cookie的session机制。
+        因为cookie是response header的一部分，根据HTTP协议，headers出现在content的前面。
+        一旦content开始向浏览器输出，headers就不可能再被改变了。这会导致基于cookie的session无法保存的问题。
+        <buffered>将所有的输出内容缓存在内存中，从而避免了response过早地提交给浏览器，也就解决了cookie无法保存的问题。
+
+        ->配置方式如下
+        <services:request-contexts xmlns="http://www.alibaba.com/schema/services/request-contexts">
+            <buffered />
+        </services:request-contexts>
+
+        ->关于操作Buffer栈
+
+        //大多数时候都是采用自动注入的方式来确定的
+        @Autowired
+        BufferedRequestContext buffered;
+
+        @Autowired
+        HttpServletResponse response;
+
+        PrintWriter out = response.getWriter();
+
+        buffered.pushBuffer(); // 创建新buffer，并压入栈顶
+        out.print("world");  // 在新buffer中写入
+
+        String content = buffered.popCharBuffer(); // 弹出顶层buffer
+
+        out.print("hello, ");
+        out.print(content); // 写入较低层的buffer
+
+        ->response会产生两种流 二进制流response.getOutputStream()和文本流response.getWriter()
+        ->而与之想对应的buffered.popByteBuffer()和buffered.popCharBuffer()
+        用混会出现异常~！
+
+        ->而关于关闭缓存机制很简单，就是out.write就可以了
+
+
+    ->lazy-commit  延迟提交response
+
+        所谓提交的意思就是，在服务器应用响应request的全过程中，都可以向浏览器输出response的内容。
+        然而，已经输出到浏览器上的内容，是不可更改的；还没有输出的内容，还有改变的余地。这个输出的过程，被称为提交（commit）。
+        所以我们可以和<buffered/>互相配合，来进行提交前的修改
+        它的配置也是这样简单
+        <services:request-contexts xmlns="http://www.alibaba.com/schema/services/request-contexts">
+            <lazy-commit />
+        </services:request-contexts>
+        而在场景类，通过LazyCommitRequestContext接口可以获得Response的状态
+
+
+    ->rewrite 重写请求的URL和参数
+
+        它可以根据规则，在运行时修改URL和参数。
+
+        当一个请求进入<rewrite>以后，它的处理过程如上图所示。过程可分为两个大的步骤，即：匹配和执行。
+        注意：他的匹配路径就是servlet路径，而不是全路径
+        ->匹配
+
+            取得URL中的path路径。
+            用所取得的path，依次匹配rule1、rule2、rule3中的pattern，直到找到第一个匹配。
+            假如rule中包含conditions，则测试conditions。如果condtions不满足，则当前的rule匹配失败，回到第2步，继续匹配下一个rules。
+            假如rule不包含conditions，或者conditions被满足，则当前的rule匹配成功，进入“执行”阶段。
+
+        ->执行
+
+            执行substitution替换。这可能导致path和参数的改变。
+            执行所有的handlers。这为编程者提供了更灵活的手段来改变request中的数据。
+            根据substitution中的指示，结束<rewrite>的执行、或者回到匹配阶段，用新的path和参数继续匹配后续的rules。
+            <rewrite>结束时，根据substitution中的指示，改写request或者重定向到新的URL。
+
+        一个整体的rewrite如下
+        <services:request-contexts xmlns="http://www.alibaba.com/schema/services/request-contexts">
+            <rewrite>
+
+                规则1
+                <rule pattern="...">
+                    整体或部分匹配conditions
+                    每个condition由两个主要的参数：测试表达式和pattern。测试表达式中可以使用一些特定的变量：
+                    <condition test="..." pattern="..." flags="..." />
+                    <condition test="..." pattern="..." flags="..." />
+                    替换参数
+                    <substitution uri="..." flags="...">
+                        <parameter key="..." value="..." />
+                        <parameter key="..." value="..." />
+                        <parameter key="..." value="..." />
+                    </substitution>
+                    自定义处理器
+                    当rule和conditions被匹配的时候，所有的handlers将被执行。Webx提供了一个handler参考实现：
+                    <handlers>
+                        <rewrite-handlers:handler class="..." />
+                    </handlers>
+                </rule>
+
+                匹配路径/path->服务器名为www.*.com，端口为8080->并且参数x!=1->并且参数y=2
+                <rule pattern="/path">
+                    <condition test="%{SERVER_NAME}:%{SERVER_PORT}" pattern="www.(\w+).com:8080" />
+                    <condition test="%{QUERY:x}" pattern="!1" />
+                    <condition test="%{QUERY:y}" pattern="2" />
+                </rule>
+
+                同时我们还可以设定FLAG来表示条件之间的关系
+
+                ->匹配路径/path->参数x=1->或者y=2->或者z=3。
+                <rule pattern="/path">
+                    <condition test="%{QUERY:x}" pattern="1" flags="OR" />
+                    <condition test="%{QUERY:y}" pattern="2" flags="ornext" />
+                    <condition test="%{QUERY:z}" pattern="3" />
+                </rule>
+
+                ->替换路径活动->这个例子中是部分匹配就替换
+                <rule pattern="/test1/hello\.htm">
+                    <substitution uri="/test1/new_hello\.htm" />
+                </rule>
+
+                ->正则替换方法
+                <rule pattern="/(\w+)\.htm">
+                    <condition test="%{REMOTE_HOST}" pattern="(\w+).blogs.com" />
+                    <condition test="%{SERVER_NAME}" pattern="(\w+).blogs.com" />
+                    要注意的是只有最后一个被匹配的condition中的匹配项，才被保留用于替换。
+                    rule pattern中的匹配项，是用“$1”、“$2”、“$3”表示的
+                    condition pattern中的匹配项，是用“%1”、“%2”、“%3”表示的
+                    <substitution uri="/%1/new_$1\.htm" />
+                        ->%{SERVER_NAME}1/new_(\w+)\.htm
+                </rule>
+
+                ->疯狂的替换参数
+                对于请求：http://www.myserver.com/hello.htm，不改变其路径，只改变其参数：
+                <rule pattern="/hello.(\w+)">
+                    <condition test="%{SERVER_NAME}" pattern="www.(\w+).com" />
+                    <substitution flags="QSA"> 如果标记此Flag就会保留参数
+                        创建单值参数：ext=htm（从rule pattern中取得$1）
+                        <parameter key="ext" value="$1" />
+                        创建单值参数：host=myserver（从condition pattern中取得%1）
+                        <parameter key="host" value="%1" />
+                        创建多值参数：count=[1, 2, 3]
+                        <parameter key="count">
+                            <value>1</value>
+                            <value>2</value>
+                            <value>3</value>
+                        </parameter>
+                        最后删除其他所有参数 在非flags="QSA"情况下
+                    </substitution>
+                </rule>
+
+
+                匹配整个路径
+                <rule pattern="^/test1/hello\.htm$"></rule>
+                后缀匹配
+                <rule pattern="\.jpg$"></rule>
+                否定匹配
+                <rule pattern="!\.jpg$"></rule>
+            </rewrite>
+        </services:request-contexts>
+
+        %{REMOTE_HOST}	客户端主机名。	相当于request.getRemoteHost()
+        %{REMOTE_ADDR}	客户端地址。	相当于request.getRemoteAddr()
+        %{REMOTE_USER}	用户名。	相当于request.getRemoteUser()
+        %{AUTH_TYPE}	验证用户的方法。例如BASIC、FORM、CLIENT_CERT、DIGEST等。	相当于request.getAuthType()
+        %{SERVER_NAME}	服务器主机名。	相当于request.getServerName()
+        %{SERVER_PORT}	服务器端口。	相当于request.getServerPort()
+        %{SERVER_PROTOCOL}	服务器协议。	相当于request.getProtocol()
+        %{REQUEST_METHOD}	HTTP方法名。例如GET、POST等。	相当于request.getMethod()
+        %{REQUEST_URI}	所请求的URI，不包括主机名、端口和参数。	相当于request.getRequestURI()
+        %{QUERY_STRING}	参数和值。注意，对于POST请求取得QUERY_STRING，可能会影响性能。	相当于request.getQueryString()
+        %{QUERY:param}	取得参数值。无论哪一种类型的请求（GET/POST/上传文件），都可以取得参数值。	相当于request.getParameter("param")
+        %{HTTP_USER_AGENT}	浏览器名称。	相当于request.getHeader("User-Agent")
+        %{HTTP_REFERER}	前一个URL。	相当于request.getHeader("Referer")
+        %{HTTP_HOST}	HTTP请求中的主机名，一般代表虚拟主机。	相当于request.getHeader("Host")
+        %{HTTP_ACCEPT}	浏览器可以接受的文档类型。	相当于request.getHeader("Accept")
+        %{HTTP_COOKIE}	浏览器发送过来的cookie。	相当于request.getHeader("Cookie")
+
+        匹配流程中的后续操作
+        flags=null 默认继续匹配
+        flags="L" 终止匹配
+        flags="C" 假如当前rule匹配，则会像默认情况一样继续匹配剩余的rules；否则，就像last选项一样立即中止匹配。所谓的串接rules
+        flags="L,R=301" 永久重定向
+        flags="L,R" 临时重定向 302 不保留参数
+        flags="L,R,QSA" 临时重定向 302 保留参数
+        uri="http://www.other-site.com/new_hello.htm" flags="L,R" 绝对路径重定向
+
+
+3、WebX的Session
+
+    ->Session-Cookie模式的弱点
+        Cookie数量和长度的限制。每个domain最多只能有20条cookie，每个cookie长度不能超过4KB，否则会被截掉。
+        安全性问题。如果cookie被人拦截了，那人就可以取得所有的session信息。即使加密也与事无补，因为拦截者并不需要知道cookie的意义，他只要原样转发cookie就可以达到目的了。
+        有些状态不可能保存在客户端。例如，为了防止重复提交表单，我们需要在服务器端保存一个计数器。如果我们把这个计数器保存在客户端，那么它起不到任何作用。
+
+    ->针对这些弱点进行改良
+        通过良好的编程，控制保存在cookie中的session对象的大小。
+        通过加密和安全传输技术（SSL），减少cookie被破解的可能性。
+        只在cookie中存放不敏感数据，即使被盗也不会有重大损失。
+        控制cookie的生命期，使之不会永远有效。偷盗者很可能拿到一个过期的cookie。'
+
+    最终还是使用客户端、服务器端组合Session的方案
+
+    ->针对这些改动应该对框架进行如下限制
+        使用标准的HttpSession接口，而不是增加新的API。这样任何WEB应用，都可以轻易在两种不同的session机制之间切换。
+        应用程序不需要知道session中的对象是被保存到了cookie中还是别的什么地方。
+        Session框架可以把同一个session中的不同的对象分别保存到不同的地方去，应用程序同样不需要关心这些。
+            例如，把一般信息放到cookie中，关键信息放到Berkeley DB中。甚至同是cookie，也有持久和临时之分，有生命期长短之分。
+
+    ->一个最简单配置（不适用于生产环境）
+    <services:request-contexts xmlns="http://www.alibaba.com/schema/services/request-contexts">
+        <buffered />
+        <lazy-commit />
+        ...
+        <session>
+            将所有数据（ name=*）保存在内存里（ simple-memory-store）。
+            <stores>
+                <session-stores:simple-memory-store id="simple" />
+            </stores>
+            <store-mappings>
+                <match name="*" store="simple" />
+            </store-mappings>
+        </session>
+    </services:request-contexts>
+
+    ->1、sessionId的设置
+    Session生命周期的配置
+        maxInactiveInterval 不活动就失效的秒数
+        keepInTouch 是否每次都更新最近访问时间
+        forceExpirationPeriod 指定Session强制作废期限
+        modelKey 保存名称（无必要修改）
+    <session　maxInactiveInterval="0" keepInTouch="false" forceExpirationPeriod="14400"　modelKey="SESSION_MODEL">
+        使用Cookie保存Session 如若不是，则只能保存的URL中。
+        urlEncodeEnabled = "true"时，就是把session ID编码在URL中，应用必须调用response.encodeURL()或response.encodeRedirectURL()来将JSESSIONID编码到URL中。
+        <id cookieEnabled="true" urlEncodeEnabled="false">
+            Session ID cookie的名称。 当前域名　最长存活时间（秒）　默认为0，表示临时cookie，随浏览器的关闭而消失
+            Session ID cookie的path。 在session ID cookie上设置HttpOnly标记，能够缓解XSS攻击
+            设置Secure标记。这样，只有在https请求中才可访问该cookie。默认为false。
+            <cookie name="JSESSIONID" domain="" maxAge="0" path="/" httpOnly="true" secure="false" />
+            指定在URL中表示session ID的名字，默认也是JSESSIONID。
+            <url-encode name="JSESSIONID" />
+            以UUID作为SessionId的新生成方法
+            <session-idgens:uuid-generator />
+        </id>
+    </session>
+
+    ->2、Session Store的配置
+        <session>
+        可以配置任意多个session store
+        只要ID不重复。此处，store1、store2和store3分别是三个session store的名称。
+            <stores>
+                <session-stores:store id="store1" />
+                <session-stores:store id="store2" />
+                <session-stores:store id="store3" />
+            </stores>
+                映射session stores：match标签用来精确匹配属性名称。一个特别的值是“*”，它代表默认匹配所有的names。
+                本例中， 如果调用session.setAttribute("loginName", user.getId())，那么这个值将被保存到store2里；
+                如果调用session.setAttribute("other", value)将被默认匹配到store1中
+                <store-mappings>
+                    <match name="*" store="store1" />
+                    <match name="loginName" store="store2" />
+                    映射session stores：matchRegexp标签用正则表达式来匹配属性名称。
+                    本例中， key_a、key_b等值都将被保存到store3里。
+                    <matchRegex pattern="key.*" store="store3" />
+                </store-mappings>
+        </session>
+
+        要注意的是必须有一个session store能够用来存放session model，否则就没法玩了。
+        可以使用<match name="*">来匹配基本Session
+        精确的匹配最优先。
+        正则表达式的匹配遵循最大匹配的原则，假如有两个以上的正则表达式被同时匹配，长度较长的匹配胜出。
+        默认匹配*总是在所有的匹配都失败以后才会被激活。
+
+
+    ->3、Session Model
+
+        Session Model是用来记录当前session的生命期数据的，例如：session的创建时间、最近更新时间等。
+        平时是以一种类似于JSON的字符串来保存的
+        等到需要用的时候，进行解码
+        <session>
+            <session-model-encoders>
+                <model-encoders:default-session-model-encoder />
+                <model-encoders:model-encoder class="..." />
+                <model-encoders:model-encoder class="..." />
+            </session-model-encoders>
+        </session>
+        解码时：
+        当从store取得SessionModel对象时，框架将依次尝试所有的encoder，直到解码成功为止。
+        编码时：
+        当将SessionModel对象保存到store之前，框架将使用第一个encoder来编码对象。
+
+    ->4、Session Interceptor
+
+        <session>
+          <request-contexts:interceptors xmlns="http://www.alibaba.com/schema/services/request-contexts/session/interceptors">
+            监听session生命期事件，并记录日志。
+            <lifecycle-logger />
+            控制session中的attributes，只允许白名单中所定义的attribute名称和类型被写入到或读出于session store中。
+            可以用来做Cookie的长度控制
+            <attribute-whitelist>
+              <attribute name="_csrf_token" />
+              <attribute name="_lang" />
+              <attribute name="loginUser" type="com.alibaba...MyUser" />
+              <attribute name="shoppingCart" type="com.alibaba....ShoppingCart" />
+            </attribute-whitelist>
+
+            <interceptor class="..." />
+
+          </request-contexts:interceptors>
+        </session>
+
+        Session Interceptor拦截器的作用是拦截特定的事件，甚至干预该事件的执行结果。目前有两种拦截器接口：
+            SessionLifecycleListener 创建、访问、作废
+            SessionAttributeInterceptor 拦截session.getAttribute()和session.setAttribute()
+
+
+    ->5、Session Encoders 将Java对象序列化为Cookie或者反序列化
+
+        和Interceptor相同，我们可以配置多个序列化类
+        保存session数据时，session框架将使用第一个encoder来将对象转换成cookie可接受的字符串；
+        读取session数据时，session框架将依次尝试所有的encoders，直到解码成功为止。
+        <session-stores:cookie-store>
+            <session-stores:encoders>
+                最经典方式、无加密
+                <session-encoders:serialization-encoder />
+                明确指定hession序列化，和↑的一样
+                <session-serializers:hessian-serializer />
+                AES加密
+                <session-encrypters:aes-encrypter key="0123456789abcdef" />
+                指定原生序列化
+                <session-serializers:java-serializer />
+            </session-stores:encoders>
+        </session-stores:cookie-store>
+
+
+    ->6、Session Value Encoders
+    他和单纯的Session Encoders不同，它只转换session attribute的值。
+    <session-stores:encoders>
+        <session-value-encoders:simple-value-encoder
+            编码字符串值 charset="GBK"
+            编码指定类型的值，该值具有默认的PropertyEditor type="com.alibaba...MyEnum" />
+        编码指定类型的值，注册相应的registrar来进行类型转换。
+        <session-value-encoders:property-editor-registrar
+                    class="com.alibaba.citrus.service.configuration.support.CustomDateRegistrar"
+                    p:timeZone="GMT+8" p:format="yyyy-MM-dd" />
+        我们还可以对其进行加密
+        <session-encrypters:aes-encrypter key="0123456789abcdef" />
+    </session-stores:encoders>
+
+    <mapped-values-encoder>和<simple-value-encoder>的区别
+        -><mapped-values-encoder>只接受java.util.Map数据类型，并将其编码成“key:value&key:value”的格式,例子如下
+        <session-stores:encoders>
+            <session-value-encoders:mapped-values-encoder valueType="com.alibaba...MyEnum" <- 这里定义的类型是Map中Value的类型 />
+        </session-stores:encoders>
+
+        实际用起来就是这样
+        {
+            Map<String, MyEnum> mappedValue = new HashMap<String, MyEnum>();
+            mappedValue.put("key1", MyEnum.value1);
+            mappedValue.put("key2", MyEnum.value2);
+
+            session.setAttribute("cookie", mappedValue);
+        }
+4、WebX的Cookie
+
+   1、Cookie Store
+   Cookie Store依赖其它两个Request Contexts： <buffered> 和  <lazy-commit>。没有它们，就不能实现基于cookie的session。
+
+   2、Cookie的参数
+   <session-stores:cookie-store id="temporaryClientStore" maxLength="3896" maxCount="5" checksum="false">
+        1、name 指定cookie的名称
+        2、domain 域名
+        3、path 路径
+        4、maxAge 有效时间
+        5、httpOnly 防止XSS攻击
+        6、secure https协议才可访问
+        7、survivesInInvalidating 及时当前session过期，新的session仍然可以读到这个store中所保存的对象
+        8、maxLength 指定每个cookie的最大长度。默认为3896，约3.8K。
+        9、maxCount 最大个数
+        10、checksum 校验和 不要再生产环境下打开
+       <session-stores:cookie name="tmp" domain="" path="/" maxAge="0" httpOnly="true" secure="false" survivesInInvalidating="false" />
+   </session-stores:cookie-store>、
+
+   3、单值Cookie Store 这个东西主要是用于让前端JS能够获取Session（Cookie）的信息
+   <session>
+       <stores>
+           单值cookie store的ID是loginNameCookie。
+           <stores:single-valued-cookie-store id="loginNameCookie">
+               Cookie的名称是login。
+               <stores:cookie name="login" />
+           </stores:single-valued-cookie-store>
+       </stores>
+       <store-mappings>
+           Session attribute的名称是loginName，attribute名称和cookie名称不必相同。
+           <match name="loginName" store="loginNameCookie" />
+       </store-mappings>
+   </session>
+
+   当我们在执行session.setAttribute("loginName", "myname");代码时候 会生成->cookie：login=myname
+
+   他需要配合一个东西Session Value Encoders来使用 见上面的3.6
+
+
+所谓的Session技术又很多
+    基于cookie的session、基于数据库的session、基于Berkeley DB的session、基于内存的session，甚至也可以实现基于TCP-ring的session等等。
+    最重要的是，我们能把这些技术结合起来，使每种技术的优点能够互补，缺点可以被避免。
+    所有这一切，对应用程序是完全透明的 —— 应用程序不用知道session是如何实现的、它们的对象被保存到哪个session store中等问题 —— session框架可以妥善地处理好这一切。
+
+
+5、表单验证游戏
+
+    ->1、创建新数据
+
+        实际我对这种xml验证很无爱……
+
+        ->form代表表单验证服务的配置。从这里开始定义表单验证的规则。
+        <services:form xmlns="http://www.alibaba.com/schema/services/form/validators">
+            ->可以定义多个groups，每个group有一个唯一的名称，例如：“register”。每个group代表了一组需要验证的字段（field）。
+            <services:group name="register">
+            ->每个field有一个在组中唯一的名称，例如：“userId”、“password”等。
+            同时也要在在表单验证规则中添加默认值
+            <services:field name="userId" displayName="登录名" defaultValue="mydefault">
+                ->每个field又包含了多个验证规则（validator）。
+                <required-validator>
+                    ->每个验证规则都包含了一段文字描述（message），如果用户填写的数据没有通过当前的规则的验证，那么用户将会看到这段文字描述，以解释出错的原因。
+                    <message>必须填写 ${displayName}</message>
+                </required-validator>
+                <regexp-validator pattern="^[A-Za-z_][A-Za-z_0-9]*$">
+                    <message>${displayName} 必须由字母、数字、下划线构成</message>
+                    </regexp-validator>
+                    <string-length-validator minLength="4" maxLength="10">
+                        <message>${displayName} 最少必须由${minLength}个字组成，最多不能超过${maxLength}个字</message>
+                    </string-length-validator>
+            </services:field>
+            </services:group>
+        </service:form>
+
+        ->1、配置完之后，我们就应该创建表单页面了
+        首先我们要创建一个pull tool工具，配置如下：
+        <services:pull xmlns="http://www.alibaba.com/schema/services/pull/factories">
+            <form-tool />
+        </services:pull>
+        上面的配置定义了一个$form工具,可以在模板中直接使用它。
+        下面是一个表单验证的页面实例
+
+            定义velocity宏：仅当field验证通过时（即$group.field.valid=true），才显示错误信息。
+            对于空白表单和通过验证的字段而言，$group.field.valid为true。
+            #macro (registerMessage $field)
+                #if (!$field.valid) $field.message #end
+            #end
+            ->HTML form的action值为空，意思是把表单提交给当前页面。
+            这样，当用户填写表单有错时，应用会停留在当前表单页面，将表单数据连同错误提示一起显示给用户，要求用户修改。如果表单验证通过，应用必须通过重定向操作来转向下一个页面。
+            <form action="" method="post">
+
+              ->根据这参数，表单将会被交给UserAccountAction来处理。Action的职责是调用表单验证过程。
+              假如验证通过，就保存数据，并重定向到下一个页面。
+              <input type="hidden" name="action" value="UserAccountAction"/>
+
+              ->创建一个register group的实例。
+              #set ($group = $form.register.defaultInstance)
+
+              <p>用户注册</p>
+
+              <dl>
+                <dt>用户名</dt>
+                <dd>
+                    <div>
+                        ->利用新创建的group对象来生成表单字段，包括生成字段的名称$group.field.key，以及字段的值为$!group.field.value。
+                        <input type="text" name="$group.userId.key" value="$!group.userId.value"/>
+                    </div>
+                    ->如果验证失败的话，显示验证出错消息。这里通过前面所定义的velocity宏来简化代码。
+                    <div class="errorMessage">
+                        #registerMessage ($group.userId)
+                    </div>
+                </dd>
+
+                <dt>密码</dt>
+                <dd>
+                    <div>
+                        <input type="password" name="$group.password.key" value="$!group.password.value"/>
+                    </div>
+                    <div class="errorMessage">
+                        #registerMessage ($group.password)
+                    </div>
+                </dd>
+
+                <dt>再输一遍密码</dt>
+                <dd>
+                    <div>
+                        <input type="password" name="$group.passwordConfirm.key" value="$!group.passwordConfirm.value"/>
+                    </div>
+                    <div class="errorMessage">
+                        #registerMessage ($group.passwordConfirm)
+                    </div>
+                </dd>
+              </dl>
+
+              <p>
+                  ->根据这个参数，表单被提交以后，系统会调用当前action（即UserAccountAction）的doRegister()方法。
+                  每个action类中，可以包含多个处理数据的动作，例如doCreate、doUpdate、doDelete等。
+                  <input type="submit" name="event_submit_do_register" value="立即注册！"/>
+              </p>
+           </form>
+           最后设置action字段，以及event_submit_do_register提交按钮，就可以让Webx框架调用UserAccountAction.doRegister()方法。
+
+        ->2、创建Java代码（Action）
+            我们要和之前的HTML表单进行联系丫！
+            public class UserAccountAction {
+                //注入form服务
+                @Autowired
+                private FormService formService;
+
+                public void doRegister(Navigator nav) throws Exception {
+                    //取得form对象，form对象中包含若干groups。
+                    Form form = formService.getForm();
+
+                    //仅当表单验证成功时，才执行下去。
+                    if (form.isValid()) {
+                        //取得group对象。Group对象的名称必须和配置文件以及模板中的group名称相同。
+                        Group group = form.getGroup("register");
+                        MyUser user = new MyUser();
+                        //将group中的数据灌入bean中。
+                        group.setProperties(user);
+                        //可以缩减为一条工厂模式的命令啊……
+                        //MyUserFactory.createFromGroup(group);
+                        //进行持久化||或者其他业务逻辑
+                        save(user);
+                        //处理完数据以后，利用Webx navigation接口跳转到“注册成功”页面。
+                        nav.redirectTo("registerSuccess");
+                    }
+                }
+            }
+
+            我们反射出来的对象就是一个普通的JavaBean
+            public static class MyUser {
+                private String userId;
+                private String password;
+
+                public String getUserId() {
+                    return userId;
+                }
+
+                public void setUserId(String userId) {
+                    this.userId = userId;
+                }
+
+                public String getPassword() {
+                    return password;
+                }
+
+                public void setPassword(String password) {
+                    this.password = password;
+                }
+            }
+
+            Group.setProperties()方法将fields的值映射到同名的Java Bean properties中。
+            然而这个对应关系是可以改变的，后文会再次讲到该问题。
+
+        ->3、简化版本的Java注解模式
+
+        public class UserAccountAction {
+            //验证表单，如果失败则不执行action，否则执行doRegister方法。
+            public void doRegister(@FormGroup("register") MyUser user, Navigator nav) throws Exception {
+                //取得form和register group对象，并将group中的数据注入到MyUser对象中,能够让后面的持久化工作进行
+                save(user);
+                nav.redirectTo("registerSuccess");
+            }
+        }
+
+    ->2、修改老数据
+
+        1、用Screen来取得老数据丫~
+        public class UserAccount {
+            @Autowired
+            private UserManager userManager;
+
+            public void execute(Context context) throws Exception {
+                //UserManager是一个业务接口。通过它，可以从数据库中取得当前登录帐户的信息。
+                User user = userManager.getUser(getCurrentUser().getId());
+                //随后，screen代码把所取得的user对象放到context中，这样，就可以在模板中用$user来引用它。
+                context.put("user", user);
+            }
+        }
+
+        2、创建用来修改数据的页面模板
+        #set ($group = $form.userAccount.defaultInstance)
+        //mapTo的功能是填充表单。
+        //用screen中所取得的user对象的值来填充表单，作为表单的初始值。和Group.setProperties()方法相反
+        //mapTo将Java Bean properties的值映射到同名的fields中。
+        $group.mapTo($user)
+        //保存主键，比起用js来保持强了不少呀！
+        //<input type="hidden" name="action" value="UserAccountAction"/>
+        <input type="hidden" name="$group.userId.key" value="$!group.userId.value"/>
+        <input type="text" name="$group.lastName.key" value="$!group.lastName.value"/>
+
+        //这个submit按钮将引导WebX执行UserAccountAction.doUpdate方法。
+        #userAccountMessage ($group.lastName)
+        <input type="submit" name="event_submit_do_update" value="修改"/>
+
+        3、UserAccountAction.java
+        public class UserAccountAction {
+            /**
+            * 上面我们定义的创建新对象的方法
+            */
+            public void doRegister(...) throws Exception {
+                ...
+            }
+            /**
+            * 用来保存提交数据的action
+            * @param user内部已经封装好Id和其他所有被添加的字段的值
+            */
+            public void doUpdate(@FormGroup("userAccount") MyUser user,
+                                 Navigator nav) throws Exception {
+                update(user);
+                nav.redirectTo("updateSuccess");
+            }
+        }
+
+    ->3、来读取批量数据
+
+        1、首先还是Screen的代码（Controller）
+        public class BatchUserAccount {
+            @Autowired
+            private UserManager userManager;
+
+            public void execute(Context context) throws Exception {
+                List<User> users = userManager.getUsers(getIds());
+                //读取数据集合，然后放进去供脚本读取
+                context.put("users", users);
+            }
+        }
+
+        2、然后是页面
+        <form action="" method="post">
+          <input type="hidden" name="action" value="UserAccountAction"/>
+
+          //foreach循环来遍历数据对象。其中，$users是由screen放入context中的对象列表。
+          #foreach($user in $users)
+            //对每个数据对象创建一个group实例。
+            //我们改变了用法：$form.userAccount.getInstance($user.id)。每次调用该方法，就对一个group生成了一个实例（instance）。
+            #set ($group = $form.userAccount.getInstance($user.id))
+
+            $group.mapTo($user)
+
+            ...
+            <input type="hidden" name="$group.userId.key" value="$!group.userId.value"/>
+
+            ...
+            <input type="text" name="$group.lastName.key" value="$!group.lastName.value"/>
+            ...
+            #userAccountMessage ($group.lastName)
+            ...
+
+          #end
+          ...
+          //指定action事件。这个submit按钮将引导webx执行UserAccountAction.doBatchEdit方法。
+          <input type="submit" name="event_submit_do_batch_edit" value="批量修改"/>
+        </form>
+
+        3、然后是用Action来处理这些数据
+        public class UserAccountAction {
+            //获取基础服务
+            @Autowired
+            private FormService formService;
+
+            public void doBatchEdit(Navigator nav) throws Exception {
+                //得到表单对象
+                Form form = formService.getForm();
+                //是否符合校验
+                if (form.isValid()) {
+                    //得到group实例
+                    Collection<Group> groups = form.getGroups("userAccount");
+                    //通过遍历group实例来获取前台数据
+                    for (Group group : groups) {
+                        MyUser user = new MyUser();
+                        group.setProperties(user);
+                        save(user);
+                    }
+                    nav.redirectTo("success");
+                }
+            }
+        }
+
+        4、使用注解版本
+        public class UserAccountAction {
+            //自动包装成数组
+            public void doBatchEdit(@FormGroup("userAccount") MyUser[] users,
+                                    Navigator nav) throws Exception {
+                for (MyUser user : users) {
+                    save(user);
+                }
+
+                nav.redirectTo("success");
+            }
+        }
+
+    4、表单验证服务详解
+
+        ->1、首先是基本配置
+        postOnlyByDefault="true" 代表仅能通过POST方式来提交表单
+        <services:form postOnlyByDefault="true" xmlns="http://www.alibaba.com/schema/services/form/validators">
+            每个表单验证服务可包含多个groups。
+            trimmingByDefault="true" 和 trimming="true" 代表消除两端的空白字符,注意使用的位置不一样
+            <services:group postOnlyByDefault="true" name="group1" trimmingByDefault="true">
+                每个group可包含多个fields。
+                DisplayName是对当前field的一个描述信息。
+                <services:field name="field1" trimming="true" displayName="我的字段">
+                    每个fields可包含多个validators。
+                    <validator />
+                    <validator />
+                    ...
+                </services:field>
+
+                <services:field name="field2" />
+                ...
+            </services:group>
+
+            <services:group name="group2">
+                ...
+            </services:group>
+
+            ...
+        </services:form>
+
+        ->2、表单内的类型转换
+        如果converterQuiet=true，那么类型转换失败时，将取得默认值。否则，抛出异常。converterQuiet的默认值为true。
+        <services:form converterQuiet="true">
+            <services:property-editor-registrar
+                通过registrar接口方式来实现转换
+                class="com.alibaba.citrus.service.configuration.support.CustomDateRegistrar"
+                p:format="yyyy-MM-dd" />
+        </services:form>
+
+        ->3、何时用到类型转换？
+        Group.setProperties(bean)	将Group中的所有fields值注入bean properties。
+        Group.mapTo(bean)	用bean properties中的值初始化group fields。
+
+    5、国际化
+        略
+
+    6、切分表单服务
+
+        将一个长配置文件切分成几个较短的文件，更有利于管理。
+        表单验证服务支持导入多个form表单服务，从而实现分割较长配置文件的功能。
+        例如下面的例程
+        ->1、form.xml
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:services="http://www.alibaba.com/schema/services"
+            xmlns:beans="http://www.springframework.org/schema/beans">
+            导入包含着子表单服务的spring配置
+            <beans:import resource="inc/form_part1.xml" />
+            <beans:import resource="inc/form_part2.xml" />
+            定义主表单服务时，必须指定primary="true"。否则spring将无法区分主从表单服务，从而导致注入FormService时失败。
+            <services:form xmlns="http://www.alibaba.com/schema/services/form/validators" primary="true">
+                导入指定ID的子表单服务：子服务必须指定ID~
+                <services:import form="part1" />
+                <services:import form="part2" />
+                ...
+            </services:form>
+        </beans:beans>
+
+        <!-- inc/form_part1.xml -->
+        <beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:services="http://www.alibaba.com/schema/services"
+            xmlns:beans="http://www.springframework.org/schema/beans">
+            子服务ID
+            <services:form id="part1">
+                ...
+            </services:form>
+
+        </beans:beans>
+
+        <!-- inc/form_part2.xml -->
+        <beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:services="http://www.alibaba.com/schema/services"
+            xmlns:beans="http://www.springframework.org/schema/beans">
+            子服务ID
+            <services:form id="part2">
+                ...
+            </services:form>
+
+        </beans:beans>
+
+        要注意的是，如果父级和子级有重名的group，那么父级将会忽略子级
+
+    7、Group的继承和导入
+
+    继承和导入的目的是让这些相似的groups之间可以共享共同的参数、字段和验证规则，避免重复定义。
+
+    <services:form>
+        <services:group name="baseGroup">
+            <services:field name="field1" >
+                <validator1 />
+                <validator2 />
+            </services:field>
+            <services:field name="field2" />
+            <services:field name="field3" />
+        </services:group>
+        指定父级Group
+        <services:group name="subGroup" extends="baseGroup">
+            <services:field name="field1">
+                <validator3 />
+            </services:field>
+            <services:field name="field4" />
+        </services:group>
+
+    </services:form>
+
+    subGroup继承了baseGroup。其效果是：
+
+    ->baseGroup的参数（postOnly、trimmingByDefault）被subGroup继承，除非subGroup明确指定了该参数。
+    ->baseGroup中fields被subGroup继承。具体来说：
+        ->baseGroup中不同名的fields被直接添加到subGroup中。
+    ->baseGroup中同名的fields被subGroup中的继承。具体来说：
+        ->baseGroup field的参数（name、displayName、defaultValue、trimming、propertyName）被subGroup field继承，除非subGroup field明确指定了该参数
+        如果子group也明确制定了，那么就忽略父类指定的。
+    ->baseGroup field中的validators被全部添加到subGroup field中。
+
+    具体的效果如下
+    <services:form>
+        <services:group name="subGroup">
+            <services:field name="field1">
+                <validator1 /><!-- 来自baseGroup -->
+                <validator2 /><!-- 来自baseGroup -->
+                <validator3 />
+            </services:field>
+            <services:field name="field2" /><!-- 来自baseGroup -->
+            <services:field name="field3" /><!-- 来自baseGroup -->
+            <services:field name="field4" />
+        </services:group>
+    </services:form>
+
+    还可以进行相应的导入(import)
+
+    <services:form>
+        <services:group name="group1">
+            <services:field name="field1" />
+            <services:field name="field2" />
+            <services:field name="field3" />
+        </services:group>
+
+        <services:group name="group2">
+            导入group1中的全部fields
+            <services:import group="group1" />
+            <services:field name="field4" />
+        </services:group>
+
+        <services:group name="group3">
+            导入group1中的一个指定field
+            <services:import group="group1" field="field1" />
+           <services:field name="field5" />
+        </services:group>
+
+    </services:form>
+
+    ->设置默认值
+    <services:field name="field5" defaultValue="defaultValue" />
+    ->如果是多选框还可以这么玩
+    <services:field name="checkbox1" defaultValue="defaultValue1, defaultValue2, defaultValue3" />

@@ -1,0 +1,262 @@
+2015年5月2日
+WebX框架学习笔记
+
+1、WebX的基本信息
+    ->WebX接收到了一个请求之后，那么将会做如下的处理
+        ->对Request，Response，Session等对象进行二次封装（所谓增强），然后调用子模块的PipeLine来进行流程处理
+        ->假如在上面的过程中出现异常，则会触发Webx Framework处理异常的过程。
+    ->关于处理响应和处理请求的一些情况
+        ->1、整个WebX框架是使用Filter来进行请求拦截的，那么当对于静态的（图片、样式、js）文件那么就会和基础的SpringMVC框架一样，配置个东西然后翻过去
+        ->2、那么对应上面的需求，就出现了excludes和passthru字段来进行处理。
+            前者为排除 -> WebX将会立刻放弃权限、将不会做任何处理
+            后者为略过 -> 还是会经过WebX的过滤器
+    ->WebX<>Controller
+        ->这是个啥呢？就像Maven子模块的pom.xml一样，它控制着子应用的上下文配置
+        ->对于<Root>，它对应的是父节点
+        ->而其他的子应用就各回各家各找各妈，处理自己那点事
+        ->当然，我们也可以自定义他们
+        例如：在下面的配置中使用自定义的RootController来当做处理器
+        <webx-configuration xmlns="http://www.alibaba.com/schema/services">
+            <components>
+                <rootController class="com.myframework.MyRootController" />
+            </components>
+        </webx-configuration>
+        在下面的例程中，对特定的子应用，使用自定义的Controller来进行处理
+        <webx-configuration xmlns="http://www.alibaba.com/schema/services">
+            <components defaultControllerClass="com.myframework.MyController">
+                <component name="app1">
+                    <controller class="com.myframework.MyController" />
+                </component>
+            </components>
+        </webx-configuration>
+    ->Webx Turbine
+        ->这个东西有两个概念
+            ->页面驱动（即美工翻身把歌唱）
+            ->约定胜于配置（即程序员根据特定的方式来命名module）
+        ->这其中牵扯到一个东西
+        pileLine.xml
+        <services:pipeline xmlns="http://www.alibaba.com/schema/services/pipeline/valves">
+
+            <!-- 初始化turbine rundata，并在pipelineContext中设置可能会用到的对象(如rundata、utils)，以便valve取得。 -->
+            <prepareForTurbine />
+
+            <!-- 设置日志系统的上下文，支持把当前请求的详情打印在日志中。 -->
+            <setLoggingContext />
+
+            <!-- 分析URL，取得target。 -->
+            <analyzeURL homepage="homepage" />
+
+            <!-- 检查csrf token，防止csrf攻击和重复提交。假如request和session中的token不匹配，则出错，或显示expired页面。 -->
+            <checkCsrfToken />
+            <loop>
+                <choose>
+                    <when>
+                        <!-- 执行带模板的screen，默认有layout。 -->
+                        <pl-conditions:target-extension-condition extension="null, vm, jsp" />
+                        <performAction />
+                        <performTemplateScreen />
+                        <renderTemplate />
+                    </when>
+                    <when>
+                        <!-- 执行不带模板的screen，默认无layout。 -->
+                        <pl-conditions:target-extension-condition extension="do" />
+                        <performAction />
+                        <performScreen />
+                    </when>
+                    <otherwise>
+                        <!-- 将控制交还给servlet engine。 -->
+                        <exit />
+                    </otherwise>
+                </choose>
+
+                <!-- 假如rundata.setRedirectTarget()被设置，则循环，否则退出循环。 -->
+                <breakUnlessTargetRedirected />
+            </loop>
+        </services:pipeline>
+        ->中间分为几个处理的步骤
+            ->1、<analyzeURL> - 分析URL
+                通过请求的路径和上下文的Xml来确定要找哪根葱
+            ->2、进入<choose> - 多重分支
+                根据一些不同的情况执行不同的操作
+                <when>
+                    <pl-conditions:target-extension-condition extension="null, vm, jsp" />
+                    ...
+                 </when>
+                 等价于
+                 if(extension.contains(new String[]{"null","vm","jsp"})){
+                    ...
+                 }
+            ->3、<performAction> - 执行action
+                用来处理用户提交的表单
+            ->4、<performTemplateScreen> - 查找并执行screen
+                通过名称来查找类，从而和后台交互进行业务逻辑
+            ->5、<renderTemplate> - 渲染模板
+                就是找页面
+            ->6、<breakUnlessTargetRedirected> - 内部重定向
+                给个302，跳到某个地方
+
+2、Resource Loading Service
+    ->这东西是干啥的呢？就是找资源玩、我们就不看经典版本的设置了
+        <resource-loading
+                xmlns="http://www.alibaba.com/schema/services"
+                xmlns:res-loaders="http://www.alibaba.com/schema/services/resource-loading/loaders">
+            将其重命名
+            <resource-alias pattern="/" name="/webroot" />
+            将资源设定新名称、或者创建新资源
+            <resource pattern="/webroot" internal="true">
+                从当前WEB应用中装载资源，也就是从ServletContext对象中装载资源。
+                <res-loaders:webapp-loader />
+            </resource>
+            <resource pattern="/classpath" internal="true">
+                从classpath中装载资源，也就是从当前的ClassLoader对象中装载资源。
+                <res-loaders:classpath-loader />
+            </resource>
+        </resource-loading>
+        internal="true"代表的是将无法通过经典路径访问
+    ->对应下面的例程
+        <resource pattern="/my/virtual">
+            <res-loaders:file-loader />
+            <res-loaders:file-loader basedir="${my.basedir}" />
+        </resource>
+        我们会从从当前配置文件所在的目录中装载。假如上述资源配置所在的配置文件是c:/myapp/conf/resources.xml，
+        那么file-loader就会从c:/myapp/conf/myFile.xml文件中装载/my/virtual/myFile.xml资源。
+        简而言之，就是一种根据当前相对路径找到资源的方法，避免使用绝对路径导致的环境变更印发的Bug
+    ->basedir
+        当我们指定basedir的时候，它就会从指定的basedir的子目录中查找资源。
+    ->多个路径进行搜索
+        <res-loaders:file-loader basedir="...">
+            搜索路径默认为相对路径，相对于指定的basedir。如果basedir未指定，则相对于当前resource-loading所在的配置文件的路径。（即当前目录下）
+            <res-loaders:path>relativePathToBasedir</res-loaders:path>
+            设定绝对路径类型
+            <res-loaders:path type="absolute">c:/absolutePath</res-loaders:path>
+        </res-loaders:file-loader>
+
+    ->他的派生类
+        ->FileResourceLoader
+        ->WebappResourceLoader
+        ->ClasspathResourceLoader
+        ->SuperResourceLoader 调用Resource Loading服务来取得资源
+            这个例程代表从父级上下文中查找资源
+            <resource pattern="/my/virtual">
+                <res-loaders:super-loader />
+            </resource>
+
+3、Filter
+
+    ->首先是大家非常熟悉的过滤器、过滤器的工作非常简单
+        ->1、改变request/response对象（通过HttpServletRequestWrapper和HttpServletResponseWrapper）；
+        ->2、改变应用执行的流程。
+    ->所以WebX的（改良）就是做了提供了链各个服务
+        ->1、Request Contexts服务	该服务负责访问和修改request和response，但不负责改变应用执行的流程。
+        ->2、Pipeline服务	提供应用执行的流程，但不关心request和response。
+    ->然后文档中如此说道
+        ->和Filter不同，Request Contexts和Pipeline服务可以访问应用内部的状态和资源，效率更高，功能更强。
+        ->和Filter不同，Pipeline服务可以定义灵活（但仍然简单）地控制应用的流程 。Pipeline不仅可以控制流程的中断或继续
+        还可以实现子流程、循环、条件转移、异常处理等更精细的流程控制。Pipeline服务甚至可以运用在非WEB的环境中。
+        ->和Filter不同，Request Contexts服务中的每一个环节（Request Context）之间并非完全独立、互不干涉的。
+        每个request context可以访问它所依赖的其它request context中的状态。
+
+4、Request Context
+
+    ->1、Request Context = HttpServletRequest + HttpServletResponse 多个Request Context可以被串接起来，被称为Request Context Chain，类似于filter chain。
+    ->2、在一个Request Context Chain中
+        ->1、在一个请求开始的时候，每个Request Context的“预处理”过程被依次调用。最内层的（即最先的）Request Context最先被调用，最外层的（即最后的）Request Context最后被调用；
+        ->2、在一个请求结束的时候，每个Request Context的“提交”过程被依次调用。和“预处理”的顺序相反，最外层的（即最后的）Request Context最先被调用，最内层的（即最先的）Request Context最后被调用。
+    ->3、在配置文件中，我们可以自定义Request Context的功能（将在第七章中讲）
+        所以多数情况下这么配置就好了
+        <services:request-contexts xmlns="http://www.alibaba.com/schema/services/request-contexts">
+            <basic />
+            <buffered />
+            <lazy-commit />
+            <parser />
+            <set-locale defaultLocale="zh_CN" defaultCharset="UTF-8" />
+            <!-- Optional -
+            <session />
+            <rewrite />
+            -->
+        </services:request-contexts>
+        <services:upload sizeMax="5M" />
+    ->4、配置文件的排序
+        Request Contexts之间，有时会有依赖关系，所以Request Contexts出现的先后顺序是非常重要的
+        ->1、<session>提供了基于cookie的session支持。然而cookie属于response header。一旦response被提交，header就无法再修改了。因此<session>依赖于<lazy-commit>，以阻止response过早提交。也就是说，<lazy-commit>必须排在<session>之前。
+        ->2、<rewrite>需要访问参数，而参数是能过<parser>解析的，所以<parser>要排在<rewrite>之前。
+        所以有这样的两组配置能够有效
+        <services:request-contexts>
+            <basic />
+            <buffered />
+            <lazy-commit />
+            <parser />
+            <set-locale />
+            <session />
+            <rewrite />
+        </services:request-contexts>
+
+        <services:request-contexts>
+            <rewrite />
+            <session />
+            <set-locale />
+            <parser />
+            <lazy-commit />
+            <buffered />
+            <basic />
+        </services:request-contexts>
+
+    ->5、访问对象
+
+        ->1、经典访问方式
+        String value = request.getParameter("myparam");
+        ->2、session
+        HttpSession session = request.getSession();
+        String value = (String) session.getAttribute("myattr");
+        session.setAttribute("myattr", newValue);
+        ->3、访问特定的RequestContext接口（文件上传）
+        //将其包装
+        ParserRequestContext parserRequestContext = RequestContextUtil.findRequestContext(request, ParserRequestContext.class);
+        //然后获取参数（二进制文件）
+        ParameterParser params = parserRequestContext.getParameters();
+        FileItem myfile = params.getFileItem("myfile");
+        //根据文件对象进行操作
+        String filename = myfile.getName();
+        InputStream istream = myfile.getInputStream();
+        ->4、通过ParserRequestContext接口访问参数
+        //同样的需要将其包装
+        ParameterParser params = parserRequestContext.getParameters();
+        String stringValue = params.getString("myparam"); // 取得字符串值，默认为null
+        int intValue = params.getInt("myparam"); // 取得整数值，默认为0
+        boolean booleanValue = params.getBoolean("myparam", true); // 取得boolean值，指定默认值为true
+
+    ->6、作用域
+        ServletContext	Singleton scope
+        HttpServletRequest	Request scope
+        HttpServletResponse	Request scope
+        HttpSession	Session scope
+        所有RequestContext对象 ParserRequestContext、SessionRequestContext...	Request scope
+
+        ->在传统的Spring中你不能把一个短期的对象如request、response和request context注入到MyAction这个singleton对象。
+        然而，在Webx中，这样做是可以的！奥秘在于Request Contexts服务对上表所列的这些短期对象作了特殊的处理，使它们可以被注入到singleton对象中。
+        事实上，被注入的只是一个“空壳”，真正的对象是在被访问到的时候才会从线程中取得的。
+        Webx鼓励应用程序使用singleton作用域的对象，不仅更简单，也更高效。经过上述技术处理以后，singleton对象访问request作用域对象的方法被大大简化了。
+
+5、Pipeline
+
+  它的设计和filter非常相似，也是击鼓传花式的流程控制。但是有几点不同：
+    ->1、Pipeline只能控制流程，不能改变request和response。
+    ->2、Pipeline是轻量级组件，它甚至不依赖于WEB环境。Pipeline既可以在程序中直接装配，也可以由spring和schema来配置。
+    ->3、Pipeline支持更复杂的流程结构，例如：子流程、条件分支、循环等。
+
+  ->1、创建一个Value
+  public class MyValve implements Valve {
+      public void invoke(PipelineContext pipelineContext) throws Exception {
+          System.out.println("valve started.");
+
+          pipelineContext.invokeNext(); // 调用后序valves
+
+          System.out.println("valve ended.");
+      }
+  }
+  在配置端
+  <services:pipeline xmlns="http://www.alibaba.com/schema/services/pipeline/valves">
+      ...
+      <valve class="com.alibaba.myapp.pipeline.MyValve" />
+      ...
+  </services:pipeline>
