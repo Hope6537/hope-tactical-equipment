@@ -17,6 +17,7 @@
     ->在代码中执行PipeLine
     @Autowired 通过注入的方式来得到管道对象
     private Pipeline myPipeline;
+
     //具体的执行例程
     public void invokePipeline() {
         //获得控制器？
@@ -24,7 +25,8 @@
         //虽然Pipeline对象是线程安全的，可被所有线程所共享。
         //但PipelineInvocationHandle对象不是线程安全的，每次执行pipeline时，均需要取得新的invocation对象。
         PipelineInvocationHandle invocation = myPipeline.newInvocation();
-        invocation.invoke();
+
+        invocation.invoke();->就是调用之前定义的MyValue.invoke()
         System.out.println(invocation.isFinished());
         System.out.println(invocation.isBroken());
     }
@@ -39,6 +41,7 @@
         }
 
         public void invoke(PipelineContext pipelineContext) throws Exception {
+
             // 发起子流程，以当前流程的pipelineContext为参数
             // 根据当前流程来获得控制器对象，来控制子流程的工作状况
             PipelineInvocationHandle subInvocation = subPipeline.newInvocation(pipelineContext);

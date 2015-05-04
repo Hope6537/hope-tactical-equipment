@@ -1,0 +1,682 @@
+好吧！开始狗屎的VeloCity学习历程！
+
+首先他说：
+[VTL意味着提供最简单、最容易并且最整洁的方式合并页面动态内容]
+    <- 注意他的用途，是合并动态内容
+
+[VTL使用references来在web site内嵌套动态内容，一个变量就是一种类型的reference]
+    <-使用标记来嵌套内容,一个变量就是一个(类)的标记
+
+[变量是某种类型的标记，它可以指向java代码中的定义，或者从当前页面内定义的VTL statement得到值]
+    <-可以从JavaBean中获取数据，或者根据表达式
+
+1、HelloWorld
+
+    >-下面是一个VTL的例子，它可以被嵌套到HTML代码中：
+    #set ( $a = “Velocity” ) -> 定义一个变量a 然后赋值
+    你或这么个事咋就写的这么麻烦呢？你看看下面这一大段屁话说的
+
+        ->[和所有的VTL statement一样，这个statement以＃字符开始并且包含一个directive：set。
+        当一个在线用户请求你的页面时，Velocity Templating Engine将查询整个页面以便发现所有＃字符，然后确定哪些是VTL statement，哪些不需要VTL作任何事情。
+        ＃字符后紧跟一个directive：set时，这个set directive使用一个表达式（使用括号封闭）->即一个方程式分配一个值给变量。
+        变量（a）被列在左边，而它的值被列在右边，最后他们之间使用＝号分割。
+        在上面的例子中，变量是$a，而它的值是Velocity。和其他的references一样以$字符开始，而值总是以双引号封闭。Velocity中仅有String可以被赋值给变量。]
+
+    ->使用$字符开始的references用于得到什么 getSomething
+    ->使用#字符开始的directives用于作些什么 doSomething
+
+    一旦某个变量被分配了一个值，那么你就可以在HTML文件的任何地方引用它。在下面的例子中，一个值被分配给$foo变量，并在其后被引用。
+
+    例如下面的这个例子
+
+    <html>
+    <body>
+    //赋值
+    #set ( $foo = “Velocity” )
+    //然后直接调用，显示
+    Hello $foo World!
+    </body>
+    </html>
+    上面的实现结果是在页面上打印“Hello Velocity World！”
+
+[要注意的是最好每一行一个VTL表达式，不要吝惜你的回车]
+    <-说的对呀！
+
+2、注释
+
+    单行注释：
+    ## This is a single line comment.
+
+    多行注释：
+    #*
+    *#
+
+    文档格式：
+    #**
+    *#
+
+在VTL中有三种类型的标记：变量(variables)、属性(properties)、方法(methods)。
+作为一个使用VTL的页面设计者，你和你的工程师必须就references的名称达成共识，以便你可以在你的template中使用它们
+要注意的是所有的对象都会转化为String对象来处理,例如如果有一个对象$foo是一个Integer对象，那么Velocity将调用它的toString()方法将这个对象转型为String类型。
+
+3、变量 —— 格式同Java
+
+4、属性:
+
+    $customer.Address
+    $purchase.Total
+    $customer.Address有两种含义它可以表示：
+        ->查找hashtable对象customer中以Address为键的值,即从哈希表中进行查找
+        ->也可以表示调用customer对象的getAddress()方法,找到这个对象名为Address的字段
+            当你的页面被请求时，Velocity将确定以上两种方式选用那种，然后返回适当的值
+
+
+5、方法:
+    一个方法就是被定义在java中的一段代码，并且它有完成某些有用工作的能力，例如一个执行计算和判断条件是否成立、满足等。
+    方法是一个由$开始并跟随VTL标识符组成的References，一般还包括一个VTL方法体。
+
+    例如：
+    $customer.getAddress()
+    $purchase.getTotal()
+    $page.setTitle( “My Home Page” )
+    $person.setAttributes( [“Strange”, “Weird”, “Excited”] )
+
+    前两个例子$customer.getAddress()和$purchase.getTotal()看起来挺想上面的属性$customer.Address 和 $purchase.Total
+    实际上两者就是有关系的~VTL属性可以作为VTL方法的缩写。
+    $customer.Address属性和使用$customer.getAddress()方法具有相同的效果。
+    如果可能的话使用属性的方式是比较合理的。属性和方法的不同点在于你能够给一个方法指定一个参数列表=>面对多个参数的方法
+
+6、正式引用标记(就是加个大括号)
+
+    reference的正式格式如下：
+    ${mudSlinger}     变量
+    ${customer.Address}   属性
+    ${purchase.getTotal()}   方法
+    非正是格式更见常用，但是有时还是使用正是格式比较适合。例如：你希望通过一个变量$vice来动态的组织一个字符串。
+    Jack is a $vicemaniac.
+    本来变量是$vice现在却变成了$vicemaniac，这样Veloctiy就不知道您到底要什么了。所以，应该使用正是格式书写
+    Jack is a ${vice}maniac
+    现在Velocity知道变量是$vice而不是$vicemaniac。
+
+7、Quiet reference notation(安静引用符) 就是一个感叹号，当目标变量没有值的时候将会不显示它
+
+    例如：
+    <input type=”text” name=”email” value=”$email” />
+    当页面的form被初始加载时，变量$email还没有值，这时你肯定是希望它能够显示一个blank text来代替输出”$email”这样的字段。
+    那么使用quiet reference notation就比较合适。
+    <input type=”text” name=”email” value=”$!email”/>
+    这样文本框的初始值就不会是email而是空值了。
+    在正式引用标记这样使用
+    <input type=”text” name=”email” value=”$!{email}”/>
+
+8、Getting literal
+
+    Velocity使用特殊字符$和 #来帮助它工作，所以如果要在template里使用这些特殊字符要格外小心。本节将讨论$字符。
+    货币字符
+    在VTL中使用
+        ->[$2.5]
+    这样的货币标识是没有问题得的，VTL不会将它错认为是一个reference，因为VTL中的reference总是以一个大写或者小写的字母开始。
+
+
+9、Escaping valid VTL reference
+
+    VTL中使用“\”作为逃逸符。具体的请参考apache官方网站
+
+
+
+10、变量都是以字符串形式表现的
+
+    #set( $foo = “gibbous” )
+    值传递
+    $moon = $foo
+    的输出结果是：
+    $moon = gibbous
+
+11、Case substitution（替换）
+
+    现在你已经对reference比较熟悉了，你可以将他们高效的应用于你的template了。Velocity利用了很多java规范以方便了设计人员的使用。例如：
+
+    $foo.getBar() 等效于 $foo.Bar
+    $data.getUser(“jon”) 等效于 $data.User(“jon”)
+    $data.getRequest().getServerName() 等效于 $data.Request.ServerName 等效于  ${data.Request.ServerName}
+
+    但是，注意VTL中不会将reference解释为对象的实例变量。
+    例如：$foo.Name将被解释为Foo对象的getName（）方法，而不是Foo对象的Name实例变量。
+
+
+12、directive（指令）
+
+    Reference允许设计者使用动态的内容，而directive使得你可以应用java代码来控制你的显示逻辑，从而达到你所期望的显示效果。
+    #set
+    #set directive被用于设置一个reference的值。例如：
+      #set ( $primate = “monkey” )
+      #set ( $customer.Behavior = $primate )
+    赋值左侧的（LHS）必须是一个变量或者属性reference。右侧（RHS）可以是以下类型中一种：
+    ＃set ( $monkey = $bill ) ##变量reference
+    ＃set ( $monkey.Friend = “monica” ) ##String literal
+    ＃set ( $monkey.Blame = $whitehouse.Leak )##属性reference
+    ＃set ( $monkey.Plan = $spindoctor.weave($web) )##方法reference
+    ＃set ( $monkey.Number = 123 ) ##Number literal
+    ＃set ( $monkey.Say = [“Not”, $my, “fault”] )##ArrayList
+    注意：最后一个例子的取值方法为：$monkey.Say.get([index<-索引])
+
+    RHS也可以是一个简单的算术表达式：
+    #set ( $value = $foo + 1 )
+    #set ( $value = $bar -1 )
+    #set ( $value = $foo * $bar )
+    #set ( $value = $foo / $bar )
+
+    如果你的RHS是一个null，VTL的处理将比较特殊：
+    [删掉原内容]
+    正确的处理方法是将其使用安静引用符->"!"
+
+    如果$query.criteria(“name”)返回一个“bill”，而$query.criteria(“address”)返回的是null，则显示的结果如下：
+    The result of the first query is bill
+    The result of the first query is bill
+
+    看看下面的例子：
+    #set( $criteria = ["name", "address"] )
+    #foreach( $criterion in $criteria )
+        //当出现空值的时候不会覆盖掉之前的结果
+        #set( $result = $query.criteria($criterion) )
+            #if( $result )
+              //也就是说两个result都是一样的，都是出自query.criteria(name)的值
+                Query was successful
+            #end
+    #end
+    在上面的例子中，程序将不能智能的根据$result的值决定查询是否成功。
+    在$result被 #set后（added to the context），它不能被设置回null（removed from the context）。
+
+    打印的结果将显示两次查询结果都成功了，但是实际上有一个查询是失败的。
+    为了解决以上问题我们可以通过预先定义的方式：
+
+    //设置一个List
+    #set( $criteria = [“name”, “address”] )
+      //进行迭代
+      #foreach( $criterion in $criteria )
+      //在这里进行预先定义
+      #set( $result = false )
+      #set( $result = $query.criteria( $criterion ) )
+      #if( $result )
+        Query was successful
+      #end
+    #end
+
+13、String Literals
+
+    当你使用#set directive，字符串表达式封闭在一对双引号内。
+      #set ( $directoryRoot = “www” )
+      #set ( $templateName = “index.vm” )
+      #set ( $template = “$directoryRoot/$tempateName” )
+      $template
+    上面这段代码的输出结果为：www/index.vm
+
+    但是，当string literal被封装在单引号内时，它将不被解析：
+    上面这个特性可以通过修改velocity.properties文件的stringliterals.interpolate = false的值来改变上面的特性是否有效。
+
+14、条件语句
+
+    if/elseif/else
+
+    当一个web页面被生成时使用Velocity的#if directrive，如果条件成立的话可以在页面内嵌入文字。例如：
+    #if ( $foo )
+      <strong>Velocity!</strong>
+    #end
+
+    上例中的条件语句将在以下两种条件下成立（就和C++的标准一样）：
+    l $foo是一个boolean型的变量，且它的值为true
+    l $foo变量的值不为null
+
+    这里需要注意一点：Velocity context仅仅能够包含对象，所以当我们说“boolean”时实际上代表的时一个Boolean对象。
+    而不是我们熟悉的基本类型
+    即便某个方法返回的是一个boolean值，Velocity也会利用内省机制将它转换为一个Boolean的相同值。
+    如果条件成立，那么#if和#end之间的内容将被显示。
+
+    #elseif和#else元素可以同#if一同使用。例如：
+
+    #if( $foo < 10 )
+      <strong> Go North </strong>
+    #elseif( $foo == 10 )
+      <strong> Go East </strong>
+    #elseif( $foo == 6 )
+      <strong> Go South </strong>
+    #else
+      <strong> Go West </strong>
+    #end
+
+    注意这里的Velocity的数字是作为Integer来比较的――其他类型的对象将使得条件为false。
+    但是与java不同它使用“==”来比较两个值，而且velocity要求等号两边的值类型相同（也就是说long 和 int 就算值相同，表达式也不会相等）。
+
+15、关系、逻辑运算符
+
+    Velocity中使用等号操作符判断两个变量的关系。例如：
+
+    #set ( $foo = “deoxyribonucleic acid” )
+    #set ( $bar = “ribonucleic acid” )
+    #if ( $foo == $foo )
+    In this case it’s clear they aren’t equivalent.So…
+    #else
+    They are not equivalent and this will be the output.
+    #end
+
+    Velocity有AND、OR和NOT（与或非）逻辑运算符。下面是一些例子：
+
+    ## logical AND
+    #if( $foo && $bar )
+      <strong> This AND that </strong>
+    #end
+
+    ## logical OR
+    #if ( $foo || $bar )
+      <strong>This OR That </strong>
+    #end
+
+    ##logical NOT
+    #if ( !$foo )
+      <strong> NOT that </strong>
+      #end
+
+16、循环
+
+    Foreach循环
+    例子：
+      <ul>
+        就是增强for循环
+        #foreach ( $product in $allProducts )
+        <li> $product </li>
+        #end
+      </ul>
+    每次循环$allProducts中的一个值都会赋给$product变量。
+
+    $allProducts 可以是一个Vector、Hashtable或者Array。
+    分配给$product的值是一个java对象，并且可以通过变量被引用。
+
+    例如：如果$ product是一个java的Product类，并且这个产品的名字可以通过调用他的getName（）方法得到。
+    现在我们假设$allProducts是一个Hashtable，如果你希望得到它的key应该像下面这样：
+    <ul>
+    #foreach ( $key in $allProducts.keySet() )
+    //获得键的集合,然后根据键来找值，将值映射出去，就是普通的Java用法
+    <li>Key: $key -> Value: $allProducts.get($key) </li>
+    #end
+    </ul>
+
+    Velocity还特别提供了得到循环次数的方法 通过$velocityCount变量来获取：
+    <table>
+    #foreach ( $customer in $customerList )
+    <tr><td>$velocityCount</td><td>$customer.Name</td></tr>
+    #end
+    </table>
+
+    $velocityCount 变量的名字是Velocity默认的名字，你也可以通过修改velocity.properties文件来改变它。
+    默认情况下，计数从“1”开始，但是你 可以在velocity.properties设置它是从“1”还是从“0”开始。下面就是文件中的配置：
+        ->修改默认名称 directive.foreach.counter.name = velocityCount
+        ->修改起始数字 directive.foreach.counter.initial.value = 1
+
+17、include就是引入末班
+
+    为了安全的原因，被引入的本地文件只能在TEMPLATE_ROOT目录下。
+    #inclued ( “one.txt” )
+    如果您需要引入多个文件，可以用逗号分隔就行：
+    #include ( “one.gif”, “two.txt”, “three.htm” )
+    在括号内可以是文件名，但是更多的时候是使用变量的：
+    #inclue ( “greetings.txt”, $seasonalstock )
+
+18、parse
+
+    #parse script element允许模板设计者一个包含VTL的本地文件。Velocity将解析其中的VTL并渲染模板。
+    #parse( “me.vm” )
+
+    就像#include，#parse接受一个变量而不是一个模板。
+    任何由#parse指向的模板都必须包含在TEMPLATE_ROOT目录下。
+    与#include不同的是，#parse只能指定单个对象。
+    你可以通过修改velocity.properties文件的parse_direcive.maxdepth的值来控制一个template可以包含的最多#parse的个数――默认值是10。
+    #parse是可以递归调用的，例如：如果dofoo.vm包含如下行：
+
+
+    Count down.
+    //将变量赋值为8
+    #set ( $count = 8 )
+      然后调用paresfoo模板
+      #parse ( “parsefoo.vm” )
+    显示模板执行完毕
+    All done with dofoo.vm!
+
+    那么在parsefoo.vm模板中，你可以包含如下VTL：
+
+    //获取到count变量，第一次调用的时候为8
+    $count
+    //将当前变量-1
+    #set ( $count = $count – 1 )
+      #if ( $count > 0 )
+      递归调用，接着回去减
+      #parse( “parsefoo.vm” )
+    #else
+      完成
+      All done with parsefoo.vm!
+    #end
+
+    的显示结果为：
+    Count down.
+    8
+    7
+    6
+    5
+    4
+    3
+    2
+    1
+    0
+    All done with parsefoo.vm!
+    All done with dofoo.vm!
+
+19、stop
+
+    这条命令允许模板设计者停止执行模板引擎并返回。把它应用于debug是很有帮助的。
+    #stop
+
+20、Velocimacros（？这是个啥东西？）
+
+    #macro script element允许模板设计者定义一段可重用的VTL template。例如：
+    #macro ( d )　<-以d为标示符，开始定义可重用的HTML。
+    <tr><td></td></tr> <-目标HTML
+    #end
+
+    ->当我调用#d()时，Velocity将用<tr><td></td></tr>替换为#d()。
+
+
+    每个Velocimacro可以拥有任意数量的参数――甚至0个参数，虽然定义时可以随意设置参数数量，但是调用这个Velocimacro时必须指定正确的参数。
+    下面是一个拥有两个参数的Velocimacro，一个参数是color另一个参数是array：
+
+    #macro ( tablerows $color <-参数1 $somelist <-参数2 )
+      //设定需要迭代的元素
+      #foreach ( $something in $somelist )
+      //然后放进去，作为参数化
+      <tr><td bgcolor=$color>$something</td</tr>
+       #end
+    #end
+
+    然后调用上面定义好的模块
+    #set ( $greatlakes = [ “Superior”, “Michigan”, “Huron”, “Erie”, “Ontario” ] )
+      #set ( $color = “blue” )
+    <table>
+      #tablerows( $color $greatlakes )
+    </table>
+
+    显示如下
+    <table>
+      <tr><td bgcolor=” blue”> Superior </td></tr>
+      <tr><td bgcolor=” blue”> Michigan </td></tr>
+      <tr><td bgcolor=” blue”> Huron </td></tr>
+      <tr><td bgcolor=” blue”> Erie </td></tr>
+      <tr><td bgcolor=” blue”> Ontario </td></tr>
+    </table>
+
+    Velocimacros可以在Velocity模板内实现行内定义（inline），也就意味着同一个web site内的其他Velocity模板不可以获得Velocimacros的定义。
+    定义一个可以被所有模板共享的Velocimacro显然是有很多好处的：它减少了在一大堆模板中重复定义的数量、节省了工作时间、减少了出错的几率、保证了单点修改。
+
+    上面定义的#tablerows( $color $list )
+    Velocimacro被定义在一个Velocimacros模板库(在velocity.properties中定义)里，所以这个macro可以在任何规范的模板中被调用。
+
+    它可以被多次应用并且可以应用于不同的目的。例如下面的调用：
+    这个真是美得很~！
+    #set ( $parts = [ “volva”, “stipe”, “annulus”, “gills”, “pileus” ] )
+    #set ( $cellbgcol = “#CC00FF” )
+    <table>
+      #tablerows( $cellbgcol $parts )
+    </table>
+    上面VTL将产生如下的输出：
+    <table>
+      <tr><td bgcolor=”#CC00FF”> volva </td</tr>
+      <tr><td bgcolor=”#CC00FF”> stipe </td</tr>
+      <tr><td bgcolor=”#CC00FF”> annulus </td</tr>
+      <tr><td bgcolor=”#CC00FF”> gills </td</tr>
+      <tr><td bgcolor=”#CC00FF”> pileus </td</tr>
+    </table>
+
+21、Velocimacro参数
+
+    Reference：任何以$开头的reference
+    String literal：
+    Number literal：
+    IntegerRange（整数范围）：[1….3]或者[$foo….$bar]
+    对象数组：[“a”,”b”,”c”]
+    boolean值：true、false
+
+    将一个reference作为参数传递给Velocimacro时，请注意reference作为参数时是以名字的形式传递的。
+    这就意味着参数的值在每次 Velocimacro内执行时才会被产生。
+
+    这个特性使得你可以将一个方法调用作为参数传递给Velocimacro，而每次Velocimacro执行时都是通过这个方法调用产生不同的值来执行的。
+
+    例如：
+    #macro (callme $a)
+      $a $a $a
+    #end
+
+    然后执行
+    #callme( $foo.bar() <-传递一个方法 )
+
+    执行的结果是：reference $foo的bar（）方法被执行了三次。
+
+    下面是函数传递
+    #set ( $myval <-此时作为一个函数变量存在 = $foo.bar() )
+    #callme ( $myval )
+
+22、Velocimacro可修改属性
+
+    velocimacro.library：一个以逗号分隔的模板库列表。
+        默认情况下，velocity 查找唯一的一个库：VM_global_library.vm。你可以通过配置这个属性来指定自己的模板库。
+
+    velocimacro.permissions.allow.inline属性：
+        有两个可选的值true或者false，通过它可以确定Velocimacros是否可以被定义在regular template（常规模板）内。
+        默认值是ture――允许设计者在他们自己的模板中定义Velocimacros。
+
+    velocimacro.permissions.allow.inline.replace.global属性
+        有两个可选值true和false
+        这个属性允许使用者确定inline的Velocimacro定义是否可以替代全局Velocimacro定义
+        （比如在 velocimacro.library属性中指定的文件内定义的Velocimacro）。
+        默认情况下，此值为false。这样就阻止本地Velocimacro定义覆盖全局定义。
+
+    velocimacro.permissions.allow.inline.local.scale属性(局部变量)
+        有true和false两个可选值，默认是 false。
+        它的作用是用于确定你inline定义的Velocimacros是否仅仅在被定义的template内可见。
+        换句话说，如果这个属性设置为 true，一个inline定义的Velocimacros只能在定义它的template内使用。
+        你可以使用此设置实现一个奇妙的VM窍门
+        a template can define a private implementation of the second VM that will be called by the first VM when invoked by that template. All other templates are unaffected。
+
+    velocimacro.context.localscope属性(是否持久化有效)
+        有true和false两个可选值，默认值为false。
+        当设置为true时，任何在Velocimacro内通过 #set()对context的修改被认为是针对此velocimacro的本地设置，而不会永久的影响内容。
+
+    velocimacro.library.autoreload属性（即刻响应）
+        控制Velocimacro库的自动加载。默认是false。
+        当设置为true时，对于一个Velocimacro的调用将自动检查原始库是否发生了变化，如果变化将重新加载它。
+        这个属性使得你可以不用重新启动 servlet容器而达到重新加载的效果，就像你使用regular模板一样。
+        这个属性可以使用的前提就是resource loader缓存是off状态（file.resource.loader.cache = false）。注意这个属性实际上是针对开发而非产品的。
+
+23、Velocimacro Trivia
+
+    Velocimacro必须被定义在他们被使用之前。也就是说，你的#macro()声明应该出现在使用Velocimacros之前，就像面向过程语言的函数一样
+
+    特别要注意的是，如果你试图#parse()一个包含#macro()的模板。
+    因为#parse()发生在运行期，但是解析器在parsetiem决定一个 似VM元素的元素是否是一个VM元素，这样#parse()-ing一组VM声明将不按照预期的样子工作。
+
+    为了得到预期的结果，只需要你简单的使用velocimacro.library使得Velocity在启动时加载你的VMs，也就是传说中的预加载。
+
+24、Escaping VTL directives(VTL逃逸符） 并不懂~
+
+    VTL directives can be escaped with “\”号，使用方式跟VTL的reference使用逃逸符的格式差不多。
+    ## #include( “a.txt” ) renders as <ontents of a.txt>(注释行)
+      #include( “a.txt” )
+
+    ## \#include( “a.txt” ) renders as \ #include( “a.txt” )
+    \#include( “a.txt” )
+
+      ## \\#include ( “a.txt” ) renders as \<contents of a.txt>
+    \\#include( “a.txt” )
+
+    在对在一个directive内包含多个script元素的VTL directives使用逃逸符时要特别小心（比如在一个if-else-end statement内）。下面是VTL的if-statement的典型应用：
+
+    #if ( $jazz )
+      Vyacheslav Ganelin
+    #end
+
+    如果$jazz是ture，输出将是：
+    Vyacheslav Ganelin
+
+    如果$jazz是false，将没有输出。使用逃逸符将改变输出。考虑一下下面的情况：
+    \#if ( $jazz )
+      Vyacheslav Ganelin
+    \#end
+
+    现在无论$jazz是true还是false，输出结果都是：
+    #if ( $jazz )
+      Vyacheslav Ganelin
+      #end
+
+    事实上，由于你使用了逃逸符，$jazz根本就没有被解析为boolean型值。在逃逸符前使用逃逸符是合法的，例如：
+    \\ #if ( $jazz )
+      Vyacheslav Ganelin
+    \\ #end
+
+    以上程序的显示结果为：
+    \ Vyacheslav Ganelin
+    \
+
+    但是如果$jazz为false，那么将没有输出。（书上说会没有输出，但是我觉得应该还有有“\”字符被输出。）
+    VTL：格式化问题
+    尽管在此用户手册中VTL通常都开始一个新行，如下所示：
+      #set ( $imperial = [ “Munetaka”, “Koreyasu”, “Hisakira”, “Morikune” ] )
+      #foreach ( $shogun in $imperial )
+      $shogun
+    #end
+
+    但是像下面这种写法也是可以的：
+    Send me #set($foo = [“$10 and”,”a cake”])#foreach($a in $foo)$a #end please.
+    上面的代码可以被改写为：
+    Send me
+    #set ( $foo = [“$10 and “,”a cake”] )
+      #foreach ( $a in $foo )
+      $a
+    #end
+    please.
+    或者
+    Send me
+    #set($foo = [“$10 and “,”a cake”])
+        #foreach （$a in $foo ）$a
+        #end please.
+    这两种的输出结构将一样。
+
+25、其他特性和杂项
+    math   在模板中可以使用Velocity内建的算术函数，如：加、减、乘、除
+      #set ( $foo = $bar + 3 )
+      #set ( $foo = $bar - 4 )
+      #set ( $foo = $bar * 6 )
+      #set ( $foo = $bar / 2 )
+    当执行除法时将返回一个Integer类型的结果。而余数你可以使用%来得到：
+      #set ( $foo = $bar % 5 )
+    在Velocity内使用数学计算公式时，只能使用像-n,-2,-1,0,1,2,n这样的整数，而不能使用其它类型数据。当一个非整型的对象被使用时它将被logged并且将以null作为输出结果。
+
+26、Range Operator
+
+    Range operator可以被用于与#set和#foreach statement联合使用。
+    对于处理一个整型数组它是很有用的，Range operator具有以下构造形式：
+
+    [n..m]
+    m和n都必须是整型，而m是否大于n则无关紧要。例子：
+
+    #foreach ( $foo in [1..5] )
+      $foo
+    #end
+    Output:
+    1 2 3 4 5
+
+    Second example:
+    #foreach ( $bar in [2..-2] )
+      $bar
+    #end
+    Output:
+    2 1 0 -1 -2
+
+    Third example:
+    #set ( $arr = [0..1] )
+      #foreach ( $i in $arr )
+      $i
+    #end
+    Output:
+    0 1
+
+    Fourth example:
+    [1..3]
+    Output:
+    [1..3] <-无效 range operator只在#set和#foreach中有效。
+
+27、Advanced Issue：Escaping and！ （逃逸符和安静符）
+
+    当一个reference被“！”分隔时，并且在它之前有逃逸符时，reference将以特殊的方式处理。注意这种方式与标准的逃逸方式时不同的。对照如下：
+    #set ( $foo = “bar” )
+    特殊形式 标准格式
+    Render前 Render后 Render前 Render后
+    $\!foo $!foo \$foo \$foo
+    $\!{foo} $!{foo} \$!foo \$!foo
+    $\\!foo $\!foo \$!{foo} \$!{foo}
+    $\\\!foo $\\!foo \\$!{foo} \bar
+
+
+28、Velocimacro杂记
+
+    Can I user a directive or another VM as an argument to a VM?
+    例如：#center ( #bold( “hello” ) )
+    不可以。一个directive的参数使用另外一个directive是不合法的。
+    但是，还是有些事情你可以作的。最简单的方式就是使用双引号：
+      #set ( $stuff = “#bold( ‘hello’ ) ” )
+      #center ( $stuff )
+    上面的格式也可以缩写为一行：
+      #center ( “#bold( ‘hello’ ) )
+    请注意在下面的例子中参数被evaluated在Velocimacro内部，而不是在calling level。例子：
+      #macro ( inner $foo )
+      inner : $foo
+      #end
+
+      #macro ( outer $foo )
+      #set ( $bar = “outerlala” )
+      outer : $foo
+    #end
+
+    #set ( $bar = ‘calltimelala’ )
+      #outer( “#inner($bar)” )
+    输出结果为：
+    outer : inner : outerlala
+    记住Veloctiy的特性：参数的传递是By Name的。例如：
+    #macro ( foo $color )
+      <tr bgcolor = $color ><td>Hi</td></tr>
+      <tr bgcolor = $color ><td>There</td></tr>
+      #end
+
+      #foo ( $bar.rowColor() )
+    以上代码将导致rowColor()方法两次调用，而不是一次。为了避免这种现象的出现，我们可以按照下面的方式执行：
+    #set ( $color = $bar.rowColor() )
+      #foo ( $color )
+    can I register velocimacros via #parse()?
+    目前，Velocimacros必须在第一次被模板调用前被定义。这就意味着你的#macro()声明应该出现在使用Velocimacros之前。
+    如 果你试图#parse()一个包含#macro() directive的模板，这一点是需要牢记的。因为#parse()发生在运行期，但是解析器在parsetiem决定一个看似VM元素的元素是否是一 个VM元素，这样#parse()-ing一组VM声明将不按照预期的样子工作。为了得到预期的结果，只需要你简单的使用 velocimacro.library使得Velocity在启动时加载你的VMs。
+    What is velocimacro autoreloading？
+    velocimacro.library.autoreload是专门为开发而非产品使用的一个属性。此属性的默认值是false。
+
+29、String concatenation
+
+    开发人员最常问的问题是我如何作字符拼接？在java中是使用“＋”号来完成的。
+    在VTL里要想实现同样的功能你只需要将需要联合的reference放到一起就行了。例如：
+    #set ( $size = “Big” )
+    #set ( $name = “Ben” )
+    The clock is $size$name.
+    输出结果将是：The clock is BigBen.。更有趣的情况是：
+      #set ( $size = “Big” )
+      #set ( $name = “Ben” )
+      #set ( $clokc = “$size$name” )
+    The clock is $clock.
+    上例也会得到同样的结果。最后一个例子，当你希望混合固定字段到你的reference时，你需要使用标准格式：
+      #set ( $size = “Big” )
+      #set ( $name = “Ben” )
+      #set ( $clock = “${size}Tall$name” )
+    The clock is $clock.
+    输出结果是：The clock is BigTallBen.。使用这种格式主要是为了使得$size不被解释为$sizeTall。

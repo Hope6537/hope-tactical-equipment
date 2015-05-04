@@ -2,6 +2,7 @@
 WebX框架学习笔记
 
 1、WebX的基本信息
+
     ->WebX接收到了一个请求之后，那么将会做如下的处理
         ->对Request，Response，Session等对象进行二次封装（所谓增强），然后调用子模块的PipeLine来进行流程处理
         ->假如在上面的过程中出现异常，则会触发Webx Framework处理异常的过程。
@@ -48,6 +49,7 @@ WebX框架学习笔记
 
             <!-- 检查csrf token，防止csrf攻击和重复提交。假如request和session中的token不匹配，则出错，或显示expired页面。 -->
             <checkCsrfToken />
+
             <loop>
                 <choose>
                     <when>
@@ -69,11 +71,14 @@ WebX框架学习笔记
                     </otherwise>
                 </choose>
 
-                <!-- 假如rundata.setRedirectTarget()被设置，则循环，否则退出循环。 -->
+                <!-- 就是一个内部重定向:假如rundata.setRedirectTarget()被设置，则循环，否则退出循环。 -->
                 <breakUnlessTargetRedirected />
+
             </loop>
         </services:pipeline>
+
         ->中间分为几个处理的步骤
+
             ->1、<analyzeURL> - 分析URL
                 通过请求的路径和上下文的Xml来确定要找哪根葱
             ->2、进入<choose> - 多重分支
@@ -96,38 +101,44 @@ WebX框架学习笔记
                 给个302，跳到某个地方
 
 2、Resource Loading Service
+
     ->这东西是干啥的呢？就是找资源玩、我们就不看经典版本的设置了
         <resource-loading
                 xmlns="http://www.alibaba.com/schema/services"
                 xmlns:res-loaders="http://www.alibaba.com/schema/services/resource-loading/loaders">
-            将其重命名
+            ->将其重命名
             <resource-alias pattern="/" name="/webroot" />
-            将资源设定新名称、或者创建新资源
+            ->将资源设定新名称、或者创建新资源
             <resource pattern="/webroot" internal="true">
-                从当前WEB应用中装载资源，也就是从ServletContext对象中装载资源。
+                ->从当前WEB应用中装载资源，也就是从ServletContext对象中装载资源。
                 <res-loaders:webapp-loader />
             </resource>
             <resource pattern="/classpath" internal="true">
-                从classpath中装载资源，也就是从当前的ClassLoader对象中装载资源。
+                ->从classpath中装载资源，也就是从当前的ClassLoader对象中装载资源。
                 <res-loaders:classpath-loader />
             </resource>
         </resource-loading>
-        internal="true"代表的是将无法通过经典路径访问
+        ->internal="true"代表的是将无法通过经典路径访问
+
     ->对应下面的例程
         <resource pattern="/my/virtual">
             <res-loaders:file-loader />
-            <res-loaders:file-loader basedir="${my.basedir}" />
+            <res-loaders:file-loader basedir="${my.basedir}->c:/myapp/conf" />
         </resource>
-        我们会从从当前配置文件所在的目录中装载。假如上述资源配置所在的配置文件是c:/myapp/conf/resources.xml，
-        那么file-loader就会从c:/myapp/conf/myFile.xml文件中装载/my/virtual/myFile.xml资源。
+        我们会从从当前配置文件所在的目录中装载。假如上述资源配置所在的配置文件是->c:/myapp/conf/resources.xml，
+        那么file-loader就会从->c:/myapp/conf/myFile.xml文件中装载->/my/virtual/myFile.xml资源。
         简而言之，就是一种根据当前相对路径找到资源的方法，避免使用绝对路径导致的环境变更印发的Bug
+
     ->basedir
         当我们指定basedir的时候，它就会从指定的basedir的子目录中查找资源。
+
     ->多个路径进行搜索
         <res-loaders:file-loader basedir="...">
-            搜索路径默认为相对路径，相对于指定的basedir。如果basedir未指定，则相对于当前resource-loading所在的配置文件的路径。（即当前目录下）
+            ->搜索路径默认为相对路径，相对于指定的basedir。
+            ->如果basedir未指定，则相对于当前resource-loading所在的配置文件的路径。（即当前目录下）
             <res-loaders:path>relativePathToBasedir</res-loaders:path>
-            设定绝对路径类型
+
+            ->设定绝对路径类型 type="absolute"
             <res-loaders:path type="absolute">c:/absolutePath</res-loaders:path>
         </res-loaders:file-loader>
 
@@ -136,6 +147,7 @@ WebX框架学习笔记
         ->WebappResourceLoader
         ->ClasspathResourceLoader
         ->SuperResourceLoader 调用Resource Loading服务来取得资源
+
             这个例程代表从父级上下文中查找资源
             <resource pattern="/my/virtual">
                 <res-loaders:super-loader />
@@ -149,19 +161,24 @@ WebX框架学习笔记
     ->所以WebX的（改良）就是做了提供了链各个服务
         ->1、Request Contexts服务	该服务负责访问和修改request和response，但不负责改变应用执行的流程。
         ->2、Pipeline服务	提供应用执行的流程，但不关心request和response。
+
     ->然后文档中如此说道
         ->和Filter不同，Request Contexts和Pipeline服务可以访问应用内部的状态和资源，效率更高，功能更强。
+
         ->和Filter不同，Pipeline服务可以定义灵活（但仍然简单）地控制应用的流程 。Pipeline不仅可以控制流程的中断或继续
         还可以实现子流程、循环、条件转移、异常处理等更精细的流程控制。Pipeline服务甚至可以运用在非WEB的环境中。
+
         ->和Filter不同，Request Contexts服务中的每一个环节（Request Context）之间并非完全独立、互不干涉的。
-        每个request context可以访问它所依赖的其它request context中的状态。
+        每个request context可以访问它所依赖的其它request context(父级<->依赖注入)中的状态。
 
 4、Request Context
 
     ->1、Request Context = HttpServletRequest + HttpServletResponse 多个Request Context可以被串接起来，被称为Request Context Chain，类似于filter chain。
+
     ->2、在一个Request Context Chain中
         ->1、在一个请求开始的时候，每个Request Context的“预处理”过程被依次调用。最内层的（即最先的）Request Context最先被调用，最外层的（即最后的）Request Context最后被调用；
         ->2、在一个请求结束的时候，每个Request Context的“提交”过程被依次调用。和“预处理”的顺序相反，最外层的（即最后的）Request Context最先被调用，最内层的（即最先的）Request Context最后被调用。
+
     ->3、在配置文件中，我们可以自定义Request Context的功能（将在第七章中讲）
         所以多数情况下这么配置就好了
         <services:request-contexts xmlns="http://www.alibaba.com/schema/services/request-contexts">
@@ -176,6 +193,7 @@ WebX框架学习笔记
             -->
         </services:request-contexts>
         <services:upload sizeMax="5M" />
+
     ->4、配置文件的排序
         Request Contexts之间，有时会有依赖关系，所以Request Contexts出现的先后顺序是非常重要的
         ->1、<session>提供了基于cookie的session支持。然而cookie属于response header。一旦response被提交，header就无法再修改了。因此<session>依赖于<lazy-commit>，以阻止response过早提交。也就是说，<lazy-commit>必须排在<session>之前。
@@ -205,31 +223,43 @@ WebX框架学习笔记
 
         ->1、经典访问方式
         String value = request.getParameter("myparam");
+
         ->2、session
         HttpSession session = request.getSession();
         String value = (String) session.getAttribute("myattr");
         session.setAttribute("myattr", newValue);
+
         ->3、访问特定的RequestContext接口（文件上传）
+
         //将其包装
         ParserRequestContext parserRequestContext = RequestContextUtil.findRequestContext(request, ParserRequestContext.class);
         //然后获取参数（二进制文件）
         ParameterParser params = parserRequestContext.getParameters();
+
         FileItem myfile = params.getFileItem("myfile");
         //根据文件对象进行操作
         String filename = myfile.getName();
         InputStream istream = myfile.getInputStream();
+
         ->4、通过ParserRequestContext接口访问参数
+
         //同样的需要将其包装
         ParameterParser params = parserRequestContext.getParameters();
+
         String stringValue = params.getString("myparam"); // 取得字符串值，默认为null
+
         int intValue = params.getInt("myparam"); // 取得整数值，默认为0
+
         boolean booleanValue = params.getBoolean("myparam", true); // 取得boolean值，指定默认值为true
 
     ->6、作用域
-        ServletContext	Singleton scope
-        HttpServletRequest	Request scope
-        HttpServletResponse	Request scope
-        HttpSession	Session scope
+
+        ServletContext	Singleton scope(Application域)
+
+        HttpServletRequest	Request scope（Request域）
+        HttpServletResponse	Request scope（Request域）
+        HttpSession	Session scope（Session域）
+
         所有RequestContext对象 ParserRequestContext、SessionRequestContext...	Request scope
 
         ->在传统的Spring中你不能把一个短期的对象如request、response和request context注入到MyAction这个singleton对象。

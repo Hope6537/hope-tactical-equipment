@@ -1,0 +1,963 @@
+1、依旧是表单验证
+
+    ->8、Field（表单字段）和Properties（Java属性）的互相注入
+
+        Fields是指HTML表单中的form fields，例如一个文本框textbox、复选框checkbox、hidden字段等。Fields也是表单验证的基本单元。
+        Properties是指Java bean中的数据成员，例如：setName(String)方法定义了一个property：name。
+
+        而在表单中，他俩是可以互相转换的
+        Group.setProperties(bean)方法将fields中的值注入到bean的properties中。 <- 一般在Java代码中出现
+        Group.mapTo(bean)方法将bean properties的值设置成fields的初始值。 <- 一般在vm脚本中出现
+
+        一般情况下，field的名称就是property的名称。然而有一些情况下，property名称和field名称会有出入。
+        设置如下所示
+        “homeAddress”为field名称。如果不指定propertyName的话，表单系统认为property名称也是“homeAddress”。
+        然而在这里，指定了property名称为“home.address” —— spring支持这种多级的property —— 也就是说他会映射到这个对象的Home属性下，名为address的字段
+
+        <services:field name="homeAddress" propertyName="home.address" /> homeAddress -> bean.home.address
+
+        当做Group.setProperties()时，会执行bean.getHome().setAddress(value)；
+        而做Group.mapTo()时，会执行bean.getHome().getAddress()。
+
+    ->9、Validator messages 验证信息
+
+        ->定义验证规则
+        <string-length-validator minLength="4" maxLength="10">
+            这是实际的现实信息
+            <message>登录名最少必须由4个字组成，最多不能超过10个字</message>
+            我们依旧可以引用相应的上面定义的字段来进行配置，这样实现了通用性
+            <message>${displayName} 最少必须由${minLength}个字组成，最多不能超过${maxLength}个字</message>
+        </string-length-validator>
+        具体定义的规则如下
+
+        ->Group基本信息
+        ${displayName}	Field显示名
+        ${defaultValue}	默认值（String）
+        ${defaultValues}	默认值数组（String[]）
+        ${value}	当前field的值（Object）
+        ${values}	当前field的一组值（Object[]）
+        特定类型的值，例如：${booleanValue}、${intValue}等。
+
+        ->域对象
+        当前Group中的其它Field对象
+        例如：${userId}，${password}等。
+        如果想取得其值，必须这样写：${userId.value}
+        也可以去的表单信息
+        也可取得其它Field properties，例如：${userId.displayName}
+
+        ->整体
+        当前的Group对象	${group}
+        当前的Form对象	${form}
+
+        ->系统参数
+        所有从System.getProperties()中取得的值，
+        例如：${user.dir}、${java.home}等
+
+        ->小工具
+        ${utils}，其中包含了很多静态方法。
+        例如：${utils.repeat("a", 10)}将会生成10个“a”。
+        详见com.alibaba.citrus.util.Utils类的API文档。
+
+    ->10、Validators校验器对象
+
+        1、->必填校验器
+        <required-validator>
+                <message>必须填写${displayName}</message>
+        </required-validator>
+        2、->正则表达式校验器
+        <regexp-validator pattern="^[A-Za-z_][A-Za-z_0-9]*$">
+                <message>${displayName} 必须由字母、数字、下划线构成</message>
+        </regexp-validator>
+        但是要注意的是正则表达式并不会判断它是否为空，也就是说就算它为空，依旧能够通过验证。
+        3、->组合校验器（实际上就是放在一起）
+        <services:field name="userId" displayName="登录名">
+            <required-validator>
+                <message>必须填写 ${displayName}</message>
+            </required-validator>
+            <regexp-validator pattern="^[A-Za-z_][A-Za-z_0-9]*$">
+                <message>${displayName} 必须由字母、数字、下划线构成</message>
+            </regexp-validator>
+        </services:field>
+        4、->字符串长度校验器
+        实际上就是他的限定字符串长度
+        <string-length-validator minLength="4" maxLength="10">
+                <message>${displayName} 最少必须由${minLength}个字组成，最多不能超过${maxLength}个字</message>
+        </string-length-validator>
+        5、->自适应编码限定字符串长度
+        <string-byte-length-validator minLength="4" maxLength="10" charset="UTF-8">
+                <message>${displayName} 最少必须由${minLength}个字节组成，最多不能超过${maxLength}个字节</message>
+        </string-byte-length-validator>
+        6、->比较字符串
+        要求和field3相同，和field2不同 如果ignoreCase=true则忽略大小写
+        <string-compare-validator equalTo="field3" notEqualTo="field2" ignoreCase="true">
+        7、->验证电子邮件
+        <mail-address-validator> 实际上等同于正则 ^\S+@[^\.]\S*$
+        8、->验证数字
+        <number-validator
+            numberType="int" 认定数字为整形
+            equalTo="1" 需要和1相等
+            notEqualTo="2" 不能和2相等
+            lessThan="100" 要小于100
+            lessThanOrEqualTo="99" 要小于等于99
+            greaterThan="0" 要大于0
+            greaterThanOrEqualTo="1"> 要求大于等于1
+        9、->比较数字
+        实际上验证规则和上面的一样
+        <number-compare-validator greaterThanOrEqualTo="field2" lessThan="field3">
+        10、->验证日期
+        定义验证字符串，最早为2015-05-01 最晚为2015-05-04
+        <date-validator format="yyyy-MM-dd" minDate="2015-05-01" maxDate="2015-05-04">
+        11、->验证上传文件
+         <uploaded-file-validator
+            extension="jpg, gif, png" 允许的文件后缀类型，多的用逗号隔开
+            minSize="1024K" 定义文件最小大小
+            maxSize="4096K" 定义文件最大大小
+            contentType="image/jpg,image/png" 允许的请求类型 ->有的浏览器不会提供
+            >
+
+    ->11、验证CSRF token，也就是阻挡跨站请求攻击
+
+        我们可以通过继承group的方式来使用csrf过滤器
+        <services:group name="csrfTokenCheckGroup">
+            <services:field name="csrfToken">
+                <csrf-validator>
+                    <message>您提交的表单已过期</message>
+                </csrf-validator>
+            </services:field>
+        </services:group>
+        继承方式如下
+        <services:group name="group1" extends="csrfTokenCheckGroup">
+            ...
+        </services:group>
+
+        但是我们需要进行前期准备
+        1、定义了pull tool以后，可以在模板中以$csrfToken来引用它。
+        <services:pull xmlns="http://www.alibaba.com/schema/services/pull/factories">
+            <csrfToken />
+        </services:pull>
+
+        2、在表单中定义包含csrf的字段
+        有两种拓展的创建方式
+            $csrfToken.uniqueHiddenField 防攻击，防止重复提交表单
+            $csrfToken.longLiveHiddenField 只能防止攻击
+        <form action="" method="post">
+          //$csrfToken.hiddenField以后将创建一个包含CSRF long live token的hidden字段，等同于调用$csrfToken.longLiveHiddenField。
+          $csrfToken.hiddenField
+          <input type="hidden" name="action" value="LoginAction"/>
+          ...
+        </form>
+
+        3、还可以在Pipeline中验证csrf
+        在pipeline中验证token
+        <services:pipeline xmlns="http://www.alibaba.com/schema/services/pipeline/valves">
+            <checkCsrfToken />
+        </services:pipeline>
+
+        同时配置PostOnly也可以避免csrf攻击！
+        <services:form postOnlyByDefault="true">
+
+    ->12、使用Action来配置数据
+
+        <services:group name="register">
+            <services:field name="userId" displayName="登录名">
+                <required-validator>
+                    <message>必须填写 ${displayName}</message>
+                </required-validator>
+                ...
+                就是这一行，我们定义自定义验证器
+                <custom-error id="duplicatedUserId">
+                    <message>登录名“${userId}”已经被人注掉了，请尝试另一个名字</message>
+                </custom-error>
+            </services:field>
+            ...
+        </services:group>
+
+        1、那么自然，这条是需要写Java代码的
+
+        /**
+        * @param err 他指定Group的名称和Field名称,使用注入的方式提供
+        * @param ... 这个是咱们自定义的具体对象
+        */
+        public void doRegister(@FormField(name = "userId", group = "register") CustomErrors err, ...) throws Exception {
+            try {
+                ...
+            } catch (DuplicatedUserException e) {
+                Map<String, Object> params = createHashMap();
+                params.put("userId", user.getUserId());
+                //CustomErrors.setMessage()方法。其中，“duplicatedUserId”就是配置文件中<custom-error>的id。
+                //第二个参数params是可选的。它是一个Map，其中的所有值，都可以在<custom-error>的message中访问到。
+                //例如，这里指定的userId参数值，就可以被message表达式${userId}所访问。
+                err.setMessage("duplicatedUserId", params);
+                //如果我们在params里有["userId":"改过了呀笨蛋"]这个Map出现，那么在表达式里[登录名“${userId}”已经被人注掉了]
+                //就会被当前值替换
+            }
+        }
+
+    ->13、使用条件验证
+
+        单分支条件验证
+        <services:field name="other" displayName="其它建议">
+            test里写表达式
+            <if test="commentCode.value == 'other'">
+                然后才执行校验判断
+                <required-validator>
+                    <message>必须填写 ${displayName}</message>
+                </required-validator>
+            </if>
+        </services:field>
+        多分支条件验证
+        <services:field name="field1" displayName="我的字段">
+            使用我们已经认识的choose表达式
+            <choose>
+                <when test="expr1">
+                    <validator />
+                </when>
+                <when test="expr2">
+                    <validator />
+                    <validator />
+                </when>
+                <otherwise>
+                    <validator />
+                </otherwise>
+            </choose>
+        </services:field>
+        也可以使用自定义配置类
+        <if xmlns:fm-conditions="http://www.alibaba.com/schema/services/form/conditions">
+            <fm-conditions:condition class="xxx" />
+        </if>
+        只要实现Condition接口的方法就可以了
+
+    ->14、多值验证
+
+        可以定义最少选择和最多选择
+        <multi-values-count-validator minCount="1" maxCount="3">
+                <message>至少选择${minCount}项，最多选择${maxCount}项</message>
+        </multi-values-count-validator>
+
+    ->15、联合校验判断
+
+        ->1、值符合要求
+
+            ->只有当前字段的所有值都符合要求，<all-of-values>验证才会通过。
+            <all-of-values>
+                其message支持${allMessages}，它是一个List列表，可以用来显示所有未通过验证的validators的消息
+                <message>${allMessages}</message>
+                <validator />
+                <validator />
+            </all-of-values>
+            ->只要当前字段有一个值通过验证，<any-of-values>验证就会通过。
+            <any-of-values>
+                其message支持${valueIndex}代表被验证通过的值的序号；
+                支持${allMessages}，它是一个List列表，可以用来显示所有未通过验证的validators的消息。
+                <message>至少有一个${displayName}要符合要求</message>
+                <validator />
+                <validator />
+            </any-of-values>
+            ->只要当前字段有一个值通过验证，<none-of-values>验证就会失败。
+            <none-of-values>
+                <message>所有${displayName}都不能符合要求</message>
+                <validator />
+                <validator />
+            </none-of-values>
+
+        ->2、校验器验证组合
+
+            ->只要有一个validator通不过验证，就失败。
+            <all-of>不需要设置message，它的message就是第一个没有通过验证的validator的message。
+            <all-of>
+                <validator />
+                <validator />
+            </all-of>
+            ->只要有一个validator通过验证，<any-of>验证就会通过
+            其message支持${allMessages}，它是一个List列表，可以用来可以用来显示所有未通过验证的validators的消息。
+            <any-of>
+                <message>${allMessages}</message>
+                <validator />
+                <validator />
+            </any-of>
+            ->只要有一个validator通过验证，<none-of>验证就会失败。
+            <none-of>
+                <message>${displayName}不符合要求</message>
+                <validator />
+                <validator />
+            </none-of>
+
+    ->16、Form Tool工具
+
+        它实际上根据pull tool来定义的。
+        <services:pull xmlns="http://www.alibaba.com/schema/services/pull/factories">
+            <form-tool />
+            ...
+        </services:pull>
+        上面的配置定义了一个$form工具。可以在模板(vm)中直接使用它。下页简单介绍在模板中，$form工具的用法。
+
+        ->1、Form的Api（都是在模板中写）
+        #if ($form.valid) ... #end	判断当前form是否验证为合法，或者未经过验证。
+        #set ($group = $form.group1.defaultInstance)	取得group1的默认实例，如果不存在，则创建之。
+        #set ($group = $form.group1.getInstance("id"))	取得group1的指定id的实例，如果不存在，则创建之。
+        #set ($group = $form.group1.getInstance("id", false))	取得group1的指定id的实例，如果不存在，则返回null。
+
+        #foreach ($group in $form.groups) ... #end	遍历当前form中所有group实例。
+        #foreach ($group in $form.getGroups("group1")) … #end	遍历当前form中所有名为group1的实例。
+
+        ->2、Group的Api
+        #if ($group.valid) … #end	判断当前group是否验证为合法，或者未经过验证（即初始表单）
+        #if ($group.validated) ... #end	判断当前group是否经过验证（初始表单为未经过验证的表单）
+
+        $group.field1	取得field1(一个字段)
+        #foreach ($field in $group.fields) ... #end	遍历当前group中所有的fields（进行批量的处理）
+
+        $group.mapTo($bean)	将bean中的properties设置成group的初始值。 该操作只对初始表单有效。如果bean为null则忽略该操作。(在update中用到过)
+
+        ->3、创建一个附件(一个Field只能存在一个附件么?)
+
+        类似于临时数据信息需要能够在模板中被获取
+
+            创建附件 等效于我们将obj序列化到一个input hidden中
+            $field.setAttachment($obj)
+            $field.attachmentHiddenField
+            当你要取得它时，只要这样：
+
+            #set ($obj = $field.attachment)
+            判断是否有附件：
+
+            #if ($field.hasAttachment()) … #end
+            清除附件：
+
+            $field.cleanAttachment()
+
+        4、表单字段压缩（调试用）
+
+            _fm.r._0.p =转换为> _fm.register._0.password
+            需要在form中进行定义
+            <services:form fieldKeyFormat="uncompressed">
+                ...
+            </services:form>
+
+        5、外部验证
+
+            有时候犯艮需要转发一下验证的步骤请求
+
+            public class RemoteRegister {
+                public void execute(ParameterParser params, Form form, Navigator nav) throws Exception {
+                    //根据页面上的Group（register）创建一个Group对象
+                    Group group = form.getGroup("register");
+                    group.init();
+                    //将request parameters中的参数设置到form group中。需要注意的是，request参数名和field名称不必相同。
+                    group.getField("userId").setValue(params.getString("userId"));
+                    group.getField("password").setValue(params.getString("password"));
+                    group.getField("passwordConfirm").setValue(params.getString("password"));
+                    //然后进行验证
+                    group.validate();
+                    //内部重定向到register页面，并指明action(目标地址)参数和actionEvent(属于什么事件->doRegister)参数
+                    nav.forwardTo("register", "registerAction", "register");
+                }
+            }
+
+            然后使用http://localhost:8081/myapp/remote_register.do?userId=xxx&password=yyy便可以重定向到指定区域
+
+2、日志系统
+
+    使用的是基于slf4j+logback+log4j的架构，但是会有一些问题:
+
+        1、由于JCL-over-SLF4J和原来的JCL具有完全相同的API，因此两者是不能共存的。
+        2、Logback和slf4j-log4j12也不能并存，否则SLF4J会迷惑并产生不确定的结果。
+
+    ->1、所以标准的配置如下（一会我也要改一改我的hope-utils日志系统、现在的以来相当混乱）
+
+        logback标准
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+            </dependency>
+        </dependencies>
+
+        <dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                    <version>1.7.5</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                    <version>1.7.5</version>
+                </dependency>
+                <dependency>
+                    将logback日志系统的依赖设定为<scope>runtime</scope>，
+                    因为应用程序永远不需要直接调用日志系统，而是通过SLF4J或JCL这样的日志框架来调用它们。
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                    <version>1.0.13</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                    <version>1.1.3</version>
+                    由于和jcl-over-slf4j存在冲突，因此JCL（commons-logging）是必须被排除的。
+                    由于maven目前缺少这样一个功能：它不能全局地排除一个jar包依赖，所以建议将commons-logging设置成<scope>provided</scope>。
+                    这样在最终的依赖关系中，将不会包含commons-logging包。
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </dependencyManagement>
+
+        要注意的是一定要在依赖配置里排除掉，因为100%会报错
+        <exclusions>
+            <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+            </exclusion>
+        </exclusions>
+
+        log4j标准就略过吧
+
+    ->2、记住，我们是要在Web应用中使用它，所以一定要在Web.xml中干点啥
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="
+                http://java.sun.com/xml/ns/j2ee  http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd
+            ">
+
+            首先是配置全局参数
+            <context-param>
+                <param-name>loggingRoot</param-name>
+                <param-value>/tmp/logs</param-value>
+            </context-param>
+            <context-param>
+                <param-name>loggingLevel</param-name>
+                <param-value>INFO</param-value>
+            </context-param>
+            <context-param>
+                <param-name>loggingCharset</param-name>
+                <param-value>UTF-8</param-value>
+            </context-param>
+            <context-param>
+                <param-name>log...</param-name>
+                <param-value>...</param-value>
+            </context-param>
+
+            配置日志监听器
+            <listener>
+                在WEB应用启动的时候，这个listener会被激活，并初始化日志系统。
+                <listener-class>com.alibaba.citrus.logconfig.LogConfiguratorListener</listener-class>
+            </listener>
+
+            <filter>
+                将当前请求的信息放到日志系统的MDC中（Mapped Diagnostic Context）->不知道干啥的
+                <filter-name>mdc</filter-name>
+                <filter-class>com.alibaba.citrus.webx.servlet.SetLoggingContextFilter</filter-class>
+            </filter>
+
+            <filter-mapping>
+                <filter-name>mdc</filter-name>
+                <url-pattern>/*</url-pattern>
+            </filter-mapping>
+
+        </web-app>
+
+    3、那么它自然是具有自动化的系统的，否则要他也没用啊
+
+    LogConfiguratorListener负责在系统启动的时候初始化日志系统。LogConfiguratorListener会根据下面所列的条件，来自动识别出当前的日志系统，并正确地配置它：
+
+        ->假如你在maven的pom.xml中指定log4j为日志系统，那么该listener就会试图用/WEB-INF/log4j.xml来初始化日志系统。
+        ->假如你在maven的pom.xml中指定logback为日志系统，那么该listener就会试图用/WEB-INF/logback.xml来初始化日志系统。
+        ->假如你在maven的pom.xml中未指定任何日志系统（不存在logback-classic或slf4j-log4j12）。
+          那么listener会报错并失败，整个WEB应用会退出，服务器报告应用启动失败。
+
+        ->假如/WEB-INF/logback.xml（或/WEB-INF/log4j.xml）不存在，那么listener会用默认的配置文件来初始化日志。默认的配置会：
+        ->把WARN级别以上的日志打印在STDERR中，
+        ->把WARN级别以下的日志打印在STDOUT中。
+
+    4、MDC 日志映射诊断环境
+
+        30377 [2010-06-02 15:24:29] -
+        GET /wrongpage.htm [ip=127.0.0.1,
+        ref=http://localhost:8081/index, ua=Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; zh-CN; rv:1.9.2.3)
+        Gecko/20100401 Firefox/3.6.3, sid=scnd32ei11a7] ……
+
+        用户请求的类型：GET。
+        请求的URI：/wrongpage.htm。
+        用户IP：127.0.0.1。
+        上一个页面的链接referrer：http://localhost:8081/index
+        用户的浏览器：Mac版的mozilla浏览器。
+        Session ID：scnd32ei11a7
+
+        SetLoggingContextFilter是一个可选的filter —— 即使没有它，Webx的<setLoggingContext /> valve也会做同样的事情。
+        但是把这些信息放在filter中，有利于及早记录用户的信息。
+
+    5、定制logback.xml或者是log4j.properties
+
+        这个的话就要具体情况具体分析了
+
+    6、向下兼容老版本的Log4j等旧日志系统
+
+        同时初始化Logback和Log4j，首先我们要对pom.xml的依赖进行管理
+        同时包含log4j和logback-classic这两个依赖，但是请一定不要包含slf4j-log4j12这个包，因为它会和logback-classic起冲突。
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+            </dependency>
+            <!--log4j的依赖-->
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+            </dependency>
+        </dependencies>
+
+        <dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                    <version>1.7.5</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                    <version>1.7.5</version>
+                </dependency>
+                <dependency>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                    <version>1.1.3</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                    <version>1.0.13</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                    <version>1.2.17</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </dependencyManagement>
+
+        然后在/WEB-INF/web.xml中增加logSystem参数。
+        <web-app>
+
+            <context-param>
+                <param-name>logSystem</param-name>
+                <param-value>log4j, logback</param-value>
+            </context-param>
+            ...
+        </web-app>
+        以上这段/WEB-INF/web.xml的配置，告诉LogConfiguratorListener同时初始化两个日志系统：log4j和logback。
+        它们的配置文件分别是：/WEB-INF/log4j.xml和/WEB-INF/logback.xml。假如文件不存在也没关系，LogConfiguratorListener会用系统默认的配置文件来初始化它们。
+
+3、SpringExt的schema部署，总的来说就是用SpringExt插件来进行
+
+    mvn springext:run -Dport=9090(后面是指定端口)
+
+4、AutoConfig
+
+    总的来说，就是对于一些和业务逻辑无关的配置信息（特别是环境配置）的自动化配置，使其在任何地点都能够自动化匹配。
+
+    目前来说共有四种机制
+
+        1、placeholders机制
+        2、Config Server机制
+        3、Maven Filtering机制
+        4、Auto Config机制
+
+    上面的三种就不讨论了，费劲，直接AutoConfig走你。
+    我们需要自定义两种角色 开发者（Developer）和部署者（Deployer）。
+
+        -> 开发者 定义应用所需要的properties，及其限定条件；提供包含placeholders的配置文件模板。
+        -> 部署者 根据所定义的properties，提供符合限定条件的属性值。调用AutoConfig来生成目标配置文件。
+
+    1、建立AutoConfig描述文件
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <config>
+            <group>
+                定义properties（属性变量）
+                <property name="petstore.work"
+                            description="应用程序的工作目录" />
+
+                <property name="petstore.loggingRoot"
+                            defaultValue="${petstore.work}/logs"
+                            description="日志文件目录" />
+
+                <property name="petstore.upload"
+                            defaultValue="${petstore.work}/upload"
+                            description="上传文件的目录" />
+
+                <property name="petstore.loggingLevel"
+                            defaultValue="warn"
+                            description="日志文件级别">
+                    定义property的验证规则（可选）
+                    <validator name="choice"
+                                 choice="trace, debug, info, warn, error" />
+                </property>
+
+            </group>
+            生成配置文件的指令。
+            <script>
+                <generate template="WEB-INF/web.xml" />
+                <generate template="WEB-INF/common/resources.xml" />
+            </script>
+        </config>
+
+        那么看起来最重要的就是Property（属性变量） 设置如下
+        <property
+            name="..."
+            [defaultValue="..."]
+            [description="..."]
+            [required="true|false"]
+        >
+            会有多种的校验器
+            <validator name="..." />
+            <validator name="..." />
+            ...
+        </property>
+
+        有了属性之后，东西就有了，那么自然就需要生成配置文件供大家使用
+        <generate
+            template="..." 需要配置的模板名。模板名为相对路径，相对于当前jar/war/ear包的根目录。
+            [destfile="..."] 目标文件。如不指定，表示目标文件和模板文件相同。
+            [charset="..."] 模板字符集编码
+            [outputCharset="..."] 目标文件的输出字符集编码。
+        >
+
+        AutoConfig的寻找模板的逻辑是：
+
+        如果在auto-config.xml所在的目录下发现模板文件，就使用它；
+        否则在包的根目录中查找模板文件；如果两处均未找到，则报错。
+
+        那么防止模板的最佳位置就是
+        src
+             └─main
+                 ├─java
+                 ├─resources                    -> /WEB-INF/classes 建议放在这里
+                 └─webapp
+                    └─WEB-INF                  -> /WEB-INF 建议放在这里
+
+        那么写模板就不能像之前一样定死了，就类似于这样
+        <context-param>
+            <param-name>loggingRoot</param-name>
+            把需要配置的点替换成placeholder：“${property.name}”。
+            当然需要确保property.name被定义在auto-config.xml中。
+            <param-value>${petstore.loggingRoot}</param-value>
+        </context-param>
+        <context-param>
+            <param-name>loggingLevel</param-name>
+            <param-value>${petstore.loggingLevel}</param-value>
+        </context-param>
+        ....
+        ${D}{runtime.placeholder}
+        此外，AutoConfig模板其实是由Velocity模板引擎来渲染的。因此，所有的placeholder必须能够通过velocity的语法。
+        类似于${my.property.2}这样的东西是不合法的，那么应改成${my_property_2}
+
+
+    2、然后就是部署AutoConfig
+
+        ->进行Maven的插件下载
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+            <parent>
+                <groupId>com.alibaba.citrus.tool</groupId>
+                <artifactId>antx-parent</artifactId>
+                版本号（1.2）决定了你要取得的AutoConfig的版本号。
+                <version>1.2</version>
+            </parent>
+            <modelVersion>4.0.0</modelVersion>
+            <artifactId>temp</artifactId>
+        </project>
+
+        ->然后运行
+        mvn dependency:copy 就取得了两个文件
+            |
+            |-autoconfig-1.2.tgz
+            |-autoexpand-1.2.tgz - AutoExpand是另一个小工具。它是用来展开war、jar、ear包的。
+
+        然后将其解包
+        取得压缩包以后，可以用下面的命令来展开并安装工具。
+        tar zxvf autoconfig-1.2.tgz
+        tar zxvf autoexpand-1.2.tgz
+        copy autoconfig.exe c:\windows\system32
+        copy autoexpand.exe c:\windows\system32
+
+        放到PATH下以便执行，然后输入AutoConfig命令即可
+        autoconfig *****.war
+
+
+        当然也可以使用pom.xml中的Maven插件进行AutoConfig
+        <?xml version="1.0" encoding="UTF-8"?>
+        <project xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+            ...
+            <properties>
+                ...
+                <!-- 定义autoconfig的版本，建议将此行写在parent pom.xml中。 -->
+                <autoconfig-plugin-version>1.2</autoconfig-plugin-version>
+            </properties>
+            ...
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.alibaba.citrus.tool</groupId>
+                        <artifactId>autoconfig-maven-plugin</artifactId>
+                        <version>${autoconfig-plugin-version}</version>
+                        <configuration>
+                            <!-- 要进行AutoConfig的目标文件，默认为${project.artifact.file}。
+                            <dest>${project.artifact.file}</dest>
+                            -->
+                            <!-- 配置后，是否展开目标文件，默认为false，不展开。
+                            <exploding>true</exploding>
+                            -->
+                            <!-- 展开到指定目录，默认为${project.build.directory}/${project.build.finalName}。
+                            <explodedDirectory>
+                                ${project.build.directory}/${project.build.finalName}
+                            </explodedDirectory>
+                            -->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>autoconfig</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </project>
+
+        这样在mvn install的时候就会自动配置具有autoconfig参数的web.xml
+        如果因为某个placeholder未定义导致install、或者其他命令失败
+        mvn ... –Dautoconfig.strict=false 这样就能避免
+        如果不想再install的时候执行autoConfig，那么这么配置 mvn install –Dautoconfig.skip 跳过即可
+
+    3、共享properties文件
+
+        当需要配置的内容越来越多时，即使使用AutoConfig这样的机制，也会变得不胜其烦。
+
+        假如你的项目包含了好几个模块，而你只负责其中的一个模块。
+        一般来说，你对其它模块的配置是什么并不清楚，事实上你也懒得去关心。
+        但是你为了运行这个项目，你不得不去配置这些模块。
+            假如模块A就是一个你不想关心的模块，但为了运行它，你需要告诉模块A一些参数：数据库连接的参数、域名、端口、文件目录、搜索引擎……可你并不清楚这些参数应该取什么值。
+            你可以创建一系列文件：module-a-db.properites，module-a-searchengine.properties等等。
+            每个文件中都包含了某个运行环境中的关于module A模块的配置参数。
+            现在，你可以不关心module A了！你只要使用下面的命令：
+
+        ->autoconfig -s module-a-db.properties,module-a-searchengine.properties  -s参数代表“共享的properties文件”。
+
+    4、共享整个目录(按照具体方式配置不同的项目)
+
+      假如共享的文件很多的话，AutoConfig还有一个贴心的功能，你可以把这些文件按目录来组织：
+
+      shared-properties/
+       ├─test/                                 // 测试环境的共享配置
+       │    module-a-db.properties
+       │    module-a-searchengine.properties
+       │    module-b.properties
+       └─prod/                                 // 生产环境的共享配置
+             module-a-db.properties
+             module-a-searchengine.properties
+             module-b.properties
+
+      可以直接在AutoConfig中引用目录：
+      autoconfig -s shared-propertes/test/ ……
+      AutoConfig就会装载这个目录下的所有共享配置文件。
+      （注意，目录必须以斜杠"/"结尾）
+
+    5、将共享目录放在http、https或ssh服务器上（就是远端配置）
+
+        AutoConfig还支持从http、https或ssh服务器上取得共享配置文件，只需要将前面例子中的文件名改成http或ssh的URI就可以了：
+
+            ->1、共享远程http服务器上的properties文件。
+            autoconfig -s http://share.alibaba.com/shared-propertes/test/ ……
+            ->2、共享远程http服务器上的properties文件，指定登录用户名。
+            autoconfig -s http://[myname]@share.alibaba.com/shared-propertes/test/ ……
+            ->3、共享远程https服务器上的properties文件。
+            autoconfig -s https://share.alibaba.com/shared-propertes/test/ ……
+            ->4、共享远程https服务器上的properties文件，指定登录用户名。
+            autoconfig -s https://myname@share.alibaba.com/shared-propertes/test/ ……
+            ->5、共享远程ssh服务器上的properties文件，必须指定用户名。
+            autoconfig -s ssh://myname@share.alibaba.com/shared-propertes/test/ ……
+
+        由于Subversion、Git服务器是支持HTTP/HTTPS协议的，因此将properties文件存放在Subversion或Git服务器上，也是一个极好的办法。
+        由于采用了Subversion或Git，properties文件的版本管理问题也被一举解决了。
+
+        需要注意的是，访问http和ssh有可能需要验证用户和密码。当需要验证时，AutoConfig会提示你输入用户名和密码。
+        输入以后，密码将被保存在$HOME/passwd.autoconfig文件中，以后就不需要重复提问了。
+
+    6、 在多种配置项中切换(应对不同的场景)
+
+        ->多个配置
+
+            当你使用前文所述的autoconfig –s命令来生成antx.properties文件时，你会发现antx.properties中增加了几行特别的内容：
+            antx.properties.default  = http://share.alibaba.com/shared-propertes/test/
+            ->如果你在-s参数中指定了多项共享properties文件或目录，那么antx.properties中将会这样：
+            antx.properties.default.1  = http://share.alibaba.com/shared-propertes/test/
+            antx.properties.default.2  = file:/shared-properties/test/my-1.properites <-（多个）
+            antx.properties.default.3  = file:/shared-properties/test/my-2.properites <-（多个）
+
+        ->多组共享配置
+
+            autoconfig -s http://share.alibaba.com/shared-propertes/test/ -n [test] ……
+            为当前共享配置定义一个名字，以后可以用这个名字来简化命令。
+            这时，antx.properties就会是这个样子：
+            antx.properties = test <-（就是起了个名字）
+            antx.properties.test  <-（根据名字来找） = http://share.alibaba.com/shared-propertes/test/
+
+            再执行：
+            autoconfig -s http://share.alibaba.com/shared-propertes/prod/ -n prod ……
+            antx.properties就会变成这个样子：
+              {
+                  antx.properties = prod    <-（刷新了新名字）
+                  antx.properties.test = http://share.alibaba.com/shared-propertes/test/
+                  antx.properties.prod = http://share.alibaba.com/shared-propertes/prod/ <-（新添加的）
+              }
+            以后再执行，就不需要再指定-s参数了，只需用-n参数选择一组共享properties文件即可。例如：
+            // 使用prod生产环境的参数
+            autoconfig -n prod ...... <-（指定名字就可以）
+            // 使用TEST测试环境的参数
+            autoconfig -n test ......
+            // 不指定，则使用最近一次所选择的共享文件
+            autoconfig ......
+
+    7、 AutoConfig常用命令
+
+        ->1、指定charset(目标字符串编码)
+
+            autoconfig ... -c GBK
+            mvn ... -Dautoconfig.charset=GBK
+
+        ->2、指定交互模式
+
+            默认情况下，交互模式为自动（auto）。
+            仅当user properties中的值不满足auto-config.xml中的定义时(也就是说没有指定)
+            才会交互式地引导用户提供properties值。
+
+            强制打开/[关闭]交互模式：
+            autoconfig ... –i [-I]
+            autoconfig ... –i on/[off]
+            mvn ... -Dautoconfig.interactive
+            mvn ...  -Dautoconfig.interactive=true/[false]
+
+        ->3、指定user properties
+
+            默认情况下，AutoConfig会按下列顺序查找user properties：
+                ->当前目录/antx.properties
+                ->当前用户HOME目录/antx.properties
+
+            但你可以指定一个自己的properties文件，用下面的命令：
+            autoconfig ... –u my.props
+            mvn ... -Dautoconfig.userProperties=my.props
+
+        ->4、显示详细的信息（Maven插件下无法使用）
+
+            默认情况下，AutoConfig只输出重要的信息，但有时你想了解更多内部的情况，只需要用下面的命令
+            autoconfig ... –v
+
+        ->5、指定输出文件（Maven插件下无法使用）
+
+            默认情况下，AutoConfig所生成的配置文件以及日志信息会直接输出到当前包文件或目录中。
+            autoconfig petstore.war(会改变petstore.war的内容)
+            但你可以指定另一个输出文件或目录，这样，原来的文件或目录就不会被修改：
+            autoconfig petstore.war –o petstore-configured.war
+
+        ->6、避免执行AutoConfig（命令模式不适用）
+
+            将AutoConfig和maven package phase绑定以后，每次build都会激活AutoConfig,所以如果要跳过
+            mvn ... -Dautoconfig.skip
+
+        ->7、避免中断maven build（命令模式不适用）
+
+            默认情况下，假如发现有未定义的placeholders，AutoConfig会报错并中止maven的执行,如果不想中断：
+            mvn ... -Dautoconfig.strict=false
+
+    8、AutoExpand
+
+         AutoExpand的用武之地就是把包展开到文件夹中 -> autoexpand myweb.war
+
+         为啥不用原生的好处如下
+             可展开嵌套的包，例如：一个ear中包含war包，用AutoExpand可以一举把它们同时展开。
+             支持更多选项，例如：更新、覆盖、删除多余文件等。
+             比jar命令速度更快。
+
+         用法：
+         1、指定输出目录
+
+           autoexpand myweb.war myweb-expanded.war
+           要注意的是这条命令将myweb.war展开到myweb-expanded.war目录中。
+           在目录名中指定后缀（如.war）是一个好主意。这样，同一个名称（*.war）既可作为目录名，也可作为包名。你可以在目录和包文件之间自由地切换，而不需要改动服务器的脚本或配置。
+
+         2、展开嵌套的包。例如：
+           autoexpand myapp.ear myapp-expanded.ear
+
+
+         他可以和AutoConfig进行配合
+
+         <?xml version="1.0" encoding="UTF-8"?>
+         <project xmlns="http://maven.apache.org/POM/4.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+             ...
+             <properties>
+                 ...
+                 <!-- 定义autoconfig的版本，建议将此行写在parent pom.xml中。 -->
+                 <autoconfig-plugin-version>1.2</autoconfig-plugin-version>
+             </properties>
+             ...
+             <build>
+                 <plugins>
+                     <plugin>
+                         <groupId>com.alibaba.citrus.tool</groupId>
+                         <artifactId>autoconfig-maven-plugin</artifactId>
+                         <version>${autoconfig-plugin-version}</version>
+                         <configuration>
+                             ...
+
+                             -><!-- 配置后，是否展开目标文件，默认为false，不展开。 -->
+                             <exploding>true</exploding>
+                             -><!-- 展开到指定目录(名称)，默认为${project.build.directory}/${project.build.finalName}。 -->
+                             <explodedDirectory>
+                                 ${project.build.directory}/${project.build.finalName}
+                             </explodedDirectory>
+                         </configuration>
+                         <executions>
+                             <execution>
+                                 <phase>package</phase>
+                                 <goals>
+                                     <goal>autoconfig</goal>
+                                 </goals>
+                             </execution>
+                         </executions>
+                     </plugin>
+                 </plugins>
+             </build>
+         </project>
