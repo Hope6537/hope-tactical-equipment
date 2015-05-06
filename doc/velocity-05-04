@@ -502,7 +502,10 @@
 
     为了得到预期的结果，只需要你简单的使用velocimacro.library使得Velocity在启动时加载你的VMs，也就是传说中的预加载。
 
-24、Escaping VTL directives(VTL逃逸符） 并不懂~
+24、Escaping VTL directives(VTL逃逸符） 就是转义符号~
+
+    如果想让模板不被解析 那么就前面加一个\
+    如果想输出一个[\] 那么就要写[\\] 即进行转义
 
     VTL directives can be escaped with “\”号，使用方式跟VTL的reference使用逃逸符的格式差不多。
     ## #include( “a.txt” ) renders as <ontents of a.txt>(注释行)
@@ -531,7 +534,7 @@
     现在无论$jazz是true还是false，输出结果都是：
     #if ( $jazz )
       Vyacheslav Ganelin
-      #end
+    #end
 
     事实上，由于你使用了逃逸符，$jazz根本就没有被解析为boolean型值。在逃逸符前使用逃逸符是合法的，例如：
     \\ #if ( $jazz )
@@ -543,7 +546,10 @@
     \
 
     但是如果$jazz为false，那么将没有输出。（书上说会没有输出，但是我觉得应该还有有“\”字符被输出。）
-    VTL：格式化问题
+
+
+25、VTL：格式化问题
+
     尽管在此用户手册中VTL通常都开始一个新行，如下所示：
       #set ( $imperial = [ “Munetaka”, “Koreyasu”, “Hisakira”, “Morikune” ] )
       #foreach ( $shogun in $imperial )
@@ -552,6 +558,8 @@
 
     但是像下面这种写法也是可以的：
     Send me #set($foo = [“$10 and”,”a cake”])#foreach($a in $foo)$a #end please.
+
+
     上面的代码可以被改写为：
     Send me
     #set ( $foo = [“$10 and “,”a cake”] )
@@ -559,6 +567,7 @@
       $a
     #end
     please.
+
     或者
     Send me
     #set($foo = [“$10 and “,”a cake”])
@@ -566,7 +575,8 @@
         #end please.
     这两种的输出结构将一样。
 
-25、其他特性和杂项
+26、其他特性和杂项
+
     math   在模板中可以使用Velocity内建的算术函数，如：加、减、乘、除
       #set ( $foo = $bar + 3 )
       #set ( $foo = $bar - 4 )
@@ -574,9 +584,10 @@
       #set ( $foo = $bar / 2 )
     当执行除法时将返回一个Integer类型的结果。而余数你可以使用%来得到：
       #set ( $foo = $bar % 5 )
-    在Velocity内使用数学计算公式时，只能使用像-n,-2,-1,0,1,2,n这样的整数，而不能使用其它类型数据。当一个非整型的对象被使用时它将被logged并且将以null作为输出结果。
+    在Velocity内使用数学计算公式时，只能使用像-n,-2,-1,0,1,2,n这样的整数，而不能使用其它类型数据。当一个非整型的对象被使用时
+    它将被logged并且将以null作为输出结果。
 
-26、Range Operator
+27、Range Operator
 
     Range operator可以被用于与#set和#foreach statement联合使用。
     对于处理一个整型数组它是很有用的，Range operator具有以下构造形式：
@@ -610,7 +621,7 @@
     Output:
     [1..3] <-无效 range operator只在#set和#foreach中有效。
 
-27、Advanced Issue：Escaping and！ （逃逸符和安静符）
+28、Advanced Issue：Escaping and！ （逃逸符和安静符）
 
     当一个reference被“！”分隔时，并且在它之前有逃逸符时，reference将以特殊的方式处理。注意这种方式与标准的逃逸方式时不同的。对照如下：
     #set ( $foo = “bar” )
@@ -622,61 +633,82 @@
     $\\\!foo $\\!foo \\$!{foo} \bar
 
 
-28、Velocimacro杂记
+29、Velocimacro杂记
 
-    Can I user a directive or another VM as an argument to a VM?
-    例如：#center ( #bold( “hello” ) )
-    不可以。一个directive的参数使用另外一个directive是不合法的。
-    但是，还是有些事情你可以作的。最简单的方式就是使用双引号：
-      #set ( $stuff = “#bold( ‘hello’ ) ” )
+    我能将一个directive的参数使用另外一个directive上么? 例如：#center ( #bold( “hello” ) )
+    不可以。一个directive的参数使用另外一个directive是不合法的
+
+    但是，还是有些事情你可以做的。最简单的方式就是使用双引号，将其转化为目标字符串,设定一个中间变量
+      #set ( $stuff = “#bold( ‘hello’ )” )
       #center ( $stuff )
     上面的格式也可以缩写为一行：
-      #center ( “#bold( ‘hello’ ) )
-    请注意在下面的例子中参数被evaluated在Velocimacro内部，而不是在calling level。例子：
+      #center ( "#bold( ‘hello’ )" )
+
+
+    请注意在下面的例子中参数被evaluated在Velocimacro内部，而不是在calling level(不是基本函数调用顺序->栈)
+
       #macro ( inner $foo )
-      inner : $foo
+        inner : $foo
       #end
 
       #macro ( outer $foo )
-      #set ( $bar = “outerlala” )
-      outer : $foo
-    #end
+        #set ( $bar = “outerlala” )
+        outer : $foo
+      #end
 
-    #set ( $bar = ‘calltimelala’ )
+      #set ( $bar = ‘calltimelala’ )
       #outer( “#inner($bar)” )
     输出结果为：
+
     outer : inner : outerlala
+
+    调用顺序为
+        ->1、bar = calltimelala肯定没有错的！
+        ->2、然后调用inner  => inner:"calltimelala"
+        ->3、之后调用outer 这时候bar的值改变 bar = "outerlala" => outer: inner: outerlala
+        ->有些不可思议……
+
     记住Veloctiy的特性：参数的传递是By Name的。例如：
+
     #macro ( foo $color )
       <tr bgcolor = $color ><td>Hi</td></tr>
       <tr bgcolor = $color ><td>There</td></tr>
-      #end
+    #end
 
-      #foo ( $bar.rowColor() )
+    #foo ( $bar.rowColor() )
+
+
     以上代码将导致rowColor()方法两次调用，而不是一次。为了避免这种现象的出现，我们可以按照下面的方式执行：
     #set ( $color = $bar.rowColor() )
       #foo ( $color )
+
     can I register velocimacros via #parse()?
     目前，Velocimacros必须在第一次被模板调用前被定义。这就意味着你的#macro()声明应该出现在使用Velocimacros之前。
-    如 果你试图#parse()一个包含#macro() directive的模板，这一点是需要牢记的。因为#parse()发生在运行期，但是解析器在parsetiem决定一个看似VM元素的元素是否是一 个VM元素，这样#parse()-ing一组VM声明将不按照预期的样子工作。为了得到预期的结果，只需要你简单的使用 velocimacro.library使得Velocity在启动时加载你的VMs。
+    如果你试图#parse()一个包含#macro() directive的模板，这一点是需要牢记的。
+    因为#parse()发生在运行期，但是解析器在parsetiem决定一个看似VM元素的元素是否是一个VM元素，这样#parse()-ing一组VM声明将不按照预期的样子工作。
+    为了得到预期的结果，只需要你简单的使用 velocimacro.library使得Velocity在启动时加载你的VMs。
     What is velocimacro autoreloading？
     velocimacro.library.autoreload是专门为开发而非产品使用的一个属性。此属性的默认值是false。
 
-29、String concatenation
+30、String concatenation
 
     开发人员最常问的问题是我如何作字符拼接？在java中是使用“＋”号来完成的。
-    在VTL里要想实现同样的功能你只需要将需要联合的reference放到一起就行了。例如：
+    在VTL里要想实现同样的功能你只需要将需要联合的reference放到一起就行了
     #set ( $size = “Big” )
     #set ( $name = “Ben” )
     The clock is $size$name.
-    输出结果将是：The clock is BigBen.。更有趣的情况是：
+    输出结果将是：The clock is BigBen.。
+
+    更有趣的情况是：
       #set ( $size = “Big” )
       #set ( $name = “Ben” )
-      #set ( $clokc = “$size$name” )
+      #set ( $clock = “$size$name” ) <-在这里依旧可以组合
     The clock is $clock.
+
     上例也会得到同样的结果。最后一个例子，当你希望混合固定字段到你的reference时，你需要使用标准格式：
       #set ( $size = “Big” )
       #set ( $name = “Ben” )
-      #set ( $clock = “${size}Tall$name” )
+      #set ( $clock = “${size}Tall$name” ) <-用了完全形式
     The clock is $clock.
+
     输出结果是：The clock is BigTallBen.。使用这种格式主要是为了使得$size不被解释为$sizeTall。
