@@ -4,7 +4,6 @@ import java.net.{ServerSocket, Socket}
 import java.util.concurrent._
 
 import akka.actor.{Actor, ActorSystem, Props}
-import akka.testkit.CallingThreadDispatcher
 import com.typesafe.config.ConfigFactory
 
 

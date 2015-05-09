@@ -66,7 +66,7 @@ def calc(*numbers):
 
 print(calc(1, 2, 3, 4, 5))
 
-#默認參數
+# 默認參數
 def enroll(name, gender, age=6, city='Beijing'):
     print 'name:', name
     print 'gender:', gender

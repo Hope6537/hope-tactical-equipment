@@ -57,7 +57,7 @@ list = [d for d in os.listdir('C:/')]  # os.listdir可以列出文件和目录
 print("->C:/")
 for value in list:
     print("->>" + value);
-#->for循环可以使用多个变量
+# ->for循环可以使用多个变量
 d = {'x': 'A', 'y': 'B', 'z': 'C'}
 #->写法1
 for key, value in d.iteritems():
