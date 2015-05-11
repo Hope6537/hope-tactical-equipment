@@ -34,6 +34,11 @@ public class MemberAction {
 
     private PrintWriter out;
 
+    private static String toResult(Object value, String paramName) {
+        AjaxResponse ajaxResponse = AjaxResponse.getInstanceByResult(value != null).addAttribute(paramName, value);
+        return JSON.toJSONString(ajaxResponse);
+    }
+
     public void doMember(Context context) throws IOException {
         final String method = request.getMethod();
         ParameterParser parameters = parserRequestContext.getParameters();
@@ -82,11 +87,6 @@ public class MemberAction {
         out.print(result);
         out.flush();
 
-    }
-
-    private static String toResult(Object value, String paramName) {
-        AjaxResponse ajaxResponse = AjaxResponse.getInstanceByResult(value != null).addAttribute(paramName, value);
-        return JSON.toJSONString(ajaxResponse);
     }
 
 

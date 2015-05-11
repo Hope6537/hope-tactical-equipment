@@ -70,9 +70,6 @@ public class BaseDaoUtilImpl<T> implements BaseDaoUtil<T> {
      */
     static ResultSet rs = null;
 
-
-    private String status = ApplicationConstant.STATUS_DIE;
-
     static {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -81,6 +78,8 @@ public class BaseDaoUtilImpl<T> implements BaseDaoUtil<T> {
             System.out.println("Can't Find DriverClass");
         }
     }
+
+    private String status = ApplicationConstant.STATUS_DIE;
 
     protected BaseDaoUtilImpl() {
         conn = getConnections();

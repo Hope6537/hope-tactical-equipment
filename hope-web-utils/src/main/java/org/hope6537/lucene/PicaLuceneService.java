@@ -23,6 +23,43 @@ import java.util.List;
 /**
  * Pica项目的Lucene服务类
  * Created by Hope6537 on 14-11-27.
+ * <p>
+ * 提交
+ * <p>
+ * 回滚
+ * <p>
+ * 将Law对象添加进入索引中
+ *
+ * @param law 待添加的law对象
+ * @throws IOException 没找到索引位置
+ * <p>
+ * 更新Law对象在索引内的数据
+ * 由Law的lawId字段进行识别
+ * 所以需要先进行查询
+ * @param law 待更新的law对象
+ * @throws IOException 没找到索引位置
+ * <p>
+ * 删除Law对象在索引内的数据
+ * 由Law的lawId字段进行识别
+ * 所以需要先进行查询
+ * @param law 待刪除的law对象
+ * @throws IOException 没找到索引位置
+ * <p>
+ * 更懒的查询方法 默认查询域和分页大小
+ * <p>
+ * 只搜索标题和内容符合关键字的Law对象 默认不截串
+ * <p>
+ * 查询符合关键字keyWord的Law对象
+ * @param keyWord           关键字
+ * @param checkedProperties 查询的属性字符串
+ * @param searchNum         搜索的个数(但是Lucene不给从哪个开搜，所以最后还是假分页)
+ * @param firstResult       要查询的第一个Law在Document的位置 类似于Mysql的Limit中的第一个数字
+ * @param maxResult         最大数量 Limit的第二个数字
+ * @param isSubStr          是否截取字符串
+ * @return 返回装有匹配的Law的List
+ * @throws IOException                                          没有找到索引在磁盘上的位置
+ * @throws org.apache.lucene.queryparser.classic.ParseException 因为查询关键字非法
+ * @author 赵鹏
  *//*
 
 public class PicaLuceneService extends LuceneService {

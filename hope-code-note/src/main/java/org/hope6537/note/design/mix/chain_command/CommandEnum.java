@@ -16,10 +16,6 @@ public enum CommandEnum {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     public static List<String> getNames() {
         CommandEnum[] commandEnums = CommandEnum.values();
         List<String> names = new ArrayList<>();
@@ -27,5 +23,9 @@ public enum CommandEnum {
             names.add(commandEnum.name());
         }
         return names;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

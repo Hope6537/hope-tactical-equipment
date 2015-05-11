@@ -21,17 +21,16 @@ public class GreenhouseScheduler {
     private volatile boolean water = false;
     private String thermostat = "Day";
     private Calendar lastTime = Calendar.getInstance();
-
-    {
-        lastTime.set(Calendar.MINUTE, 30);
-        lastTime.set(Calendar.SECOND, 00);
-    }
-
     private float lastTemp = 65.0f;
     private int tempDirection = +1;
     private float lastHumidity = 50.0f;
     private int humidityDirection = +1;
     private Random rand = new Random(47);
+
+    {
+        lastTime.set(Calendar.MINUTE, 30);
+        lastTime.set(Calendar.SECOND, 00);
+    }
 
     public static void main(String[] args) {
         GreenhouseScheduler gh = new GreenhouseScheduler();

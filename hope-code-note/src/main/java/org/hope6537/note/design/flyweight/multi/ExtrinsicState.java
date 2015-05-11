@@ -10,6 +10,11 @@ public class ExtrinsicState {
     private String location;
 
 
+    public ExtrinsicState(String subject, String location) {
+        this.subject = subject;
+        this.location = location;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,11 +33,6 @@ public class ExtrinsicState {
         int result = subject != null ? subject.hashCode() : 0;
         result = 31 * result + (location != null ? location.hashCode() : 0);
         return result;
-    }
-
-    public ExtrinsicState(String subject, String location) {
-        this.subject = subject;
-        this.location = location;
     }
 
     public String getSubject() {

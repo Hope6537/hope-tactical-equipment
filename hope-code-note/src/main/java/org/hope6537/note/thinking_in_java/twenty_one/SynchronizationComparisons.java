@@ -22,6 +22,7 @@ abstract class Accumulator {
     public static long cycles = 50000L;
     public static ExecutorService exec = Executors.newFixedThreadPool(N * 2);
     protected static int[] preLoaded = new int[SIZE];
+    private static CyclicBarrier barrier = new CyclicBarrier(N * 2 + 1);
 
     static {
         // 载入随机数数组
@@ -30,7 +31,6 @@ abstract class Accumulator {
             preLoaded[i] = rand.nextInt();
     }
 
-    private static CyclicBarrier barrier = new CyclicBarrier(N * 2 + 1);
     protected volatile int index = 0;
     protected volatile long value = 0;
     protected long duration = 0;
@@ -155,11 +155,11 @@ class SynchronizedTest extends Accumulator {
  * @company Changchun University&SHXT
  */
 class LockTest extends Accumulator {
+    private Lock lock = new ReentrantLock();
+
     {
         id = "Lock";
     }
-
-    private Lock lock = new ReentrantLock();
 
     public void accumulate() {
         lock.lock();
@@ -190,12 +190,12 @@ class LockTest extends Accumulator {
  * @company Changchun University&SHXT
  */
 class AtomicTest extends Accumulator {
+    private AtomicInteger index = new AtomicInteger(0);
+    private AtomicLong value = new AtomicLong(0);
+
     {
         id = "Atomic";
     }
-
-    private AtomicInteger index = new AtomicInteger(0);
-    private AtomicLong value = new AtomicLong(0);
 
 	/*
      * public void accumulate() { // Oops! Relying on more than one Atomic at //

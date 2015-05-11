@@ -10,12 +10,11 @@ import java.util.concurrent.TimeUnit;
 
 public class OkHttpUtil {
     private static final OkHttpClient mOkHttpClient = new OkHttpClient();
+    private static final String CHARSET_NAME = "UTF-8";
 
     static {
         mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
     }
-
-    private static final String CHARSET_NAME = "UTF-8";
 
     /**
      * 该不会开启异步线程。

@@ -12,6 +12,16 @@ import org.apache.lucene.document.TextField;
 /**
  * Pica项目中Document索引对象和Law对象的互相转换
  * Created by Hope6537 on 14-11-27.
+ * <p>
+ * 对象转换索引
+ *
+ * @param law 要转换的对象
+ * @return 返回转换完毕的Document
+ * <p>
+ * 索引转换对象
+ * 注意 该对象只有lawId title和content字段
+ * @param document 要还原的装载着law的document对象
+ * @return 返回由Document封装好的Law对象
  *//*
 
 public class PicaLuceneUtil {
