@@ -153,8 +153,8 @@ public class DateFormatCalculate {
     public static double jiSuanTimeReturnHours(String startTime, String endTime) {
         SimpleDateFormat s1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat s2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date d1 = new Date();
-        Date d2 = new Date();
+        Date d1;
+        Date d2;
         try {
             d1 = s1.parse(startTime);
             d2 = s2.parse(endTime);
@@ -185,8 +185,8 @@ public class DateFormatCalculate {
                                                             String endTime) {
         SimpleDateFormat s1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat s2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date d1 = new Date();
-        Date d2 = new Date();
+        Date d1;
+        Date d2;
         try {
             d1 = s1.parse(startTime);
             d2 = s2.parse(endTime);
@@ -195,7 +195,7 @@ public class DateFormatCalculate {
             double minute = (Math.abs((t2 - t1) / (1000 * 60)));
             if (minute % 60 != 0) {
                 System.out.println("minute" + minute);
-                System.out.println("hours" + ((int) (((int) minute) / 60) + 1));
+                System.out.println("hours" + (((int) minute) / 60 + 1));
                 return (((int) minute) / 60) + 1;
             } else {
                 return ((int) minute / 60);
