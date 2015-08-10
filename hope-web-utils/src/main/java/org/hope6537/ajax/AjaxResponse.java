@@ -9,7 +9,7 @@ import java.util.Map;
 public class AjaxResponse {
     private ReturnState returnState = ReturnState.OK;
     private String returnMsg;
-    private Map<String, Object> returnData = new HashMap<String, Object>();
+    private Map<String, Object> returnData = new HashMap<>();
 
     public AjaxResponse() {
         this(ReturnState.OK, "");
