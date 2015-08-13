@@ -84,17 +84,16 @@ public class FileUtil {
             flag = new File(newPath).mkdirs();
             File filePath = new File(oldPath);
             String[] file = filePath.list();
-            File temp = null;
-            for (int i = 0; i < file.length; i++) {
+            File temp;
+            for (String fileName : file) {
                 if (oldPath.endsWith(File.separator)) {
-                    temp = new File(oldPath + file[i]);
+                    temp = new File(oldPath + fileName);
                 } else {
-                    temp = new File(oldPath + File.separator + file[i]);
+                    temp = new File(oldPath + File.separator + fileName);
                 }
                 if (temp.isFile()) {
                     FileInputStream input = new FileInputStream(temp);
-                    FileOutputStream output = new FileOutputStream(newPath + File.separator +
-                            (temp.getName()).toString());
+                    FileOutputStream output = new FileOutputStream(newPath + File.separator + (temp.getName()));
                     byte[] b = new byte[1024 * 5];
                     int len;
                     while ((len = input.read(b)) != -1) {
@@ -105,7 +104,7 @@ public class FileUtil {
                     input.close();
                 }
                 if (temp.isDirectory()) {
-                    copyFolder(oldPath + File.separator + file[i], newPath + File.separator + file[i]);
+                    copyFolder(oldPath + File.separator + fileName, newPath + File.separator + fileName);
                 }
             }
         } catch (Exception e) {
@@ -147,12 +146,10 @@ public class FileUtil {
         }
         byte[] buffer = new byte[bufferSize];
         try {
-            long count = 0;
             int n = 0;
             while (-1 != (n = in.read(buffer))) {
                 server.write(buffer, 0, n);
                 //hdfs.write(buffer, 0, n);
-                count += n;
             }
             return true;
         } catch (Exception e) {
@@ -171,7 +168,7 @@ public class FileUtil {
         byte[] buffer = new byte[bufferSize];
         try {
             long count = 0;
-            int n = 0;
+            int n;
             while (-1 != (n = in.read(buffer))) {
                 if (count <= 4096) {
                     md5 = MD5Util.string2MD5(Arrays.toString(buffer));
@@ -194,33 +191,30 @@ public class FileUtil {
      */
     public static boolean createDirects(String path) {
         File newDirect = new File(path);
-        if (!newDirect.exists()) {
-            return newDirect.mkdirs();
-        }
-        return false;
+        return !newDirect.exists() && newDirect.mkdirs();
     }
 
     /**
      * 删除目录
      *
-     * @param delpath
+     * @param delPath
      * @return
      * @throws Exception
      */
-    public static boolean deleteFiles(String delpath) throws Exception {
+    public static boolean deleteFiles(String delPath) throws Exception {
         try {
 
-            File file = new File(delpath);
+            File file = new File(delPath);
             if (!file.isDirectory()) {
                 file.delete();
-            } else if (file.isDirectory()) {
+            } else {
                 String[] filelist = file.list();
-                for (int i = 0; i < filelist.length; i++) {
-                    File delfile = new File(delpath + "\\" + filelist[i]);
+                for (String aFilelist : filelist) {
+                    File delfile = new File(delPath + "\\" + aFilelist);
                     if (!delfile.isDirectory()) {
                         delfile.delete();
-                    } else if (delfile.isDirectory()) {
-                        deleteFiles(delpath + "\\" + filelist[i]);
+                    } else {
+                        deleteFiles(delPath + "\\" + aFilelist);
                     }
                 }
                 file.delete();

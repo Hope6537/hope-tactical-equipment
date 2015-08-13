@@ -75,15 +75,5 @@ public class HdfsUtilsTest {
         hdfsUtils.rmrShowInConsole("/peoplerank/pr");
         hdfsUtils.renameShowInConsole("/peoplerank/tmp2", "/peoplerank/pr");
     }
-
-    @Test
-    public void test2() {
-
-    }
-
-    @Test
-    public void test3() {
-
-    }
 }
 

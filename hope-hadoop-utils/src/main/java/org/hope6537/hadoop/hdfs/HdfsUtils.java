@@ -35,9 +35,7 @@ public class HdfsUtils {
         this.logger = LoggerFactory.getLogger(getClass());
         try {
             this.fileSystem = FileSystem.get(URI.create(hdfsDir), configuration, username);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
