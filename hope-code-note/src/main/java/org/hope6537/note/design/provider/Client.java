@@ -22,12 +22,12 @@ public class Client {
         UserSpecification userSpecification = new UserAgeThen(15);
         userProvider.findUser(userSpecification).forEach(System.out::println);
 
-        UserSpecification userSpecification1 = new UserByNameLike("%Echo%");
+        UserSpecification userSpecification1 = new UserByNameLikeEqual("%Echo%");
         userProvider.findUser(userSpecification1).forEach(System.out::println);
 
         //原复合查询
         /*System.out.println("====");
-        UserSpecification specification1 = new UserByNameLike("%Echo%");
+        UserSpecification specification1 = new UserByNameLikeEqual("%Echo%");
         UserSpecification specification2 = new UserAgeThen(12);
         userList = userProvider.findUser(specification1);
         userProvider.setUserList(userList);
@@ -35,7 +35,7 @@ public class Client {
 
         System.out.println("====");
         UserSpecification spec1 = new UserAgeThen(14);
-        UserSpecification spec2 = new UserByNameLike("%Fox%");
+        UserSpecification spec2 = new UserByNameLikeEqual("%Fox%");
         userProvider.findUser(spec1.and(spec2)).forEach(System.out::println);
 
     }

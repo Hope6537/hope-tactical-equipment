@@ -2,13 +2,13 @@ package org.hope6537.note.design.provider;
 
 /**
  */
-public class UserByNameLike extends CompositeSpecification {
+public class UserByNameLikeEqual extends CompositeSpecification {
 
     public static final String LIKE_FLAG = "%";
 
     private String likeStr;
 
-    public UserByNameLike(String likeStr) {
+    public UserByNameLikeEqual(String likeStr) {
         this.likeStr = likeStr;
     }
 
