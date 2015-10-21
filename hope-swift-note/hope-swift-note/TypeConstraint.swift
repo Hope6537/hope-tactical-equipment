@@ -24,14 +24,14 @@ class AppleSimple : FruitSimple{
 
 func isEqual<V:Equatable,R:FruitSimple>(left:V,right:V,result:R) -> Bool{
     if left == right{
-        println("true \(result.name)");
+        print("true \(result.name)");
         return true;
     }else{
-        println("false \(result.name)");
+        print("false \(result.name)");
         return false;
     }
 }
 
 func testTypeConstraint(){
-    println(isEqual("asdasd","asdasd",AppleSimple()));
+    print(isEqual("asdasd",right: "asdasd",result: AppleSimple()));
 }

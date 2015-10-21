@@ -165,11 +165,11 @@ class ConcurrencyScala {
           " by " + Thread.currentThread().getName)
       }
     }
-    val echoServers = (1 to 10).map(x =>
-      system.actorOf(Props(new EchoServer(x.toString))
-        .withDispatcher(CallingThreadDispatcher.Id)))
-    (1 to 10).foreach(msg =>
-      echoServers(scala.util.Random.nextInt(10)) ! msg.toString)
+//    val echoServers = (1 to 10).map(x =>
+//      system.actorOf(Props(new EchoServer(x.toString))
+//        .withDispatcher(CallingThreadDispatcher.Id)))
+//    (1 to 10).foreach(msg =>
+//      echoServers(scala.util.Random.nextInt(10)) ! msg.toString)
 
     system.shutdown()
 

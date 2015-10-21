@@ -112,9 +112,9 @@ func testAssoicatedType(){
     
     var arrayOfStrings = ["1233","12312","412"];
     
-    if allItemsMatch(stackOfString, arrayOfStrings){
-        println("all match");
+    if allItemsMatch(stackOfString, anotherConatiner: arrayOfStrings){
+        print("all match");
     }else{
-        println("not all match");
+        print("not all match");
     }
 }

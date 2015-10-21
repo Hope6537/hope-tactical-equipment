@@ -19,19 +19,19 @@ class People{
         willSet(newLover){
             if(self.lover != nil){
                 if(newLover != nil){
-                    println("\(self.name) lover has changed to \(newLover)");
+                    print("\(self.name) lover has changed to \(newLover)");
                 }
             }
             else{
                 if(newLover != nil){
-                    println("\(self.name) has found first love  \(newLover)");
+                    print("\(self.name) has found first love  \(newLover)");
                 }
             }
         }
         //属性改变后触发
         didSet(oldLover){
             if(oldLover != nil){
-                println("\(self.name) has left the oldlover \(oldLover)");
+                print("\(self.name) has left the oldlover \(oldLover)");
             }
         }
     };
@@ -66,17 +66,17 @@ class People{
         return "静态变量";
     }
     class func staticFunc(){
-        println("静态方法");
-        println(staticParam);
+        print("静态方法");
+        print(staticParam);
     }
 }
 
 func testObject(){
-    var oldCoder = People();
-    println("Old Coder is Happy :\(oldCoder.isHappy)");
+    let oldCoder = People();
+    print("Old Coder is Happy :\(oldCoder.isHappy)");
     oldCoder.isHappy = true;
-    println("app : \(oldCoder.apperance)");
-    println(People.plannet);
+    print("app : \(oldCoder.apperance)");
+    print(People.plannet);
 }
 
 

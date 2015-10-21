@@ -17,12 +17,12 @@ class Fruit{
 
 class Apple : Fruit{
     func description(){
-        println("apple! " + placeOfOrigninal);
+        print("apple! " + placeOfOrigninal);
     }
 }
 class Orange : Fruit{
     func description(){
-        println("orange! " + placeOfOrigninal);
+        print("orange! " + placeOfOrigninal);
     }
 }
 

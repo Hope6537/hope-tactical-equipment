@@ -11,6 +11,6 @@ import Foundation
 //类的继承方式
 class Assistant_Son:Assistant{
     override class func staticMethods(){
-        println("override");
+        print("override");
     }
 }

@@ -18,7 +18,7 @@ extension Double {
         return self / Double.factor;
     }
     var zeros : Int{
-        var str = "\(self)";
+        let str = "\(self)";
         return str.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) - 3;
     }
     func toString()->String{
@@ -44,13 +44,13 @@ class Human{
         self.init(name:"unimportant",sword:Sword());
     }
     func say(){
-        println("name is \(name) , sword is \(sword.name)");
+        print("name is \(name) , sword is \(sword.name)");
     }
 }
 extension Sword{
     init(newData:String){
         if(newData == "t1"){
-            println("ahhhhhhhhhh!");
+            print("ahhhhhhhhhh!");
             self.init(length:3,name:"master");
         }
         else{
@@ -63,7 +63,7 @@ extension Human{
     //class拓展只能够拓展便捷构造器
     convenience init(type:String){
         if(type == "woman"){
-            println("my god!woman!oh yeah!come baby!big breast yo!");
+            print("my god!woman!oh yeah!come baby!big breast yo!");
             self.init(name : "cute girl" , sword:Sword(newData : "t1" ));
         }else{
             //调用便捷构造器
@@ -98,32 +98,32 @@ extension Int{
     static var assistant = Assistant();
     
     subscript (var index : Int) -> Int{
-        var str = "\(self)";
-        if(index >= str.utf16Count){
+        let str = "\(self)";
+        if(index >= 64){
             Int.assistant.result = .NotFound;
             return -1;
         }
         else{
-            var char = str[advance(str.startIndex,index)];
-            var value = String(char).toInt();
+            let char = str.characters.count;
+            let value = Int.init(char)
             Int.assistant.result = .Found;
-            return value!;
+            return value;
         }
     }
 }
 
 func testExtension(){
-    var money : Double = 100_000_000_000_000;
-    println("now \(money)");
-    println("chy \(money.CHY)");
-    println("now is \(money.toString())");
-    println("has zero \(money.zeros)");
-    println(Double.getClassName());
+    let money : Double = 100_000_000_000_000;
+    print("now \(money)");
+    print("chy \(money.CHY)");
+    print("now is \(money.toString())");
+    print("has zero \(money.zeros)");
+    print(Double.getClassName());
     
-    var uncle = Human();
+    let uncle = Human();
     uncle.say();
-    var loli = Human(type:"woman");
+    let loli = Human(type:"woman");
     loli.say();
     
-    println("\(1234567891011121345[2]) , isFound? \(Int.assistant.say())");
+    print("\(1234567891011121345[2]) , isFound? \(Int.assistant.say())");
 }

@@ -39,7 +39,7 @@ class Pet{
         }
     }
     func printNumberOfToys(){
-        println("number is \(numberOfToys)");
+        print("number is \(numberOfToys)");
     }
 }
 
@@ -63,38 +63,38 @@ func testChain(){
     let john = Person();
     //这个表达式不能用括号
     if let num1 = john.pet?.numberOfToys{
-        println(num1);
+        print(num1);
     }
     else{
-        println("none");
+        print("none");
     }
     
 
     if (john.pet?.name = "snow") != nil{
-        println("yes");
+        print("yes");
     }
     else{
-        println("no");
+        print("no");
     }
     
     //methods
     if john.pet?.printNumberOfToys() != nil{
-        println("yes println");
+        print("yes println");
     }
     else{
-        println("no println()");
+        print("no println()");
     }
     //index
     if let name = john.pet?[0].name{
-        println(name + "yse");
+        print(name + "yse");
     }else{
-        println("nil no");
+        print("nil no");
     }
     //return value
-    if let MadeInChina = john.pet?.toys[0].getLocation()?.hasPrefix("china") {
-        println("yes");
+    if let _ = john.pet?.toys[0].getLocation()?.hasPrefix("china") {
+        print("yes");
     }else{
-        println("no");
+        print("no");
     }
     
 

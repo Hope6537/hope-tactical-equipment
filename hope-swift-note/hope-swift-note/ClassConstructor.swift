@@ -13,17 +13,17 @@ class Buddna {
     var name : String;
     //这是普通的指定构造器
     init(theFirstMethod name:String){
-        println("first");
+        print("first");
         self.name = name;
     }
     //构造器可以重载
     init(theSecondMethod name:String){
-        println("second");
+        print("second");
         self.name = name;
     }
     //便利构造器 调用其他构造器的方法
     convenience init (){
-        println("convenience");
+        print("convenience");
         self.init(theSecondMethod:"theFirst");
     }
     //可失败构造器，用于不符合条件时返回null对象
@@ -35,7 +35,7 @@ class Buddna {
         }
     }
     deinit{
-        println("destroy");
+        print("destroy");
     }
 }
 
@@ -44,14 +44,14 @@ class base1 {
     var name1 : String;
     init(){
         self.name1 = "test";
-        println("base init \(name1)" );
+        print("base init \(name1)" );
     }
 }
 class base2 : base1{
     var name2 : String;
     override init(){
         self.name2 = "base2";
-        println("base2 name \(name2)");
+        print("base2 name \(name2)");
         //显示的调用superinit之后彩才可以使父类的值
         super.init();
         self.name1 = "name1";
@@ -74,5 +74,5 @@ func testConstructor(){
     base2 name base2
     base init test
     */
-    var testBase = base2();
+    _ = base2();
 }

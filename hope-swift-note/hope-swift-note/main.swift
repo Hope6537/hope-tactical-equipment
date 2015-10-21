@@ -19,7 +19,7 @@ import Foundation
 //testAnyObject();
 //testInnerClass();
 //testExtension();
-//testProtocal();
+testProtocal();
 testTypeConstraint();
 testAssoicatedType();
 

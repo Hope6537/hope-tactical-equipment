@@ -41,37 +41,37 @@ protocol GameRoom{
 }
 //接口可以多重继承
 protocol CombineRequirement:Villa,WorkShop{
-    class var name : String{get};
-    class func finish() -> Bool;
+    static var name : String{get};
+    static func finish() -> Bool;
     
     
 }
 
 class OuterHorse :CombineRequirement{
     //协议中的构造器 实现的时候要添加required关键字
-    required init(weapon:String){
-        println("the weapon is \(weapon)");
+    @objc required init(weapon:String){
+        print("the weapon is \(weapon)");
     }
     //    同时也要实现可失败构造器
-    required init?(hasWeapon:Bool){
+    @objc required init?(hasWeapon:Bool){
         if hasWeapon == false{
-            println("no weapon");
+            print("no weapon");
             return;
         }
-        println("has weapon");
+        print("has weapon");
     }
     convenience init(){
         self.init(weapon:"minigun");
     }
     
-    let floors = 4;
-    var style:String {
+    @objc let floors = 4;
+    @objc var style:String {
         return "Europe";
     }
-    func openGate()->String{
+    @objc func openGate()->String{
         return "auto Door";
     }
-    func openAirCondition()->Bool{
+    @objc func openAirCondition()->Bool{
         return true;
     }
     var desk : String{
@@ -79,18 +79,18 @@ class OuterHorse :CombineRequirement{
             return "desk";
         }
         set{
-            println("new desk \(newValue)");
+            print("new desk \(newValue)");
         }
     }
     var book = "swift";
     
     func program(code:String) -> Bool{
-        println("code is \(code)");
+        print("code is \(code)");
         return true;
     }
     
     func debug(){
-        println("debug success");
+        print("debug success");
     }
     
     class var name : String{
@@ -106,7 +106,7 @@ struct buildGameRoom : GameRoom{
 }
 
 func testProtocal(){
-    var villa = OuterHorse(weapon: "m249");
-    var base = OuterHorse(hasWeapon: true);
+    _ = OuterHorse(weapon: "m249");
+    _ = OuterHorse(hasWeapon: true);
     
 }

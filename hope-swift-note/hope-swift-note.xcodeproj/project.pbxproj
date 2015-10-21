@@ -8,6 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		DA03A6B71BD7D2C300D40687 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6B61BD7D2C300D40687 /* main.swift */; };
+		DA03A6CC1BD7D3F900D40687 /* AnyInSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6BD1BD7D3F900D40687 /* AnyInSwift.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6CD1BD7D3F900D40687 /* AssociatedType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6BE1BD7D3F900D40687 /* AssociatedType.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6CE1BD7D3F900D40687 /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6BF1BD7D3F900D40687 /* Chain.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6CF1BD7D3F900D40687 /* ClassCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C01BD7D3F900D40687 /* ClassCast.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D01BD7D3F900D40687 /* ClassConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C11BD7D3F900D40687 /* ClassConstructor.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D11BD7D3F900D40687 /* ClassExtend.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C21BD7D3F900D40687 /* ClassExtend.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D21BD7D3F900D40687 /* ExtensionSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C31BD7D3F900D40687 /* ExtensionSwift.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D31BD7D3F900D40687 /* FieldOfSetGet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C41BD7D3F900D40687 /* FieldOfSetGet.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D41BD7D3F900D40687 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C51BD7D3F900D40687 /* File.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D51BD7D3F900D40687 /* InnerClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C61BD7D3F900D40687 /* InnerClass.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D61BD7D3F900D40687 /* Protocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C71BD7D3F900D40687 /* Protocal.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D71BD7D3F900D40687 /* Reference.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C81BD7D3F900D40687 /* Reference.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D81BD7D3F900D40687 /* StructMutiating.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6C91BD7D3F900D40687 /* StructMutiating.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6D91BD7D3F900D40687 /* SwiftObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6CA1BD7D3F900D40687 /* SwiftObject.swift */; settings = {ASSET_TAGS = (); }; };
+		DA03A6DA1BD7D3F900D40687 /* TypeConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA03A6CB1BD7D3F900D40687 /* TypeConstraint.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +40,21 @@
 /* Begin PBXFileReference section */
 		DA03A6B31BD7D2C300D40687 /* hope-swift-note */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "hope-swift-note"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA03A6B61BD7D2C300D40687 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		DA03A6BD1BD7D3F900D40687 /* AnyInSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyInSwift.swift; sourceTree = "<group>"; };
+		DA03A6BE1BD7D3F900D40687 /* AssociatedType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssociatedType.swift; sourceTree = "<group>"; };
+		DA03A6BF1BD7D3F900D40687 /* Chain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
+		DA03A6C01BD7D3F900D40687 /* ClassCast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassCast.swift; sourceTree = "<group>"; };
+		DA03A6C11BD7D3F900D40687 /* ClassConstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassConstructor.swift; sourceTree = "<group>"; };
+		DA03A6C21BD7D3F900D40687 /* ClassExtend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClassExtend.swift; sourceTree = "<group>"; };
+		DA03A6C31BD7D3F900D40687 /* ExtensionSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionSwift.swift; sourceTree = "<group>"; };
+		DA03A6C41BD7D3F900D40687 /* FieldOfSetGet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FieldOfSetGet.swift; sourceTree = "<group>"; };
+		DA03A6C51BD7D3F900D40687 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		DA03A6C61BD7D3F900D40687 /* InnerClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InnerClass.swift; sourceTree = "<group>"; };
+		DA03A6C71BD7D3F900D40687 /* Protocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocal.swift; sourceTree = "<group>"; };
+		DA03A6C81BD7D3F900D40687 /* Reference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reference.swift; sourceTree = "<group>"; };
+		DA03A6C91BD7D3F900D40687 /* StructMutiating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StructMutiating.swift; sourceTree = "<group>"; };
+		DA03A6CA1BD7D3F900D40687 /* SwiftObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftObject.swift; sourceTree = "<group>"; };
+		DA03A6CB1BD7D3F900D40687 /* TypeConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeConstraint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +87,21 @@
 		DA03A6B51BD7D2C300D40687 /* hope-swift-note */ = {
 			isa = PBXGroup;
 			children = (
+				DA03A6BD1BD7D3F900D40687 /* AnyInSwift.swift */,
+				DA03A6BE1BD7D3F900D40687 /* AssociatedType.swift */,
+				DA03A6BF1BD7D3F900D40687 /* Chain.swift */,
+				DA03A6C01BD7D3F900D40687 /* ClassCast.swift */,
+				DA03A6C11BD7D3F900D40687 /* ClassConstructor.swift */,
+				DA03A6C21BD7D3F900D40687 /* ClassExtend.swift */,
+				DA03A6C31BD7D3F900D40687 /* ExtensionSwift.swift */,
+				DA03A6C41BD7D3F900D40687 /* FieldOfSetGet.swift */,
+				DA03A6C51BD7D3F900D40687 /* File.swift */,
+				DA03A6C61BD7D3F900D40687 /* InnerClass.swift */,
+				DA03A6C71BD7D3F900D40687 /* Protocal.swift */,
+				DA03A6C81BD7D3F900D40687 /* Reference.swift */,
+				DA03A6C91BD7D3F900D40687 /* StructMutiating.swift */,
+				DA03A6CA1BD7D3F900D40687 /* SwiftObject.swift */,
+				DA03A6CB1BD7D3F900D40687 /* TypeConstraint.swift */,
 				DA03A6B61BD7D2C300D40687 /* main.swift */,
 			);
 			path = "hope-swift-note";
@@ -119,6 +164,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA03A6B71BD7D2C300D40687 /* main.swift in Sources */,
+				DA03A6D61BD7D3F900D40687 /* Protocal.swift in Sources */,
+				DA03A6D21BD7D3F900D40687 /* ExtensionSwift.swift in Sources */,
+				DA03A6D01BD7D3F900D40687 /* ClassConstructor.swift in Sources */,
+				DA03A6D91BD7D3F900D40687 /* SwiftObject.swift in Sources */,
+				DA03A6D71BD7D3F900D40687 /* Reference.swift in Sources */,
+				DA03A6DA1BD7D3F900D40687 /* TypeConstraint.swift in Sources */,
+				DA03A6CE1BD7D3F900D40687 /* Chain.swift in Sources */,
+				DA03A6CF1BD7D3F900D40687 /* ClassCast.swift in Sources */,
+				DA03A6D41BD7D3F900D40687 /* File.swift in Sources */,
+				DA03A6D51BD7D3F900D40687 /* InnerClass.swift in Sources */,
+				DA03A6CC1BD7D3F900D40687 /* AnyInSwift.swift in Sources */,
+				DA03A6D11BD7D3F900D40687 /* ClassExtend.swift in Sources */,
+				DA03A6CD1BD7D3F900D40687 /* AssociatedType.swift in Sources */,
+				DA03A6D31BD7D3F900D40687 /* FieldOfSetGet.swift in Sources */,
+				DA03A6D81BD7D3F900D40687 /* StructMutiating.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +296,7 @@
 				DA03A6BC1BD7D2C300D40687 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

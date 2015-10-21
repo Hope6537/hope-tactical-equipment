@@ -24,9 +24,9 @@ struct TestStruct{
 }
 
 func testAnyObject(){
-    var test1  = Evil();
-    var test2  = Angel();
-    var test3  = Folk();
+    let test1  = Evil();
+    let test2  = Angel();
+    let test3  = Folk();
     var Buddhism = [AnyObject]();
     //AnyObject
     Buddhism = [test1,test2,test3];

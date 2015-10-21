@@ -19,8 +19,8 @@ struct WarCraft {
         self = WarCraft(sence: "new Sence", money: 123);
     }
     func toString(){
-        println("sence " + self.sence);
-        println("money  \(self.money)");
+        print("sence " + self.sence);
+        print("money  \(self.money)");
     }
 }
 

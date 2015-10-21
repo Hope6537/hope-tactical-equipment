@@ -19,7 +19,7 @@ class OutClass{
 }
 
 func testInnerClass(){
-    var test = OutClass();
-    println(test.name);
-    println(test.innerClass.name);
+    let test = OutClass();
+    print(test.name);
+    print(test.innerClass.name);
 }

@@ -28,7 +28,7 @@ class Male{
         self.girl = girl;
     }
     deinit{
-        println("die male");
+        print("die male");
     }
 }
 
@@ -39,20 +39,20 @@ class Female {
         self.name = name;
     }
     deinit{
-        println("die fe");
+        print("die fe");
     }
 }
 func testReference(){
     //出现了内存泄露
     var woman : Female? = Female(name:"female");
-    var man : Male? = Male(name: "male",girl:woman!);
+    let man : Male? = Male(name: "male",girl:woman!);
     //在无主引用中要使用！来进行强制解封来使用里面的值
     //man!.girl =  woman;
     
     woman!.boy = man;
-    println("deinit");
+    print("deinit");
     //无主引用中 girl死了boy也会跟着死
     //man = nil;
     woman = nil;
-    println("finish");
+    print("finish");
 }
