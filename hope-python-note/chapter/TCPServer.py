@@ -17,8 +17,8 @@ s.listen(5)
 # 连接建立后，服务器首先发一条欢迎消息，然后等待客户端数据，并加上Hello再发送给客户端。
 # 如果客户端发送了exit字符串，就直接关闭连接。
 def tcplink(sock, addr):
-    print 'Accept new connection from %s:%s...' % addr
-    sock.send('Welcome!')
+    print('Accept new connection from %s:%s...' % addr)
+    sock.send(bytearray.append('Welcome!'))
     while True:
         data = sock.recv(1024)
         time.sleep(1)
@@ -26,7 +26,7 @@ def tcplink(sock, addr):
             break
         sock.send('Hello, %s!' % data)
     sock.close()
-    print 'Connection from %s:%s closed.' % addr
+    print('Connection from %s:%s closed.' % addr)
 
 
 while True:

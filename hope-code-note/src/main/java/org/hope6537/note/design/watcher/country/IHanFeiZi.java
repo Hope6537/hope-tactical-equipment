@@ -7,8 +7,8 @@ public interface IHanFeiZi {
 
     /**
      */
-    public void haveBreakfast();
+    public void haveBreakfast() throws InterruptedException;
 
-    public void haveFun();
+    public void haveFun() throws InterruptedException;
 
 }

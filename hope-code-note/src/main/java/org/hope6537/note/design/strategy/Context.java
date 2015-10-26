@@ -14,4 +14,12 @@ public class Context {
     public void doAnyThing() {
         strategy.doSomething();
     }
+
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
 }
