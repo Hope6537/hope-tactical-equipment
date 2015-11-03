@@ -11,8 +11,8 @@ __author__ = 'Hope6537'
 
 wget = "wget "
 https = "https://"
-dir = "D:/eHentai/"
-urlFile = open('D:/url.txt', 'a')
+dir = "/Users/hope6537/eHentai/"
+urlFile = open('/Users/hope6537/url.txt', 'a')
 site = "http://lofi.e-hentai.org/"
 cj = cookielib.CookieJar()
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))

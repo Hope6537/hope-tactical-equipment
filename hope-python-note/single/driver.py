@@ -42,6 +42,8 @@ def show_console_menu():
         print("2 search object")
         print("0 exit system")
 
+        userinfoList = []
+
         optionarray = [show_add_object, show_search_object]
         try:
             option = int(raw_input())
@@ -50,7 +52,7 @@ def show_console_menu():
             continue
         if option != 0:
             try:
-                optionarray[option - 1]()
+                userinfoList = optionarray[option - 1](userinfoList)
             except IndexError:
                 print("input error")
         else:
@@ -58,17 +60,23 @@ def show_console_menu():
             break
 
 
-def show_add_object():
+def show_add_object(userinfoList):
     print("add object")
     print("print user's info username , password and name")
     username = raw_input()
     password = raw_input()
     name = raw_input()
+    userinfoList.append(Userinfo(username, password, name))
+    return userinfoList
 
 
-def show_search_object():
+
+def show_search_object(userinfoList):
     print("search object")
-
+    print(userinfoList)
+    for userinfo in userinfoList:
+        print(userinfo)
+    return userinfoList;
 
 def add_object():
     pass

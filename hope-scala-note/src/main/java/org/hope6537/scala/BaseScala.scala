@@ -71,6 +71,9 @@ object BaseScala extends App {
       println("try")
       val str: String = null
       str.charAt(0);
+    } catch {
+      case e : NullPointerException => e.printStackTrace();
+      case unknown => println("undefined");
     }
   }
 
