@@ -8,8 +8,14 @@
         <version>1.2.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
 
-    <artifactId>hope-dubbo-client</artifactId>
+    <artifactId>hope-dubbo-parent</artifactId>
 
+
+    <modules>
+        <module>hope-dubbo-client</module>
+        <module>hope-dubbo-service</module>
+    </modules>
 
 </project>
