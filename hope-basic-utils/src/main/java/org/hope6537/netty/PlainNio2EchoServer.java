@@ -1,4 +1,4 @@
-package org.hope6537.io;
+package org.hope6537.netty;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
