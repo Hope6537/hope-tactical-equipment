@@ -12,8 +12,6 @@
         <module>hope-web-utils</module>
         <module>hope-code-note</module>
         <module>hope-basic-utils</module>
-        <module>hope-dubbo-service</module>
-        <module>hope-dubbo-client</module>
         <module>hope-dubbo-parent</module>
     </modules>
     <name>hope6537-utils</name>
