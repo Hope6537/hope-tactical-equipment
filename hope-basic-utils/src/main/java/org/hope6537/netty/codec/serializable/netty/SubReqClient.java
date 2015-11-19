@@ -70,7 +70,7 @@ public class SubReqClient {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        int port = 8080;
+        int port = 7000;
         if (args != null && args.length > 0) {
             try {
                 port = Integer.valueOf(args[0]);

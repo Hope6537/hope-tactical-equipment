@@ -26,7 +26,6 @@ import java.util.concurrent.CountDownLatch;
 /**
  * @author wuyang
  * @version 1.0
- * @date 2014年2月16日
  */
 public class AsyncTimeClientHandler implements
         CompletionHandler<Void, AsyncTimeClientHandler>, Runnable {
@@ -77,9 +76,7 @@ public class AsyncTimeClientHandler implements
                             client.write(buffer, buffer, this);
                         } else {
                             ByteBuffer readBuffer = ByteBuffer.allocate(1024);
-                            client.read(
-                                    readBuffer,
-                                    readBuffer,
+                            client.read(readBuffer, readBuffer,
                                     new CompletionHandler<Integer, ByteBuffer>() {
                                         @Override
                                         public void completed(Integer result,
@@ -99,7 +96,6 @@ public class AsyncTimeClientHandler implements
                                                 e.printStackTrace();
                                             }
                                         }
-
                                         @Override
                                         public void failed(Throwable exc,
                                                            ByteBuffer attachment) {
@@ -113,7 +109,6 @@ public class AsyncTimeClientHandler implements
                                     });
                         }
                     }
-
                     @Override
                     public void failed(Throwable exc, ByteBuffer attachment) {
                         try {

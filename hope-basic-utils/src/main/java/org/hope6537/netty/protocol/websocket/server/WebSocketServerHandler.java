@@ -76,7 +76,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
         // 构造握手响应返回，本机测试
         WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(
-                "ws://localhost:8080/websocket", null, false);
+                "ws://localhost:7000/websocket", null, false);
         handshaker = wsFactory.newHandshaker(req);
         if (handshaker == null) {
             WebSocketServerHandshakerFactory

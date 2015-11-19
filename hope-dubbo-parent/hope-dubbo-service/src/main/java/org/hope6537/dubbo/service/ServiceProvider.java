@@ -7,15 +7,24 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class ServiceProvider {
 
-    public static void initTimeService(String[] args) throws Exception {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+
+    private static final ClassPathXmlApplicationContext context;
+
+    static{
+        context = new ClassPathXmlApplicationContext(
                 new String[]{"classpath*:provider/dubbo_time_service_provider.xml"});
+
         context.start();
+    }
+
+    public static TimeService initTimeService() throws Exception {
+        return (TimeService) context.getBean("timeService");
     }
 
 
     public static void main(String[] args) throws Exception {
-        initTimeService(args);
+        TimeService timeService = initTimeService();
+        System.out.println(timeService.getCurrentTime());
     }
 
 }

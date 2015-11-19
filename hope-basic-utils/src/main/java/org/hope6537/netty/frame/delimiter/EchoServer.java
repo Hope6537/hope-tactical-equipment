@@ -33,7 +33,6 @@ import io.netty.handler.logging.LoggingHandler;
 /**
  * @author wuyang
  * @version 1.0
- *
  */
 public class EchoServer {
     public void bind(int port) throws Exception {
@@ -73,7 +72,7 @@ public class EchoServer {
     }
 
     public static void main(String[] args) throws Exception {
-        int port = 8080;
+        int port = 7000;
         if (args != null && args.length > 0) {
             try {
                 port = Integer.valueOf(args[0]);

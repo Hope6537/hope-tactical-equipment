@@ -29,7 +29,7 @@ public class TimeServer {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        int port = 8080;
+        int port = 7000;
         if (args != null && args.length > 0) {
             try {
                 port = Integer.valueOf(args[0]);
