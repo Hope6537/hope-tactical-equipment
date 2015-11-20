@@ -42,9 +42,9 @@ public class SubReqClientHandler extends ChannelHandlerAdapter {
 
     private SubscribeReq subReq(int i) {
         SubscribeReq req = new SubscribeReq();
-        req.setAddress("南京市雨花台区软件大道101号华为基地");
-        req.setPhoneNumber("138xxxxxxxxx");
-        req.setProductName("Netty 最佳实践和原理分析");
+        req.setAddress("蘑菇街");
+        req.setPhoneNumber("18357020880");
+        req.setProductName("Netty分享");
         req.setSubReqID(i);
         req.setUserName("wuyang");
         return req;
