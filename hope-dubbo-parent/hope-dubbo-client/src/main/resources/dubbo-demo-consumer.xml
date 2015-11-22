@@ -20,8 +20,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <bean id="timeService" class="org.hope6537.dubbo.service.impl.JdkTimeService"/>
-
-    <dubbo:service interface="org.hope6537.dubbo.service.TimeService" ref="timeService"/>
+    <dubbo:reference id="timeService" interface="org.hope6537.dubbo.service.TimeService"/>
 
 </beans>
