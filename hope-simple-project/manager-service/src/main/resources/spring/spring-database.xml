@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.1.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+    <!-- SessionFactory使用自定义数据源 必须使用自定义的数据源 在这里dataSource定义了之后就没有必要使用Hibernate的配置文件定义了 -->
+    <context:property-placeholder location="classpath:config.properties"/>
+
+    <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc_url}"/>
+        <property name="username" value="${jdbc_username}"/>
+        <property name="password" value="${jdbc_password}"/>
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="0"/>
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="20"/>
+        <!-- 连接池最大空闲 该参数已弃用 -->
+        <!-- <property name="maxIdle" value="20" /> -->
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="0"/>
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="60000"/>
+        <property name="validationQuery" value="${validationQuery}"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="testWhileIdle" value="true"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="25200000"/>
+        <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandoned" value="true"/>
+        <!-- 1800秒，也就是30分钟 -->
+        <property name="removeAbandonedTimeout" value="1800"/>
+        <!-- 关闭abanded连接时输出错误日志 -->
+        <property name="logAbandoned" value="true"/>
+        <!-- 监控数据库 -->
+        <property name="filters" value="mergeStat"/>
+    </bean>
+
+    <bean id="druid-stat-interceptor"
+          class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+    </bean>
+
+    <bean id="druid-type-proxyCreator" class="com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator">
+        <!-- 所有ABCInterface的派生类被拦截监控  -->
+        <property name="targetBeanType" value="org.hope6537.basic.dao.BasicDao"/>
+        <property name="interceptorNames">
+            <list>
+                <value>druid-stat-interceptor</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <context:component-scan base-package="org.hope6537">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    <!-- 定义aspectj -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <aop:config>
+        <aop:pointcut id="serviceTransactionProxy"
+                      expression="execution(* org.hope6537..service.*.*(..))"/>
+        <aop:advisor pointcut-ref="serviceTransactionProxy" advice-ref="defaultTxAdvice"/>
+    </aop:config>
+    <tx:advice id="defaultTxAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+    <!-- MyBatis配置 -->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:/mybatis/configuration.xml"/>
+        <!-- 显式指定Mapper文件位置 -->
+        <property name="mapperLocations">
+            <list>
+                <value>classpath*:/org/hope6537/**/*.xml</value>
+            </list>
+        </property>
+        <property name="configurationProperties">
+            <props>
+                <!-- mapUnderscoreToCamelCase属性将表中列名的下划线映射为JavaBean属性的驼峰式命名，默认为false -->
+                <prop key="mapUnderscoreToCamelCase">true</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- 扫描basePackage下所有以@MyBatisRepository标识的接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="org.hope6537"/>
+        <property name="sqlSessionFactoryBeanName" value="sessionFactory"/>
+        <property name="annotationClass" value="org.hope6537.context.MybatisRepository"/>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="ViewMessages"/>
+        <!--开发时将cacheSeconds调整为0，则每次访问springMessage都会更新，不需要重启。-->
+        <property name="cacheSeconds" value="-1"/>
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean>
+
+    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"/>
+
+    <context:property-placeholder ignore-resource-not-found="true" location="classpath*:/config.properties"/>
+
+
+</beans>
