@@ -12,7 +12,6 @@
         <module>hope-web-utils</module>
         <module>hope-code-note</module>
         <module>hope-basic-utils</module>
-        <module>hope-dubbo-parent</module>
     </modules>
     <name>hope6537-utils</name>
     <packaging>pom</packaging>
@@ -270,9 +269,34 @@
                 <artifactId>velocity</artifactId>
                 <version>1.7</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.jmeter</groupId>
+                <artifactId>apache-jmeter</artifactId>
+                <version>2.9</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>2.7.3</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>5.0.0.Alpha1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>2.6.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jibx</groupId>
+                <artifactId>jibx-run</artifactId>
+                <version>1.1.6</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -311,6 +335,7 @@
             <artifactId>cglib</artifactId>
         </dependency>
         <!-- 代理模式 end -->
+
         <!-- apache commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -354,36 +379,14 @@
             <artifactId>commons-fileupload</artifactId>
         </dependency>
         <!-- apache commons end -->
+
         <!-- json依赖 -->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
-        <dependency>
-            <groupId>jaxen</groupId>
-            <artifactId>jaxen</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-        </dependency>
         <!-- json依赖 end -->
+
         <!-- 日志依赖 -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -399,21 +402,18 @@
             <artifactId>log4j-over-slf4j</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <!-- 代码直接调用common-logging会被桥接到slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <!-- 代码直接调用java.util.logging会被桥接到slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <!-- log4jdbc -->
         <dependency>
             <groupId>org.bgee.log4jdbc-log4j2</groupId>
@@ -426,7 +426,6 @@
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby-complete</artifactId>
-            <version>1.6.8</version>
         </dependency>
         <!-- joda time end -->
         <!-- 切面 -->
@@ -446,43 +445,12 @@
             <artifactId>okhttp</artifactId>
         </dependency>
         <!-- http end -->
-
         <!-- velocity -->
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
         </dependency>
-
-
-        <dependency>
-            <groupId>org.apache.jmeter</groupId>
-            <artifactId>apache-jmeter</artifactId>
-            <version>2.9</version>
-            <type>zip</type>
-        </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.7.3</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>5.0.0.Alpha1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>2.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jibx</groupId>
-            <artifactId>jibx-run</artifactId>
-            <version>1.1.6</version>
-        </dependency>
-
     </dependencies>
-
 
     <reporting>
         <plugins>
@@ -539,32 +507,6 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.2</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <shadeTestJar>true</shadeTestJar>
-                            <shadedClassifierName>SHADED</shadedClassifierName>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>org.hope6537.netty.aio.TimeServer</Main-Class>
-                                    </manifestEntries>
-                                </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                            </transformers>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
