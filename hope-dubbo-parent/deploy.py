@@ -3,8 +3,9 @@ from os.path import join
 
 __author__ = 'hope6537'
 
-#system('mvn clean install -Dmaven.test.skip')
+# system('mvn clean install -Dmaven.test.skip')
 list = []
+
 
 def find(name):
     for root, dirs, files in walk('./'):
@@ -15,8 +16,8 @@ def find(name):
 find('hope-dubbo-service-1.2.1-assembly.tar.gz')
 find('hope-dubbo-client-1.2.1-assembly.tar.gz')
 
-if(isdir('~/Document/dubbo')){
+if not path.isdir('~/Document/dubbo'):
+    makedirs('~/Document/dubbo')
 
-}
 for file in list:
     system('cp ' + file + ' ~/dubbo/')
