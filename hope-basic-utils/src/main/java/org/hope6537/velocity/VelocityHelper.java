@@ -6,99 +6,77 @@ import org.apache.velocity.context.Context;
 
 import java.io.*;
 import java.util.Map;
-  
-/** 
- * <pre> 
- * Velocity引擎帮助类 
- * </pre> 
- *  
+
+/**
+ * Velocity Engine Helper
  */
-public class VelocityHelper {  
+public class VelocityHelper {
     private static final VelocityHelper instance = new VelocityHelper();
-  
+
     private VelocityHelper() {
         //初始化velocity的信息 主要设置一些Velocity的默认属性  
         try {
-            Velocity.init();  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        }  
-    }  
-  
-    /** 
-     * 取得实例
-     */
-    public static VelocityHelper getInstance() {  
-        return instance;  
-    }  
-  
-    /** 
-     * 渲染：从reader到writer
-     *
-     * @param context 
-     * @param writer 
-     * @param reader 
-     * @return 
-     */  
-    public boolean evaluate(Context context, Writer writer, Reader reader) {  
-        try {  
-            return Velocity.evaluate(context, writer, "", reader);  
-        } catch (Exception e) {  
-            throw new RuntimeException("velocity evaluate error! detail [" + e.getMessage() + "]");  
-        }  
-    }  
-  
-    /** 
-     * 通过Map过滤一个输入流
-     *
-     * @param map 
-     * @param reader 
-     * @return 
-     */  
-    @SuppressWarnings("unchecked")  
-    public InputStream evaluate(Map map, Reader reader) {
-        try {  
-            // 把产生的输出流(字符流)，转换成输入流(字节流)  
-            byte[] dataBytes = this.evaluateToWriter(map, reader).toString().getBytes();
-            return new ByteArrayInputStream(dataBytes);  
-        } catch (Exception e) {  
-            throw new RuntimeException("velocity evaluate error! detial [" + e.getMessage() + "]");  
-        }  
-    }  
-  
-    /** 
-     * 通过Map过滤一个输入流
-     *
-     * @param map 
-     * @param reader 
-     * @return 
-     */  
-    @SuppressWarnings("unchecked")  
-    public Writer evaluateToWriter(Map map, Reader reader) {  
-        try {  
-            VelocityContext context = convertVelocityContext(map);  
-            CharArrayWriter writer = new CharArrayWriter();  
-            //开始评估  
-            this.evaluate(context, writer, reader);  
-  
-            return writer;  
-        } catch (Exception e) {  
-            throw new RuntimeException("velocity evaluate error! detail [" + e.getMessage() + "]");  
-        }  
-    }  
-  
-    /** 
-     * 取得Velocity系统属性
-     *
-     * @param key 
-     * @return 
-     */  
-    public Object getProperty(String key) {  
-        return Velocity.getProperty(key);
-    }  
+            Velocity.init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
-     * 把Map转换成Context
+     * get Instance
+     */
+    public static VelocityHelper getInstance() {
+        return instance;
+    }
+
+    /**
+     * Render : reader -> writer
+     *
+     * @param context
+     * @param writer
+     * @param reader
+     * @return
+     */
+    public boolean evaluate(Context context, Writer writer, Reader reader) {
+        try {
+            return Velocity.evaluate(context, writer, "", reader);
+        } catch (Exception e) {
+            throw new RuntimeException("velocity evaluate error! detail [" + e.getMessage() + "]");
+        }
+    }
+
+    /**
+     * filter to writer
+     *
+     * @param map
+     * @param reader
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public Writer evaluateToWriter(Map map, Reader reader, String targetFilePath) {
+        try {
+            VelocityContext context = convertVelocityContext(map);
+            PrintWriter writer = new PrintWriter(targetFilePath);
+            //开始评估  
+            this.evaluate(context, writer, reader);
+            return writer;
+        } catch (Exception e) {
+            throw new RuntimeException("velocity evaluate error! detail [" + e.getMessage() + "]");
+        }
+    }
+
+    /**
+     * getProperty
+     *
+     * @param key
+     * @return
+     */
+    public Object getProperty(String key) {
+        return Velocity.getProperty(key);
+    }
+
+    /**
+     * convert the Velocity Context
      */
     private VelocityContext convertVelocityContext(Map<String, Object> map) {
         VelocityContext context = new VelocityContext();
@@ -110,5 +88,5 @@ public class VelocityHelper {
         }
         return context;
     }
-  
+
 }  
