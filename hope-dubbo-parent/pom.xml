@@ -13,12 +13,14 @@
         <module>hope-dubbo-spi</module>
         <module>hope-dubbo-consumer</module>
         <module>hope-dubbo-provider</module>
+        <module>hope-dubbo-deploy</module>
     </modules>
 
     <properties>
         <zkclient_version>0.1</zkclient_version>
         <zookeeper_version>3.4.7</zookeeper_version>
         <spring.version>4.2.1.RELEASE</spring.version>
+        <dubbo.version>2.5.3</dubbo.version>
     </properties>
 
     <dependencies>
@@ -35,7 +37,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
-            <version>2.5.3</version>
+            <version>${dubbo.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.zookeeper</groupId>

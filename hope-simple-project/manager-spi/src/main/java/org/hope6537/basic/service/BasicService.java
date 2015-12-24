@@ -10,13 +10,21 @@ import java.util.List;
  */
 public interface BasicService<T, DaoType extends BasicDao<T>> {
 
-    boolean addEntry(T t);
+    int addEntry(T t);
 
-    boolean updateEntry(T t);
+    int batchAddEntryList(List<T> tList);
 
-    boolean disableEntry(T t);
+    int updateEntry(T t);
 
-    boolean deleteEntry(T t);
+    int batchUpdateEntry(List<T> tList);
+
+    int disableEntry(T t);
+
+    int batchDisableEntry(List<T> tList);
+
+    int deleteEntry(T t);
+
+    int batchDeleteEntry(List<T> tList);
 
     T getEntryById(String id);
 
