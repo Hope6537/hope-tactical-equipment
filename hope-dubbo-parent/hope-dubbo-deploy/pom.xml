@@ -35,7 +35,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptor>src/main/assembly/assembly.xml</descriptor>
-                    <finalName>${project.parent.artifactId}</finalName>
+                    <finalName>${project.artifactId}</finalName>
                     <outputDirectory>${basedir}/../target</outputDirectory>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>

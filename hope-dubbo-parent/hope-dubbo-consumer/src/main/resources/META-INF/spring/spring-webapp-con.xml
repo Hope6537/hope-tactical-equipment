@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	   http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:reference id="basicService" interface="org.hope6537.soa.spi.BasicService"/>
+
+    <dubbo:application name="hope-con"/>
+
+    <dubbo:registry protocol="zookeeper" address="114.215.92.220:2181"/>
+    
+    <bean id="controller" class="org.hope6537.controller.Controller" init-method="hasDemo">
+        <property name="basicService" ref="basicService"/>
+    </bean>
+
+
+</beans>
