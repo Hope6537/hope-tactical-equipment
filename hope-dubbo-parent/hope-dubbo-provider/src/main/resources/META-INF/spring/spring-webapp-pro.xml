@@ -22,13 +22,4 @@
     <bean id="basicService" class="org.hope6537.soa.spi.impl.BasicServiceImpl"/>
 
 
-    <bean id="monitorService" class="com.alibaba.dubbo.monitor.simple.SimpleMonitorService">
-
-        <property name="statisticsDirectory" value="${dubbo.statistics.directory}"/>
-
-        <property name="chartsDirectory" value="${dubbo.charts.directory}"/>
-
-    </bean>
-
-
 </beans>
