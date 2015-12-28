@@ -18,11 +18,14 @@ public class Controller {
     public void hasDemo() throws InterruptedException {
 
         ExecutorService executorService = Executors.newCachedThreadPool();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 150; i++) {
             executorService.submit(() -> {
                 for (int j = 0; j < Integer.MAX_VALUE; j++) {
                     try {
-                        System.out.println(Thread.currentThread().getName() + ":" + basicService.getTime());
+                        if (j % 10 == 0) {
+                            System.err.println(j + " times");
+                            System.out.println(Thread.currentThread().getName() + ":" + basicService.getTime());
+                        }
                     } catch (Exception e) {
                         System.err.println(new Date().toString() + e.getMessage());
                     }
