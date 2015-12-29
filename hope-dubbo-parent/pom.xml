@@ -15,11 +15,12 @@
         <module>hope-dubbo-provider</module>
         <module>hope-dubbo-deploy</module>
         <module>hope-dubbo-monitor</module>
+        <module>hope-dubbo-fastboot</module>
     </modules>
 
     <properties>
         <!-- Common libs -->
-        <spring.version>4.2.1.RELEASE</spring.version>
+        <spring.version>4.2.4.RELEASE</spring.version>
         <dubbo.version>2.5.3</dubbo.version>
         <javassist_version>3.15.0-GA</javassist_version>
         <netty_version>3.2.5.Final</netty_version>
@@ -90,6 +91,10 @@
                 <artifactId>dubbo</artifactId>
                 <version>${dubbo.version}</version>
                 <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>org.apache.zookeeper</groupId>
                         <artifactId>zookeeper</artifactId>
