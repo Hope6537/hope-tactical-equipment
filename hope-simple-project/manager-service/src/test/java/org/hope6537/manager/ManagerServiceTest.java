@@ -34,15 +34,15 @@ public class ManagerServiceTest extends SpringTestHelper {
     @Test
     public void testAdd() {
         ManagerDO managerDO = appendEntry();
-        boolean b = managerService.addEntry(managerDO);
-        assertTrue(b);
+        int b = managerService.addEntry(managerDO);
+        assertTrue(b==1);
     }
 
     @Test
     public void testGet() {
         ManagerDO managerDO = appendEntry();
-        boolean b = managerService.addEntry(managerDO);
-        assertTrue(b);
+        int b = managerService.addEntry(managerDO);
+        assertTrue(b==1);
         logger.debug(managerDO.toString());
         ManagerDO entryById = managerService.getEntryById(managerDO.getId());
         assertNotNull(entryById);
@@ -53,14 +53,14 @@ public class ManagerServiceTest extends SpringTestHelper {
     @Test
     public void testUpdate() {
         ManagerDO managerDO = appendEntry();
-        boolean b = managerService.addEntry(managerDO);
-        assertTrue(b);
+        int b = managerService.addEntry(managerDO);
+        assertTrue(b==1);
         assertNotNull(managerDO.commonId());
         logger.debug(managerDO.toString());
         managerDO.setAccount(managerDO.getAccount() + "_update");
 
         b = managerService.updateEntry(managerDO);
-        assertTrue(b);
+        assertTrue(b==1);
 
         ManagerDO entryById = managerService.getEntryById(managerDO.getId());
         logger.debug(entryById.toString());

@@ -1,6 +1,5 @@
 package org.hope6537.basic.service.impl;
 
-import org.hope6537.context.ApplicationConstant;
 import org.hope6537.basic.dao.BasicDao;
 import org.hope6537.basic.service.BasicService;
 import org.slf4j.Logger;
@@ -25,27 +24,27 @@ public abstract class BasicServiceImpl<T, DaoType extends BasicDao<T>> implement
     }
 
     @Override
-    public boolean addEntry(T t) {
+    public int addEntry(T t) {
         logger.debug("基本服务——添加对象");
-        return dao.addEntry(t) == ApplicationConstant.EFFECTIVE_LINE_ONE;
+        return dao.addEntry(t);
     }
 
     @Override
-    public boolean updateEntry(T t) {
+    public int updateEntry(T t) {
         logger.debug("基本服务——更新对象");
-        return dao.updateEntry(t) == ApplicationConstant.EFFECTIVE_LINE_ONE;
+        return dao.updateEntry(t);
     }
 
     @Override
-    public boolean disableEntry(T t) {
+    public int disableEntry(T t) {
         logger.debug("基本服务——无效化对象");
-        return dao.disableEntry(t) == ApplicationConstant.EFFECTIVE_LINE_ONE;
+        return dao.disableEntry(t);
     }
 
     @Override
-    public boolean deleteEntry(T t) {
+    public int deleteEntry(T t) {
         logger.debug("基本服务——删除对象");
-        return dao.deleteEntry(t) == ApplicationConstant.EFFECTIVE_LINE_ONE;
+        return dao.deleteEntry(t);
     }
 
     @Override
@@ -58,5 +57,25 @@ public abstract class BasicServiceImpl<T, DaoType extends BasicDao<T>> implement
     public List<T> getEntryListByEntry(T t) {
         logger.debug("基本服务——根据对象当前信息获取对象");
         return dao.getEntryListByEntry(t);
+    }
+
+    @Override
+    public int batchAddEntryList(List<T> ts) {
+        return 0;
+    }
+
+    @Override
+    public int batchUpdateEntry(List<T> ts) {
+        return 0;
+    }
+
+    @Override
+    public int batchDisableEntry(List<T> ts) {
+        return 0;
+    }
+
+    @Override
+    public int batchDeleteEntry(List<T> ts) {
+        return 0;
     }
 }
