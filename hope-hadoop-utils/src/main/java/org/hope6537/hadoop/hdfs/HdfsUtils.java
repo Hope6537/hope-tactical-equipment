@@ -171,9 +171,31 @@ public class HdfsUtils {
         }
     }
 
+    public OutputStream getHdfsOutPutStreamOfPseudoDistributed(String path) {
+        try {
+            Path f = new Path(path);
+            OutputStream out = f.getFileSystem(this.configuration).create(f, false);
+            return out;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public InputStream getHdfsInputStream(String path) {
         try {
             InputStream in = fileSystem.open(new Path(path));
+            return in;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public InputStream getHdfsInputStreamOfPseudoDistributed(String path) {
+        try {
+            Path f = new Path(path);
+            InputStream in = f.getFileSystem(this.configuration).open(f);
             return in;
         } catch (IOException e) {
             e.printStackTrace();
