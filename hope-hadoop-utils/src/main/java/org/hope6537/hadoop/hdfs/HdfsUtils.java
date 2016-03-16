@@ -57,7 +57,7 @@ public class HdfsUtils {
     }
 
     public HdfsUtils(String hdfsDir, Configuration configuration) {
-        this(hdfsDir, configuration, "hope6537");
+        this(hdfsDir, configuration, "root");
     }
 
     public static HdfsUtils getInstanceOfDistributed() {
