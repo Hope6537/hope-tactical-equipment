@@ -24,6 +24,7 @@ public class HdfsUtils {
     public static final String HADOOP2MASTER_DIR = "hdfs://hadoop2master:9000";
     public static final String HADOOP_NAMESERVICE_DIR = "hdfs://ns1";
     public static final String JICHUANG_MASTER_DIR = "hdfs://jichuang:9000";
+    public static final String HOPE_MASTER_DIR = "hdfs://www.hope6537.com:9000";
     public Logger logger;
     private FileSystem fileSystem;
     private String username;
@@ -69,6 +70,10 @@ public class HdfsUtils {
 
     public static HdfsUtils getInstanceOfJiChuang(Configuration configuration) {
         return new HdfsUtils(JICHUANG_MASTER_DIR, configuration);
+    }
+
+    public static HdfsUtils getInstanceOfHope(Configuration configuration) {
+        return new HdfsUtils(HOPE_MASTER_DIR, configuration);
     }
 
 
