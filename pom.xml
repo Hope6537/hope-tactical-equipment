@@ -534,6 +534,16 @@
 
             <!-- 19 search engine -->
 
+            <!-- 20 date joda time -->
+
+            <dependency>
+                <groupId>org.jruby</groupId>
+                <artifactId>jruby-complete</artifactId>
+                <version>1.6.8</version>
+            </dependency>
+
+            <!-- 20 date joda time end -->
+
 
             <!-- User Configuration Dependencies End -->
         </dependencies>

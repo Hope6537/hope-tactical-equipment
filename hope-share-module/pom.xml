@@ -13,6 +13,7 @@
     <modules>
         <module>hope-service</module>
         <module>hope-tools</module>
+        <module>hope-custom-datastruct</module>
     </modules>
     <artifactId>hope-share-module</artifactId>
 
