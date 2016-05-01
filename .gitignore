@@ -16,5 +16,4 @@
 target/
 logs/
 *.pyc
-*.jar
 hope-python-note/www/static/bower_plugins

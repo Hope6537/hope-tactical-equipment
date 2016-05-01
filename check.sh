@@ -1,1 +1,0 @@
-cd ${HOPE_HOME}
