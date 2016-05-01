@@ -1,7 +1,5 @@
 package org.hope6537.datastruct.graph;
 
-import org.hope6537.context.ApplicationConstant;
-
 /**
  * Created by Hope6537 on 2015/3/28.
  */
@@ -38,7 +36,7 @@ public class Topological {
     }
 
     public boolean isDAG() {
-        return ApplicationConstant.notNull(order);
+        return order != null;
     }
 
 }
