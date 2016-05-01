@@ -6,7 +6,7 @@
 
     <groupId>org.hope6537</groupId>
     <artifactId>hope6537-utils</artifactId>
-    <version>1.2.1</version>
+    <version>2.0</version>
     <modules>
         <module>hope-hadoop-utils</module>
         <module>hope-web-utils</module>
@@ -381,6 +381,10 @@
                 <exclusion>
                     <groupId>xerces</groupId>
                     <artifactId>xercesImpl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-collections</artifactId>
+                    <groupId>commons-collections</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
