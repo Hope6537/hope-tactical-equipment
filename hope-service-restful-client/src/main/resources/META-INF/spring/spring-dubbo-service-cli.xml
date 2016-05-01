@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	   http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+	   http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="org.hope6537.controller.*"/>
+
+    <!--<import resource="classpath*:/redis/spring-redis.xml"/>-->
+
+    <bean id="elasticSearchUtil" class="org.hope6537.rest.utils.ElasticSearchUtil" init-method="init"
+          destroy-method="destroy">
+        <property name="host" value="127.0.0.1"/>
+        <property name="port" value="9300"/>
+    </bean>
+
+    <!-- 默认消费者域名 -->
+    <dubbo:protocol host="www.hope6537.com"/>
+
+    <dubbo:reference id="categoryService" interface="org.hope6537.service.CategoryService"/>
+    <dubbo:reference id="classifiedService" interface="org.hope6537.service.ClassifiedService"/>
+    <dubbo:reference id="comicService" interface="org.hope6537.service.ComicService"/>
+    <dubbo:reference id="favoriteService" interface="org.hope6537.service.FavoriteService"/>
+    <dubbo:reference id="jumpService" interface="org.hope6537.service.JumpService"/>
+    <dubbo:reference id="specialService" interface="org.hope6537.service.SpecialService"/>
+    <dubbo:reference id="userInfoService" interface="org.hope6537.service.UserInfoService"/>
+
+    <dubbo:reference id="jumpBusiness" interface="org.hope6537.bo.JumpBusiness"/>
+    <dubbo:reference id="categoryBusiness" interface="org.hope6537.bo.CategoryBusiness"/>
+    <dubbo:reference id="comicBusiness" interface="org.hope6537.bo.ComicBusiness"/>
+    <dubbo:reference id="favoriteBusiness" interface="org.hope6537.bo.FavoriteBusiness"/>
+
+    <dubbo:application name="comic-rest-api"/>
+
+    <dubbo:registry protocol="zookeeper" address="www.hope6537.com:2181"/>
+
+</beans>

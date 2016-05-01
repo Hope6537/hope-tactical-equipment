@@ -1,0 +1,47 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <!--配置Sentinel-->
+    <bean id="sentinelConfig" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
+        <constructor-arg name="master" value="mymaster"/>
+        <constructor-arg name="sentinelHostAndPorts">
+            <set>
+                <value>www.hope6537.com:7000</value>
+                <value>www.hope6537.com:7001</value>
+                <value>ding.hope6537.com:7000</value>
+                <value>ding.hope6537.com:7001</value>
+                <value>db.hope6537.com:7000</value>
+                <value>db.hope6537.com:7001</value>
+            </set>
+        </constructor-arg>
+    </bean>
+
+    <!-- 配置redis池，依次为最大实例数，最大空闲实例数，(创建实例时)最大等待时间，(创建实例时)是否验证 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="500"/>
+        <property name="maxIdle" value="50"/>
+        <property name="minIdle" value="5"/>
+        <property name="maxWaitMillis" value="2000"/>
+        <property name="testOnBorrow" value="true"/>
+    </bean>
+
+    <!-- redis连接配置，依次为数据库，是否使用池，(usePool=true时)redis的池配置 -->
+    <bean id="jedisFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="database" value="0"></property>
+        <property name="usePool" value="true"/>
+        <constructor-arg name="sentinelConfig" ref="sentinelConfig"/>
+        <constructor-arg name="poolConfig" ref="jedisPoolConfig"/>
+    </bean>
+
+    <!-- redis模板配置 -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisFactory"/>
+        <property name="defaultSerializer">
+            <bean
+                    class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+    </bean>
+
+</beans>

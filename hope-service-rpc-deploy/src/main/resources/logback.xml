@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 监控输出 -->
+    <appender name="MONITOR-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>./logs/hope-service-rpc-monitor.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./log/hope-service-rpc-monitor-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <append>true</append>
+        <prudent>false</prudent>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 监控输出 -->
+    <appender name="DEBUG-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>./logs/hope-service-rpc-debug.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./log/hope-service-rpc-debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <append>true</append>
+        <prudent>false</prudent>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 正常输出 -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>./logs/hope-service-rpc-info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./log/hope-service-rpc-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <append>true</append>
+        <prudent>false</prudent>
+        <encoder>
+            <pattern>d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- <appender name="BaseLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+         <file>hope-service-rpc-app-log</file>
+         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+             <fileNamePattern>./log/hope-service-rpc-app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+             <maxHistory>30</maxHistory>
+             <timeBasedFileNamingAndTriggeringPolicy
+                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                 &lt;!&ndash; or whenever the file size reaches 100MB &ndash;&gt;
+                 <maxFileSize>100MB</maxFileSize>
+             </timeBasedFileNamingAndTriggeringPolicy>
+         </rollingPolicy>
+         <encoder>&lt;!&ndash; 必须指定，否则不会往文件输出内容 &ndash;&gt;
+             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+         </encoder>
+         <append>true</append>
+         <prudent>false</prudent>
+     </appender>
+
+     <logger name="slf4j" level="INFO" additivity="false">
+         <appender-ref ref="STDOUT"/>
+     </logger>
+
+     <logger name="slf4j2" level="ERROR"/>
+
+     <logger name="BaseLog" level="INFO" additivity="false">
+         <appender-ref ref="BaseLog"/>
+     </logger>
+     &lt;!&ndash;如需显示sql，将下面调整成debug即可&ndash;&gt;
+     <logger name="org.hope6537" level="debug"/>
+     <logger name="org.hope6537" level="debug"/>-->
+
+
+    <!-- additivity=false 确保debug数据只去debug日志 -->
+    <!-- 使用方法 Logger monitor = LoggerFactory.getLogger("monitor");-->
+    <logger name="monitor" level="INFO" additivity="false">
+        <appender-ref ref="MONITOR-FILE"/>
+    </logger>
+
+    <logger name="org.hope6537" level="debug" additivity="false">
+        <appender-ref ref="DEBUG-FILE"/>
+    </logger>
+    <logger name="org.hope6537" level="debug" additivity="false">
+        <appender-ref ref="DEBUG-FILE"/>
+    </logger>
+
+    <logger name="normal" level="INFO" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <root>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

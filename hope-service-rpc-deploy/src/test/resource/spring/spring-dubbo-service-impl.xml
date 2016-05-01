@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	   http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <import resource="classpath*:/spring/spring-service-impl-context.xml"/>
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="hope-service-rpc-deploy"/>
+
+    <!-- 使用multicast广播注册中心暴露服务地址 -->
+    <dubbo:registry address="zookeeper://www.hope6537.com:2181"/>
+
+    <!-- 用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="20880"/>
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service ref="testComicService" interface="org.hope6537.service.TestComicService"/>
+    <dubbo:service ref="testUserService" interface="org.hope6537.service.TestUserService"/>
+    <dubbo:service ref="categoryService" interface="org.hope6537.service.CategoryService"/>
+    <dubbo:service ref="classifiedService" interface="org.hope6537.service.ClassifiedService"/>
+    <dubbo:service ref="comicService" interface="org.hope6537.service.ComicService"/>
+    <dubbo:service ref="favoriteService" interface="org.hope6537.service.FavoriteService"/>
+    <dubbo:service ref="jumpService" interface="org.hope6537.service.JumpService"/>
+    <dubbo:service ref="specialService" interface="org.hope6537.service.SpecialService"/>
+    <dubbo:service ref="userInfoService" interface="org.hope6537.service.UserInfoService"/>
+
+
+    <dubbo:service ref="jumpBusiness" interface="org.hope6537.bo.JumpBusiness"/>
+    <dubbo:service ref="favoriteBusiness" interface="org.hope6537.bo.FavoriteBusiness"/>
+    <dubbo:service ref="categoryBusiness" interface="org.hope6537.bo.CategoryBusiness"/>
+    <dubbo:service ref="comicBusiness" interface="org.hope6537.bo.ComicBusiness"/>
+
+</beans>

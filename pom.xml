@@ -10,7 +10,10 @@
     <version>2.0</version>
     <modules>
         <module>hope-dependency</module>
-        <module>hope-share</module>
+        <module>hope-share-module</module>
+        <module>hope-relation-database</module>
+        <module>hope-service-default-implement</module>
+        <module>hope-service-rpc-deploy</module>
     </modules>
 
     <properties>
@@ -18,7 +21,7 @@
         <mysql_version>5.1.36</mysql_version>
         <guava_version>18.0</guava_version>
         <dozer_version>5.4.0</dozer_version>
-        <spring.version>4.2.4.RELEASE</spring.version>
+        <spring.version>4.2.5.RELEASE</spring.version>
         <aspectj_version>1.7.3</aspectj_version>
         <dubbo.version>2.5.3</dubbo.version>
         <javassist_version>3.20.0-GA</javassist_version>
@@ -38,7 +41,7 @@
         <hessian_version>4.0.7</hessian_version>
         <servlet_version>3.1.0</servlet_version>
         <jetty_version>6.1.26</jetty_version>
-        <validation_version>1.0.0.GA</validation_version>
+        <validation_version>1.1.0.Final</validation_version>
         <hibernate_validator_version>4.2.0.Final</hibernate_validator_version>
         <jcache_version>0.4</jcache_version>
         <sca_version>2.0-M5.1</sca_version>
@@ -52,7 +55,8 @@
         <curator_version>1.1.16</curator_version>
 
         <!-- Redis客户端 -->
-        <jedis_version>2.1.0</jedis_version>
+        <jedis_version>2.8.1</jedis_version>
+        <spring_redis_version>1.7.1.RELEASE</spring_redis_version>
 
         <!-- 日志依赖 -->
         <slf4j_version>1.6.2</slf4j_version>
@@ -157,6 +161,10 @@
                         <groupId>org.slf4j</groupId>
                         <artifactId>*</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <artifactId>log4j-over-slf4j</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
@@ -179,6 +187,17 @@
 
             <!-- 5 test driven framework -->
 
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit_version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>hamcrest-core</artifactId>
+                        <groupId>org.hamcrest</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <!-- mock -->
             <!-- unused -->
             <dependency>
@@ -355,6 +374,11 @@
                 <artifactId>spring-orm</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-redis</artifactId>
+                <version>${spring_redis_version}</version>
+            </dependency>
 
 
             <!-- 10 spring end-->
@@ -489,6 +513,26 @@
             </dependency>
 
             <!-- 18 data display end -->
+
+            <!-- 19 search engine -->
+
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>2.3.2</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>zookeeper</artifactId>
+                        <groupId>org.apache.zookeeper</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>netty</artifactId>
+                        <groupId>io.netty</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- 19 search engine -->
 
 
             <!-- User Configuration Dependencies End -->
