@@ -5,7 +5,6 @@ import ImageDraw
 import ImageFilter
 import ImageFont
 
-
 __author__ = 'Hope6537'
 
 import Image
@@ -24,6 +23,7 @@ im = Image.open('D:/miku.jpg')
 im2 = im.filter(ImageFilter.BLUR)
 im2.save('D:/miku3.jpg', 'jpeg')
 
+
 # 同时提供了一些绘图方法
 
 # 随机字母:
@@ -39,6 +39,7 @@ def rndColor():
 # 随机颜色2:
 def rndColor2():
     return (random.randint(32, 127), random.randint(32, 127), random.randint(32, 127))
+
 
 # 480 x 80:
 width = 80 * 5

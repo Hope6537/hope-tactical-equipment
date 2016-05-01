@@ -8,6 +8,7 @@ class Userinfo(object):
         self._password = password
 
     __slots__ = ('_username', '_password', "_score")
+
     # 用tuple定义允许绑定的属性名称
     # 使用__slots__要注意，__slots__定义的属性仅对当前类起作用，对继承的子类是不起作用的
 
@@ -136,9 +137,11 @@ s = Student('Michael')
 s()
 print(callable(s))
 
+
 # 要创建一个class对象，type()函数依次传入3个参数：
 def fn(self, name='world'):  # 先定义函数
     print('Hello, %s.' % name)
+
 
 # class的名称；
 # 继承的父类集合，注意Python支持多重继承，如果只有一个父类，别忘了tuple的单元素写法；
@@ -147,6 +150,7 @@ def fn(self, name='world'):  # 先定义函数
 Hello = type('Hello', (object,), dict(hello=fn))  # 创建Hello class
 h = Hello()
 h.hello()
+
 
 # 如果我们想创建出类呢？那就必须根据metaclass创建出类，所以：先定义metaclass，然后创建类。
 # 先定义metaclass，就可以创建类，最后创建实例。
@@ -172,6 +176,7 @@ class MyList(list):
 L = MyList()
 L.add(1)
 print(L)
+
 
 # 直接在MyList定义中写上add()方法不是更简单吗？正常情况下，确实应该直接写，通过metaclass修改纯属变态
 
@@ -267,6 +272,7 @@ class User(Model):
     name = StringField('username')
     email = StringField('email')
     password = StringField('password')
+
 
 # 创建一个实例：
 u = User(id=12345, name='Michael', email='test@orm.org', password='my-pwd')

@@ -5,7 +5,6 @@ __author__ = 'Hope6537'
 # -*- coding: utf-8 -*-
 
 from distutils.core import setup
-import py2exe
 
 includes = ["encodings", "encodings.*"]
 data_files = ['CameraDll.dll']
@@ -19,11 +18,11 @@ options = {"py2exe":
            }
 
 setup(
-    version="1.0",
-    description="Screenshot Tool",
-    name="Screenshot  Tool",
-    options=options,
-    zipfile=None,
-    data_files=data_files,
-    console=[{"script": "Screenshot.py", "icon_resources": [(1, "Screenshot.ico")]}]
+        version="1.0",
+        description="Screenshot Tool",
+        name="Screenshot  Tool",
+        options=options,
+        zipfile=None,
+        data_files=data_files,
+        console=[{"script": "Screenshot.py", "icon_resources": [(1, "Screenshot.ico")]}]
 )

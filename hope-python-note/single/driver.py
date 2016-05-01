@@ -13,7 +13,6 @@ class Userinfo(object):
     def __str__(self):
         print(self._username + " -> " + self._password + " -> " + self._name)
 
-
     _repr = __str__
 
     @property
@@ -70,13 +69,13 @@ def show_add_object(userinfoList):
     return userinfoList
 
 
-
 def show_search_object(userinfoList):
     print("search object")
     print(userinfoList)
     for userinfo in userinfoList:
         print(userinfo)
     return userinfoList;
+
 
 def add_object():
     pass

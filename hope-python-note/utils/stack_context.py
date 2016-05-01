@@ -48,7 +48,6 @@ Example usage:
 
 import contextlib
 import functools
-import logging
 import threading
 
 try:
@@ -57,10 +56,14 @@ try:
 except:
     from itertools import zip
 
+
 class _State(threading.local):
     def __init__(self):
         self.contexts = ()
+
+
 _state = _State()
+
 
 @contextlib.contextmanager
 def StackContext(context_factory):
@@ -81,6 +84,7 @@ def StackContext(context_factory):
     finally:
         _state.contexts = old_contexts
 
+
 @contextlib.contextmanager
 def NullContext():
     '''Resets the StackContext.
@@ -96,6 +100,7 @@ def NullContext():
     finally:
         _state.contexts = old_contexts
 
+
 def wrap(fn):
     '''Returns a callable object that will resore the current StackContext
     when executed.
@@ -105,9 +110,10 @@ def wrap(fn):
     asynchronously in the same thread).
     '''
     if fn is None:
-      return None
+        return None
+
     # functools.wraps doesn't appear to work on functools.partial objects
-    #@functools.wraps(fn)
+    # @functools.wraps(fn)
     def wrapped(callback, contexts, *args, **kwargs):
         # If we're moving down the stack, _state.contexts is a prefix
         # of contexts.  For each element of contexts not in that prefix,
@@ -127,6 +133,7 @@ def wrap(fn):
                 callback(*args, **kwargs)
         else:
             callback(*args, **kwargs)
+
     if getattr(fn, 'stack_context_wrapped', False):
         return fn
     contexts = _state.contexts

@@ -14,6 +14,7 @@ except ImportError:
 
 ctx = threading.local()
 
+
 # Dict object:
 
 class Dict(dict):
@@ -122,6 +123,7 @@ class UTC(datetime.tzinfo):
         return 'UTC tzinfo object (%s)' % self._tzname
 
     __repr__ = __str__
+
 
 # all known response statues:
 
@@ -575,7 +577,7 @@ class StaticFileRoute(object):
 
     def match(self, url):
         if url.startswith('/static/'):
-            return (url[1:], )
+            return (url[1:],)
         return None
 
     def __call__(self, *args):
@@ -1068,7 +1070,7 @@ class Response(object):
         if expires is not None:
             if isinstance(expires, (float, int, long)):
                 L.append('Expires=%s' % datetime.datetime.fromtimestamp(expires, UTC_0).strftime(
-                    '%a, %d-%b-%Y %H:%M:%S GMT'))
+                        '%a, %d-%b-%Y %H:%M:%S GMT'))
             if isinstance(expires, (datetime.date, datetime.datetime)):
                 L.append('Expires=%s' % expires.astimezone(UTC_0).strftime('%a, %d-%b-%Y %H:%M:%S GMT'))
         elif isinstance(max_age, (int, long)):

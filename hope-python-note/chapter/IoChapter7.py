@@ -30,6 +30,8 @@ print(contains("encodings.xml", "encoding"))
 
 # 列出当前目录下的所有目录
 print([x for x in os.listdir('.') if os.path.isdir(x)])
+
+
 # 这些合并、拆分路径的函数并不要求目录和文件要真实存在，它们只对字符串进行操作。
 
 # Python没有提供关于复制的函数，所以需要如下

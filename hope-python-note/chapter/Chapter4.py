@@ -3,7 +3,6 @@ from types import MethodType
 
 from org.hope6537.oop.Userinfo import Userinfo, Student
 
-
 __author__ = 'Hope6537'
 
 userinfo = Userinfo("hope6537", "password")
@@ -17,6 +16,7 @@ print(userinfo.getUsername())
 
 def set_score(self, score):
     self._score = score
+
 
 # 给class绑定方法
 Userinfo.set_score = MethodType(set_score, None, Userinfo)
@@ -34,6 +34,3 @@ s.score = 22
 # s.score = 222  # throw exception
 print(s.score)
 print(userinfo)
-
-
-

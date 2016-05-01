@@ -6,6 +6,7 @@ from flask import request
 
 app = Flask(__name__)
 
+
 # 通过注解定义请求方式和URL
 # 最后返回字符串
 

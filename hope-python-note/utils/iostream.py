@@ -26,10 +26,8 @@ import ssl
 from marrow.io import ioloop
 from marrow.util.compat import exception
 
-
 log = __import__('logging').getLogger(__name__)
 __all__ = ['IOStream', 'SSLIOStream']
-
 
 
 class IOStream(object):
@@ -69,6 +67,7 @@ class IOStream(object):
         ioloop.IOLoop.instance().start()
 
     """
+
     def __init__(self, socket, io_loop=None, max_buffer_size=104857600, read_chunk_size=4096):
         self.socket = socket
         self.address = socket.getpeername()
@@ -85,37 +84,37 @@ class IOStream(object):
         self._close_callback = None
         self._state = self.io_loop.ERROR
         self.io_loop.add_handler(self.socket.fileno(), self._handle_events, self._state)
-    
+
     def read_until(self, delimiter, callback):
         """Call callback when we read the given delimiter."""
         assert not self._read_callback, "Already reading."
-        
+
         loc = self._read_buffer.find(delimiter)
-        
+
         if loc != -1:
             self._run_callback(callback, self._consume(loc + len(delimiter)))
             return
-        
+
         # TODO: Allow multiple registered callbacks.
         self._check_closed()
         self._read_delimiter = delimiter
         self._read_callback = callback
         self._add_io_state(self.io_loop.READ)
-    
+
     def read_bytes(self, num_bytes, callback):
         """Call callback when we read the given number of bytes."""
         assert not self._read_callback, "Already reading"
-        
+
         if len(self._read_buffer) >= num_bytes:
             self._run_callback(callback, self._consume(num_bytes))
             return
-        
+
         # TODO: Allow multiple registered callbacks.
         self._check_closed()
         self._read_bytes = num_bytes
         self._read_callback = callback
         self._add_io_state(self.io_loop.READ)
-    
+
     def write(self, data, callback=None):
         """Write the given data to this stream.
         
@@ -127,82 +126,82 @@ class IOStream(object):
         self._check_closed()
         self._write_buffer += data
         self._add_io_state(self.io_loop.WRITE)
-        
+
         # TODO: Allow multiple registered callbacks.
         self._write_callback = callback
-    
+
     def set_close_callback(self, callback):
         """Call the given callback when the stream is closed."""
         # TODO: Allow multiple registered callbacks.
         self._close_callback = callback
-    
+
     # TODO: set_exception_callback
-    
+
     def close(self):
         """Close this stream."""
         if self.socket is not None:
             self.io_loop.remove_handler(self.socket.fileno())
-            
+
             try:
                 self.socket.shutdown(socket.SHUT_RDWR)
                 self.socket.close()
-            
+
             except:
                 pass
-            
+
             self.socket = None
-            
+
             # TODO: Allow multiple registered callbacks.
             if self._close_callback:
                 self._run_callback(self._close_callback)
-    
+
     def reading(self):
         """Returns true if we are currently reading from the stream."""
         return self._read_callback is not None
-    
+
     def writing(self):
         """Returns true if we are currently writing to the stream."""
-        return len(self._write_buffer) # w/o > 0 = 27% speed increase if False, 5% if True
-    
+        return len(self._write_buffer)  # w/o > 0 = 27% speed increase if False, 5% if True
+
     def closed(self):
         return self.socket is None
-    
+
     def _handle_events(self, fd, events):
         if not self.socket:
             log.warning("Got events for closed stream %d", fd)
             return
-        
+
         if events & self.io_loop.READ:
             self._handle_read()
-            
+
             if not self.socket:
                 return
-        
+
         if events & self.io_loop.WRITE:
             self._handle_write()
-            
+
             if not self.socket:
                 return
-        
+
         if events & self.io_loop.ERROR:
             self.close()
             return
-        
+
         state = self.io_loop.ERROR
         if self._read_delimiter or self._read_bytes:
             state |= self.io_loop.READ
-        
+
         if self._write_buffer:
             state |= self.io_loop.WRITE
-        
+
         if state != self._state:
             self._state = state
             self.io_loop.update_handler(self.socket.fileno(), self._state)
-    
+
     def _run_callback(self, callback, *args, **kwargs):
         try:
             callback(*args, **kwargs)
-        
+
         except:
             # Close the socket on an uncaught exception from a user callback
             # (It would eventually get closed when the socket object is
@@ -212,33 +211,33 @@ class IOStream(object):
             # Re-raise the exception so that IOLoop.handle_callback_exception
             # can see it and log the error
             raise
-    
+
     def _handle_read(self):
         try:
             chunk = self.socket.recv(self.read_chunk_size)
-        
+
         except socket.error:
             e = exception().exception
             if e.args[0] in (errno.EWOULDBLOCK, errno.EAGAIN):
                 return
-            
+
             else:
                 log.warning("Read error on %d: %s", self.socket.fileno(), e)
                 self.close()
                 return
-        
+
         if not chunk:
             self.close()
             return
-        
+
         self._read_buffer += chunk
         rblen = len(self._read_buffer)
-        
+
         if rblen >= self.max_buffer_size:
             log.error("Connection %d reached maximum read buffer size.", self.socket.fileno())
             self.close()
             return
-        
+
         if self._read_bytes:
             if rblen >= self._read_bytes:
                 num_bytes = self._read_bytes
@@ -246,49 +245,49 @@ class IOStream(object):
                 self._read_callback = None
                 self._read_bytes = None
                 self._run_callback(callback, self._consume(num_bytes))
-        
+
         elif self._read_delimiter:
             loc = self._read_buffer.find(self._read_delimiter)
-            
+
             if loc != -1:
                 callback = self._read_callback
                 delimiter_len = len(self._read_delimiter)
                 self._read_callback = None
                 self._read_delimiter = None
                 self._run_callback(callback, self._consume(loc + delimiter_len))
-    
+
     def _handle_write(self):
         while self._write_buffer:
             try:
                 num_bytes = self.socket.send(self._write_buffer[:128 * 1024])
                 self._write_buffer = self._write_buffer[num_bytes:]
-            
+
             except socket.error:
                 e = exception().exception
-                
+
                 if e.args[0] in (errno.EWOULDBLOCK, errno.EAGAIN):
                     break
-                
+
                 else:
                     log.warning("Write error on %d: %s", self.socket.fileno(), e)
                     self.close()
                     return
-        
+
         # TODO: Allow multiple callbacks.
         if not self._write_buffer and self._write_callback:
             callback = self._write_callback
             self._write_callback = None
             self._run_callback(callback)
-    
+
     def _consume(self, loc):
         result = self._read_buffer[:loc]
         self._read_buffer = self._read_buffer[loc:]
         return result
-    
+
     def _check_closed(self):
         if not self.socket:
             raise IOError("Stream is closed.")
-    
+
     def _add_io_state(self, state):
         if not self._state & state:
             self._state = self._state | state
@@ -297,11 +296,12 @@ class IOStream(object):
 
 class SSLIOStream(IOStream):
     """Sets up an SSL connection in a non-blocking manner"""
+
     def __init__(self, *args, **kwargs):
         super(SSLIOStream, self).__init__(*args, **kwargs)
         self._ssl_accepting = True
         self._do_ssl_handshake()
-    
+
     def _do_ssl_handshake(self):
         # Based on code from test_ssl.py in the python stdlib
         try:
@@ -325,13 +325,13 @@ class SSLIOStream(IOStream):
                 return self.close()
         else:
             self._ssl_accepting = False
-    
+
     def _handle_read(self):
         if self._ssl_accepting:
             self._do_ssl_handshake()
             return
         super(SSLIOStream, self)._handle_read()
-    
+
     def _handle_write(self):
         if self._ssl_accepting:
             self._do_ssl_handshake()

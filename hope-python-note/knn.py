@@ -5,10 +5,8 @@ __author__ = 'hope6537'
 KNN聚类算法
 '''
 
-from numpy import *
 import matplotlib.pyplot as plt
-import operator
-import matplotlib
+from numpy import *
 
 
 def createDataSet():
@@ -20,25 +18,27 @@ def createDataSet():
 def file2matrix(filename):
     fr = open(filename)
     numberOfLines = len(fr.readlines())
-    returnMat = zeros((numberOfLines,3))
+    returnMat = zeros((numberOfLines, 3))
     classLabelVector = []
     fr = open(filename)
     index = 0
     for line in fr.readlines():
         line = line.strip()
         listFromLine = line.split('\t')
-        returnMat[index,:] = listFromLine[0:3]
+        returnMat[index, :] = listFromLine[0:3]
         classLabelVector.append(int(listFromLine[-1]))
         index += 1
-    return returnMat,classLabelVector
+    return returnMat, classLabelVector
+
 
 group, labels = createDataSet()
-datingDataMat, datingLabels=file2matrix('/Users/hope6537/Downloads/machinelearninginaction/Ch02/datingTestSet2.txt')
+datingDataMat, datingLabels = file2matrix('/Users/hope6537/Downloads/machinelearninginaction/Ch02/datingTestSet2.txt')
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.scatter(datingDataMat[:,1], datingDataMat[:,2])
-ax.scatter(datingDataMat[:,1], datingDataMat[:,2],15.0*array(datingLabels), 15.0*array(datingLabels))
+ax.scatter(datingDataMat[:, 1], datingDataMat[:, 2])
+ax.scatter(datingDataMat[:, 1], datingDataMat[:, 2], 15.0 * array(datingLabels), 15.0 * array(datingLabels))
+
 
 def autoNorm(dataSet):
     minVals = dataSet.min(0)
@@ -47,7 +47,8 @@ def autoNorm(dataSet):
     normDataSet = zeros(shape(dataSet))
     m = dataSet.shape[0]
     normDataSet = dataSet - tile(minVals, (m, 1))
-    normDataSet = normDataSet/tile(ranges, (m, 1))
+    normDataSet = normDataSet / tile(ranges, (m, 1))
     return normDataSet, ranges, minVals
+
 
 plt.show()

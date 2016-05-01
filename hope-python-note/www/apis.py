@@ -2,9 +2,9 @@
 
 __author__ = 'Hope6537'
 
+import functools
 import json
 import logging
-import functools
 
 from transwarp.web import ctx
 

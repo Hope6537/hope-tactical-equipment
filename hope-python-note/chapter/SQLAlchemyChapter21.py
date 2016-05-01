@@ -1,6 +1,7 @@
 # encoding:UTF-8
 __author__ = 'Hope6537'
 
+
 # 使用ORM工具 使用Chapter20中定义的数据库表
 class User(object):
     def __init__(self, id, name):
@@ -16,11 +17,12 @@ class User(object):
 
 # 第一步，导入SQLAlchemy，并初始化DBSession：
 from sqlalchemy import Column, String, create_engine, ForeignKey
-from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, relationship
 
 # 创建对象的基类:
 Base = declarative_base()
+
 
 # 定义User对象:
 class User(Base):
@@ -30,6 +32,7 @@ class User(Base):
     # 表的结构:
     id = Column(String(20), primary_key=True)
     name = Column(String(20))
+
 
 # 初始化数据库连接:
 # create_engine()用来初始化数据库连接。SQLAlchemy用一个字符串表示连接信息

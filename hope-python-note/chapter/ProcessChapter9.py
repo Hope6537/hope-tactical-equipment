@@ -1,10 +1,12 @@
 # encoding:UTF-8
-from multiprocessing import Process, Pool, Queue
 import os
 import random
 import time
+from multiprocessing import Process, Pool, Queue
 
 __author__ = 'Hope6537'
+
+
 # multiprocessing模块提供了一个Process类来代表一个进程对象，下面的例子演示了启动一个子进程并等待其结束：
 def run_proc(name):
     print 'Run child process %s (%s)...' % (name, os.getpid())
@@ -20,6 +22,7 @@ if __name__ == '__main__':
     p.join()
     print 'Process end.'
 
+
 # 如果需要启动大量的子进程，那么进程池走你
 def long_time_task(name):
     print 'Run task %s (%s)...' % (name, os.getpid())
@@ -27,6 +30,7 @@ def long_time_task(name):
     time.sleep(random.random() * 3)
     end = time.time()
     print 'Task %s runs %0.2f seconds.' % (name, (end - start))
+
 
 # 请注意输出的结果，task 0，1，2，3是立刻执行的，而task 4要等待前面某个task完成后才执行，
 # 这是因为Pool的默认大小在我的电脑上是4，因此，最多同时执行4个进程。这是Pool有意设计的限制，并不是操作系统的限制
@@ -43,6 +47,7 @@ if __name__ == '__main__':
     # 等待完成
     p.join()
     print 'All subprocesses done.'
+
 
 # Process之间肯定是需要通信的，操作系统提供了很多机制来实现进程间的通信。
 # Python的multiprocessing模块包装了底层的机制，提供了Queue队列、Pipes管道等多种方式来交换数据。
@@ -61,6 +66,7 @@ def read(q):
         value = q.get(True)
         print 'Get %s from queue.' % value
 
+
 # multiprocessing需要“模拟”出fork的效果，父进程所有Python对象都必须通过pickle序列化再传到子进程去
 # 所有，如果multiprocessing在Windows下调用失败了，要先考虑是不是pickle失败了。
 if __name__ == '__main__':
@@ -76,5 +82,3 @@ if __name__ == '__main__':
     pw.join()
     # pr进程里是死循环，无法等待其结束，只能强行终止:
     pr.terminate()
-
-

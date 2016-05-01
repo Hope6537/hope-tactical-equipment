@@ -1,6 +1,6 @@
 # encoding:UTF-8
-from Tkinter import *
 import tkMessageBox
+from Tkinter import *
 
 __author__ = 'Hope6537'
 

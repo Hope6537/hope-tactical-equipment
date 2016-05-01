@@ -6,6 +6,7 @@ import time
 from transwarp.db import next_id
 from transwarp.orm import Model, StringField, BooleanField, FloatField, TextField
 
+
 # 定义数据模型
 class User(Model):
     __table__ = 'users'

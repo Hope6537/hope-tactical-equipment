@@ -3,12 +3,11 @@
 
 import ctypes
 import ctypes.wintypes
+import errno
 import os
 import socket
-import errno
 
 from marrow.util.compat import exception
-
 
 # See: http://msdn.microsoft.com/en-us/library/ms738573(VS.85).aspx
 ioctlsocket = ctypes.windll.ws2_32.ioctlsocket
@@ -21,7 +20,6 @@ SetHandleInformation.argtypes = (ctypes.wintypes.HANDLE, ctypes.wintypes.DWORD, 
 SetHandleInformation.restype = ctypes.wintypes.BOOL
 
 HANDLE_FLAG_INHERIT = 0x00000001
-
 
 F_GETFD = 1
 F_SETFD = 2
@@ -46,21 +44,22 @@ def fcntl(fd, op, arg=0):
                 raise ctypes.GetLastError()
         else:
             raise ValueError("Unsupported arg")
-    #elif op == F_SETFL:
-        ## Check that the flag is NONBLOCK and translate
-        #if arg == os.O_NONBLOCK:
+            # elif op == F_SETFL:
+            ## Check that the flag is NONBLOCK and translate
+            # if arg == os.O_NONBLOCK:
             ##pass
-            #result = ioctlsocket(fd, FIONBIO, 1)
-            #if result != 0:
-                #raise ctypes.GetLastError()
-        #else:
-            #raise ValueError("Unsupported arg")
+            # result = ioctlsocket(fd, FIONBIO, 1)
+            # if result != 0:
+            # raise ctypes.GetLastError()
+            # else:
+            # raise ValueError("Unsupported arg")
     else:
         raise ValueError("Unsupported op")
 
 
 class Pipe(object):
     """Create an OS independent asynchronous pipe"""
+
     def __init__(self):
         # Based on Zope async.py: http://svn.zope.org/zc.ngi/trunk/src/zc/ngi/async.py
 
@@ -88,7 +87,7 @@ class Pipe(object):
             a.listen(1)
             try:
                 self.writer.connect(connect_address)
-                break    # success
+                break  # success
             except socket.error:
                 detail = exception().exception
                 if detail[0] != errno.WSAEADDRINUSE:

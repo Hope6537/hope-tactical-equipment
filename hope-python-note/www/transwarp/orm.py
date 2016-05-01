@@ -5,8 +5,8 @@ __author__ = 'Hope6537'
 ORM映射模块
 '''
 
-import time
 import logging
+import time
 
 import db
 
@@ -310,7 +310,7 @@ class Model(dict):
     def delete(self):
         self.pre_delete and self.pre_delete()
         pk = self.__primary_key__.name
-        args = (getattr(self, pk), )
+        args = (getattr(self, pk),)
         db.update('delete from `%s` where `%s`=?' % (self.__table__, pk), *args)
         return self
 

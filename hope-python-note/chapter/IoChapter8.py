@@ -29,6 +29,7 @@ with open("dump.txt", "rb") as f:
     d = json.load(f)
     print(d.get("age"))
 
+
 # json进阶 类转化
 
 class Student(object):

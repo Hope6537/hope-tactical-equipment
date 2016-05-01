@@ -1,7 +1,7 @@
 # encoding:UTF-8
 import cookielib
-import urllib2
 import time
+import urllib2
 
 __author__ = 'Hope6537'
 

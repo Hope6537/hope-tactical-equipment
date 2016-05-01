@@ -1,8 +1,9 @@
 # encoding:UTF-8
 __author__ = 'Hope6537'
 
-import time
 import threading
+import time
+
 
 # 新线程执行的代码:
 def loop():
@@ -26,6 +27,8 @@ print 'thread %s ended.' % threading.current_thread().name
 balance = 0
 
 lock = threading.Lock()
+
+
 # 如果我们要确保balance计算正确，就要给change_it()上一把锁，当某个线程开始执行change_it()时
 def change_it(n):
     # 先存后取，结果应该为0:

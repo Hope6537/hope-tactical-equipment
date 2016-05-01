@@ -6,7 +6,6 @@ import urllib2
 
 from pyquery import PyQuery as pq
 
-
 __author__ = 'Hope6537'
 
 wget = "wget "

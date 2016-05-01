@@ -3,7 +3,7 @@ from os.path import join
 
 __author__ = 'hope6537'
 
-#system('mvn clean install -Dmaven.test.skip')
+# system('mvn clean install -Dmaven.test.skip')
 list = []
 
 

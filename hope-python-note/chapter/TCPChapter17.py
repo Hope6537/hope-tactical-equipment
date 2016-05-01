@@ -4,6 +4,7 @@ __author__ = 'Hope6537'
 
 # 导入socket库:
 import socket
+
 # 创建一个socket:
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # 建立连接:
@@ -27,4 +28,3 @@ print header
 # 把接收的数据写入文件:
 with open('sina.html', 'wb') as f:
     f.write(html)
-

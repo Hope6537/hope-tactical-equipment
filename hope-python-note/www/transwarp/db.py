@@ -6,11 +6,12 @@ __author__ = 'Hope6537'
 数据库调用模块
 '''
 
+import functools
+import logging
+import threading
 import time
 import uuid
-import functools
-import threading
-import logging
+
 
 # 生成一个字典对象
 class Dict(dict):
@@ -136,7 +137,6 @@ class _DbCtx(threading.local):
         self.connection = _LasyConnection()
         self.transactions = 0
 
-
     def cleanup(self):
         '''
         清空上下文的连接对象
@@ -144,16 +144,15 @@ class _DbCtx(threading.local):
         self.connection.cleanup()
         self.connection = None
 
-
     def cursor(self):
         '''
         返回连接产生的实例
          '''
         return self.connection.cursor()
 
+
 # 本地线程的数据库连接对象
 _db_ctx = _DbCtx()
-
 
 # 全局数据库引擎
 engine = None
@@ -198,6 +197,7 @@ class _ConnectionCtx(object):
         with connection():
             pass
     '''
+
     #
     def __enter__(self):
         global _db_ctx
