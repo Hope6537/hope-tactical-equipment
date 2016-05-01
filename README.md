@@ -1,4 +1,4 @@
-###hope-battleBack
+###hope-battlepack
 
 RPC Service Provider/Client and RESTFul API Template
 
