@@ -1,4 +1,0 @@
-Java
-Python
-Hello
-World
