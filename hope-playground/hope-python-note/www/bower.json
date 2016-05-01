@@ -1,9 +1,0 @@
-{
-  "name": "awesome",
-  "version": "0.2",
-  "private": true,
-  "dependencies": {
-    "hope6537-plugin": "0.4"
-  }
-}
-
