@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.hope6537</groupId>
-    <artifactId>hope-battlepack</artifactId>
+    <artifactId>hope-tactical-equipment</artifactId>
     <packaging>pom</packaging>
     <version>2.0</version>
     <modules>

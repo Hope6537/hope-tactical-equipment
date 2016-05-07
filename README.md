@@ -1,4 +1,4 @@
-###hope-battlepack
+###hope-tactical-equipment
 
 RPC Service Provider/Client and RESTFul API Template
 
