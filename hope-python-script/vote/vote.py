@@ -75,7 +75,7 @@ def driver(limit=100):
         proxy_list = json.loads(f.read(-1))
     print(now() + "正在进行第" + str(vote_count + 1) + "访问,共需要访问" + str(limit + 1) + "次")
     while vote_count < limit:
-        result = vote('http://1024sq.xyz/ad.asp', proxy_list[proxy_index])
+        result = vote('http://test.com/112.asp', proxy_list[proxy_index])
         if result:
             print(now() + "第" + str(vote_count + 1) + "次成功登陆")
             vote_count += 1
