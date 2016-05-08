@@ -33,6 +33,7 @@ public class NameCheckProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (!roundEnv.processingOver()) {
+            //遍历Round的Element进行处理
             for (Element element : roundEnv.getRootElements()) {
                 nameChecker.checkNames(element);
             }

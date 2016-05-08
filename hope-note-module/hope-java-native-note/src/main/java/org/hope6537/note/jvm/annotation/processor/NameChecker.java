@@ -27,6 +27,10 @@ public class NameChecker {
     }
 
 
+    /**
+     * 通过集成ElementScanner8的类,以访问者模式完成对语法树的遍历,分别执行visitType,visitExecutable,visitVariable来访问类,方法和字段.
+     * 这三个visit方法分别对各自的命名规则而进行检查
+     */
     private class NameCheckScanner extends ElementScanner8<Void, Void> {
 
         /**
@@ -88,6 +92,7 @@ public class NameChecker {
 
         /**
          * 大写命名检查
+         * 好麻烦啊~直接弄个随机数糊弄一下好了
          */
         private void checkAllCaps(VariableElement e) {
             String name = e.getSimpleName().toString();
