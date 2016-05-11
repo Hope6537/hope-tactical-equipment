@@ -1,11 +1,22 @@
+# encoding:UTF-8
 import socket
 import sys
 import threading
 
+"""
+进行TCP代理,来分析协议和当前明文信息
+"""
 
-# this is a pretty hex dumping function directly taken from
+
+# 这个16进制导出函数来自
 # http://code.activestate.com/recipes/142812-hex-dumper/
 def hexdump(src, length=16):
+    """
+    用于输出数据包的十六进制值和可打印的ASCII码字符,这个东西用于了解未知协议,并且能找到使用明文协议的认证信息
+    :param src:
+    :param length:
+    :return:
+    """
     result = []
     digits = 4 if isinstance(src, unicode) else 2
 
@@ -21,13 +32,11 @@ def hexdump(src, length=16):
 def receive_from(connection):
     buffer = ""
 
-    # We set a 2 second time out depending on your
-    # target this may need to be adjusted
+    # 设置超时时间
     connection.settimeout(2)
 
     try:
-        # keep reading into the buffer until there's no more data
-        # or we time out
+        # 持续从缓存中读取数据
         while True:
             data = connection.recv(4096)
 
@@ -43,71 +52,84 @@ def receive_from(connection):
     return buffer
 
 
-# modify any requests destined for the remote host
+# 对目标是远程主机的请求进行修改
 def request_handler(buffer):
-    # perform packet modifications
+    # 执行包修改
     return buffer
 
 
-# modify any responses destined for the local host
+# 对目标是本地主机的响应进行修改
 def response_handler(buffer):
-    # perform packet modifications
+    # 执行包修改
     return buffer
 
 
 def proxy_handler(client_socket, remote_host, remote_port, receive_first):
-    # connect to the remote host
+    """
+    包含代理的主体逻辑
+    :param client_socket:
+    :param remote_host:
+    :param remote_port:
+    :param receive_first:
+    :return:
+    """
+    # 连接远程主机
     remote_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     remote_socket.connect((remote_host, remote_port))
 
-    # receive data from the remote end if necessary
+    # 在确保启动主循环之前,不向远程主机发送数据,并从远程主机中接受数据
     if receive_first:
 
+        # receive_from使用socket实现对数据的接收
         remote_buffer = receive_from(remote_socket)
+        # 然后转储数据包的负载,查看里面是否有感兴趣的内容
         hexdump(remote_buffer)
 
-        # send it to our response handler
+        """
+        在这里我们可以修改数据包的内容,例如进行模糊测试任务
+        """
+        # 发送给我们的响应流程处理
         remote_buffer = response_handler(remote_buffer)
 
-        # if we have data to send to our local client send it
+        # 将接收到的缓存发送本地客户端
+        # 如果我们有数据传递给本地客户端,发送它
         if len(remote_buffer):
             print "[<==] Sending %d bytes to localhost." % len(remote_buffer)
             client_socket.send(remote_buffer)
 
-    # now let's loop and reading from local, send to remote, send to local
-    # rinse wash repeat
+    # 现在我们从本地循环读取数据,发送给远程主机和本地主机
     while True:
 
-        # read from local host
+        # 从本地读取数据
         local_buffer = receive_from(client_socket)
 
         if len(local_buffer):
             print "[==>] Received %d bytes from localhost." % len(local_buffer)
             hexdump(local_buffer)
 
-            # send it to our request handler
+            # 发送给我们的本地请求,让其进行处理
             local_buffer = request_handler(local_buffer)
 
-            # send off the data to the remote host
+            # 向远程主机发送数据
             remote_socket.send(local_buffer)
             print "[==>] Sent to remote."
 
-        # receive back the response
+        # 接收响应的数据
         remote_buffer = receive_from(remote_socket)
 
         if len(remote_buffer):
             print "[<==] Received %d bytes from remote." % len(remote_buffer)
             hexdump(remote_buffer)
 
-            # send to our response handler
+            # 发送给响应处理函数
             remote_buffer = response_handler(remote_buffer)
 
-            # send the response to the local socket
+            # 将响应发送给本地socket
             client_socket.send(remote_buffer)
 
             print "[<==] Sent to localhost."
 
-        # if no more data on either side close the connections
+        # 如果两边都没有数据,关闭连接
         if not len(local_buffer) or not len(remote_buffer):
             client_socket.close()
             remote_socket.close()
@@ -133,32 +155,32 @@ def server_loop(local_host, local_port, remote_host, remote_port, receive_first)
     while True:
         client_socket, addr = server.accept()
 
-        # print out the local connection information
+        # 打印出本地连接信息
         print "[==>] Received incoming connection from %s:%d" % (addr[0], addr[1])
 
-        # start a thread to talk to the remote host
+        # 开启一个线程与远程主机通信
         proxy_thread = threading.Thread(target=proxy_handler,
                                         args=(client_socket, remote_host, remote_port, receive_first))
         proxy_thread.start()
 
 
 def main():
-    # no fancy command line parsing here
+    # 简单命令行解析
     if len(sys.argv[1:]) != 5:
         print "Usage: ./proxy.py [localhost] [localport] [remotehost] [remoteport] [receive_first]"
-        print "Example: ./proxy.py 127.0.0.1 9000 10.12.132.1 9000 True"
+        print("例如 sudo python ./proxy.py localhost 81  mirrors.hope6537.com 80 True")
+        print("然后 curl http://localhost:81")
         sys.exit(0)
 
-    # setup local listening parameters
+    # 设置本地监听参数
     local_host = sys.argv[1]
     local_port = int(sys.argv[2])
 
-    # setup remote target
+    # 设置远程目标
     remote_host = sys.argv[3]
     remote_port = int(sys.argv[4])
 
-    # this tells our proxy to connect and receive data
-    # before sending to the remote host
+    # 告诉代理在发送给远程知己之前的连接和接收数据
     receive_first = sys.argv[5]
 
     if "True" in receive_first:
@@ -166,7 +188,7 @@ def main():
     else:
         receive_first = False
 
-    # now spin up our listening socket
+    # 设置完毕!监听Host
     server_loop(local_host, local_port, remote_host, remote_port, receive_first)
 
 
