@@ -1,8 +1,7 @@
-package org.hope6537.rest.utils;
+package org.hope6537.security;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
-import org.hope6537.security.AESLocker;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -10,7 +9,7 @@ import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.hope6537.rest.utils.TimeUtils.getUnixTime;
+import static org.hope6537.security.TimeUtils.getUnixTime;
 
 /**
  * Created by hope6537 on 16/3/16.

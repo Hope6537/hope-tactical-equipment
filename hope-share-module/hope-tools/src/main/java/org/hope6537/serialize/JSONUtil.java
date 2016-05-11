@@ -1,4 +1,4 @@
-package org.hope6537.rest.utils;
+package org.hope6537.serialize;
 
 
 import com.alibaba.fastjson.JSON;

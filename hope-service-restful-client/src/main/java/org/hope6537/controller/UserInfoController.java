@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.hope6537.dto.UserInfoDto;
 import org.hope6537.entity.Response;
 import org.hope6537.entity.ResultSupport;
-import org.hope6537.rest.utils.TokenCheckUtil;
+import org.hope6537.security.TokenCheckUtil;
 import org.hope6537.security.AESLocker;
 import org.hope6537.service.UserInfoService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

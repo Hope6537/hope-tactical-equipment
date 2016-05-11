@@ -7,7 +7,7 @@ import org.hope6537.bo.ComicBusiness;
 import org.hope6537.dto.ComicDto;
 import org.hope6537.entity.Response;
 import org.hope6537.entity.ResultSupport;
-import org.hope6537.rest.utils.PageMapUtil;
+import org.hope6537.page.PageMapUtil;
 import org.hope6537.security.AESLocker;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;

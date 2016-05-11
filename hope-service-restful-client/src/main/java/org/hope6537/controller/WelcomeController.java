@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.hope6537.dto.ComicDto;
 import org.hope6537.entity.Response;
 import org.hope6537.entity.ResultSupport;
-import org.hope6537.rest.utils.PageMapUtil;
+import org.hope6537.page.PageMapUtil;
 import org.hope6537.security.AESLocker;
 import org.hope6537.service.ComicService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
