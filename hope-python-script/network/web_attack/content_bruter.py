@@ -65,8 +65,7 @@ def dir_bruter(extensions=None):
 
             try:
                 # 添加User-Agent测试远程服务器
-                headers = {}
-                headers["User-Agent"] = user_agent
+                headers = {"User-Agent": user_agent}
                 r = urllib2.Request(url, headers=headers)
 
                 response = urllib2.urlopen(r)
