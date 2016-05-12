@@ -1,5 +1,5 @@
 # encoding:utf-8
-from comic_hentai import read_comic_to_db
+import read_comic_to_db
 
 print("输入total.json的路径")
 data = raw_input()

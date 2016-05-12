@@ -1,5 +1,5 @@
 # encoding:UTF-8
-from comic_hentai import search_and_download_comic
+import search_and_download_comic
 
 # ComicHentai[2016-03-23 17:33:14]/total.json
 print("输入total.json的路径")
