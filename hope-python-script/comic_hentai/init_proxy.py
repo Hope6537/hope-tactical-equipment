@@ -25,6 +25,20 @@ def parse_few_proxy(url, add_pattern=9):
     return list
 
 
+def parse_fpl_proxy(url='http://free-proxy-list.net/', add_pattern=8):
+    response = requests.get(url, timeout=5)
+    html = pq(response.text)("tbody")
+    table = html.children()
+    i = 0
+    list = []
+    while i < len(table):
+        ip = str(table[i][0].text)
+        port = str(table[i][1].text)
+        list.append("http://" + str(ip) + ":" + str(port))
+        i += 1
+    return list
+
+
 def get_port(img):
     ports = '''
     {
@@ -117,6 +131,10 @@ def get_lot_foreign_proxy():
 
 def get_lot_foreign_secret_proxy():
     return parse_lots_proxy('http://www.xicidaili.com/wn/')
+
+
+def get_parse_fpl_proxy():
+    return parse_fpl_proxy()
 
 
 def gen_china_proxy():
@@ -232,6 +250,10 @@ def gen_foreign_proxy():
         proxy_list += get_lot_foreign_secret_proxy()
     except BaseException as e:
         print(now() + "获取国外大量高匿代理失败 : [{0:s}]".format(e))
+    try:
+        proxy_list += get_parse_fpl_proxy()
+    except BaseException as e:
+        print(now() + "获取国外FPL代理失败 : [{0:s}]".format(e))
 
     if len(proxy_list) == 0:
         proxy_list += old_proxy_list
@@ -263,6 +285,66 @@ def gen_foreign_proxy():
         return False
 
 
+def gen_fpl_proxy():
+    """
+    获取国外代理
+    """
+    has_old_proxy = False
+    old_proxy_list = []
+    template_proxy_list = []
+    proxy_list = []
+    fetch_success = False
+    has_add_old = False
+
+    try:
+        with open('fpl_proxy.json', 'r') as f:
+            old_proxy_list = json.loads(f.read(-1))
+            has_old_proxy = True
+    except IOError:
+        print("没有以前的代理数据,使用本地模板")
+        try:
+            with open('template_fpl_proxy.json', 'r') as f:
+                old_proxy_list = json.loads(f.read(-1))
+                template_proxy_list = old_proxy_list
+                has_old_proxy = True
+        except IOError:
+            print(now() + "国外代理数据无效")
+
+    try:
+        proxy_list += get_parse_fpl_proxy()
+    except BaseException as e:
+        print(now() + "获取国外FPL代理失败 : [{0:s}]".format(e))
+
+    if len(proxy_list) == 0:
+        proxy_list += old_proxy_list
+        has_add_old = True
+        print(now() + "国外代理获取失败,寻找老数据")
+        if len(proxy_list) == 0:
+            print(now() + "寻找老数据失败,获取模板数据")
+            if len(template_proxy_list) == 0 or not has_old_proxy:
+                print(now() + "读取模板数据失败,国外代理获取结束")
+                return
+            proxy_list = old_proxy_list
+    else:
+        fetch_success = True
+
+    if not has_add_old:
+        proxy_list += old_proxy_list
+
+    if fetch_success:
+        with open('fpl_proxy.json', 'w') as f:
+            print(now() + "代理读取成功,写入文件" + os.getcwd() + "/fpl_proxy.json")
+            f.write(json.dumps(proxy_list))
+        # 如果没有模板数据,在第一次的时候生成
+        if not has_old_proxy:
+            with open('template_fpl_proxy.json', 'w') as f:
+                print(now() + "正在生成后备模板数据")
+                f.write(json.dumps(proxy_list))
+        return True
+    else:
+        return False
+
+
 def create_proxy(mode='foreign'):
     """
     懒得梳理代码了
@@ -284,6 +366,13 @@ def create_proxy(mode='foreign'):
         if cn_result:
             print(now() + "国内代理获取成功,正在合并")
         with open('cn_proxy.json', 'r') as f:
+            proxy_list += json.loads(f.read(-1))
+    elif mode == 'fpl':
+        print(now() + "读取FPL代理中")
+        cn_result = gen_fpl_proxy()
+        if cn_result:
+            print(now() + "FPL代理获取成功,正在合并")
+        with open('fpl_proxy.json', 'r') as f:
             proxy_list += json.loads(f.read(-1))
     else:
         print(now() + "读取国内代理中")
