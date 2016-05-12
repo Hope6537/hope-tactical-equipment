@@ -23,9 +23,7 @@ mkdir ~/.ssh;
 touch ~/.ssh/authorized_keys;
 echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjK6q0Z482Doylnbg30PsqywoOBEQk0lvP3oeWVqwHV6l1Hu1cwqSs+tQK3cbGhVu8VzZESF2LoGkvz18mLVuVtPO+727VAQm9qm8BDdaUtqv+wd4yg8rMNzhCoKVtbuarPma9lJldbVaw7c/Hgwq5EPDw1qYq4F7XK+2LTEvkOQ1HghAIU9trnC1PdF8vCZlDt+s/MXsTEMB4qTjsxrdNYRD07brM43CkVI3I+AigJolCfhb8s0xaVTxJxbexyVWz/k6lNyKQiwx7t6nJbq3BeYSQG5RyIkgSAMajHcWZV4dW60VDleyYRWeNNTYfPn1iuTnbemN1+unf0Zk6jmqB root@ding
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+sgIEPorYX/T/AYWIx2CYiLyVaavglfa/sR+J6wHdkDyMbijzbHAlBcSFzlmFLqgaJH5sS5RRW1i/O1x2T/7BG4QPMiK0O/Hxp5hoi8AIUXDKYR9f5sHz1hQuSNPi4wZEhtfXetIVk7q2gYBMPlM8SGY1MHxxl+e/MoUJmoTrkfVaPHO2WZtKe/dn7mwbKH8hWr6EYl6pk4KyRc3sLJyLJ6keZDHTJEr4GlvPycPbc6hac25DoHHRaY+fkr/BBP3OsJ7eepqJhbc3cvEGtIOcWDyrIq+YMjIOMDu77LG0HtLJiH2fKc4zKX9Ov10/mUktil+67wXE6ah6axj7YGtr root@hope6537
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCeFmQltWejBwRTGQS61JGEqYd58Toe8PqbV+0FFKh80nPdcGVi03Kg0uNtMCJ3BbyvwWE+PEVpFSNFwrO3sQIyxkK+9nwnsD8ynAgLP+72BPRdJphVc1yx2AwjUrno/pdFNW/SUMkrm2KPqfJCA3i+hVJvlNbNnkyHj32XJSxGjC1OTypty+jqnjlfa9hLjXhtnw9pdoYWosDjbzW18REeXRQjpQCfsdAaX8A0fAJY3kfqSjU2fTfVx0SzDHIJK+VBTfKA2g6TbsVOs1u5Fd1aBlOZJ4ZSAqpVCXLBDnxv+cQRzy5AXXU9yIyZ4n4tTrL66Vhnq48tjRIR19YoQEAx hope6537@wuyang.local
 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtqvfe64oVhqWSGDJE+/TD7JXK/KfuTppYMxX+y31hKvLCjm/YeSzbgINJB3EuLKWYltgcbwwjl/yVRl6GsO8oKdnbNnLoucV/dRUcjR65vx6pcch3RsZT9U68mXDuz1t0uM32sfT1wmpQZaE6ASPS81ddcha23OXlejjEQeaQK55zVO+TvfI/FsVnYPC9MuBZ6+IJOWW3hRw/vip/NwtqnGbBZXlAOp46RZlGNen+HqhrAVQzmV0h5vd3woKPvFxfl3H/jTbBqDUnk49OKjelvvKZcYnI4ARa6rQ1x1otJVEXKvc1ylh0qzk9dsc9E5JkzJWQyM0rBOQm2ZyzymJLw== Hope6537@HOPE6537-RABOOK
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDkZ+fxixnnGrKgOLWcJyfQfs+1hLQ91waVwCOp4nkwXIhs/d04Q/WTV4zEB2T1Bbu9J4/0n0PpZ7p0pKFT0qZlhQ7k6+Kq5O0sQY2JY721GW0Ax58F2w9ssApRyPgZqDei26jfme4HZcwBzrAKjvJoXEK5+H/4teJx8q7z2iwEl7inC8oPY5RdmOlvkK9n7zi0vFRRg0uYocvzW75YJt9Y4y70uKL+ga2AIk3D/HqkjhPaJ1rvb3BB3TTf7wCEcjtmZ6PRSpcvxiflf09zkeu/BxHJsgwAZw4WE0CX1U/Kd0Bhhc77r0YEkFS67EX2Sy4UYrf7LSOvfh0RbA/xgRPD hope6537@hope-Firebat
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/8/9gJ7ShCLeKxznpgauz4vuw+XZgRqSbT260LRaw5FI1KIdSOm3+mx7rtR2qsWwjh/ykQt1TVzOSA7mRNVJnVAfWymbWcWmqPMicVnPc1gKWj0RhfLfU3tlHHr5FNGIXtJmgDcf7JfVmK7qKp7jZXNjj7gXMfqni2LVF11i4EV4zoZK59wxvCa1PAM+CY/GH09KlKMNDWcIrKNBSNB8Qlq6Eo+8Xtdj8JDnx+4UfuB+rJywEnNywLeUjgXZ8FltbM/YRU0rsht1LTWSclj1o5kzkShC/nkGue9u0GeRrIGUFthes47SfwfC61f2s6o74gGZk+C318RvG0akYAQkT hope6537@hope6537deMacBook-Pro.local
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI/gkmdCU06b8bZd60FSJ+9HkdCEOw9DBbfV0NEbbZwsMLwwd+amve52/D/91Q0FBsagcBaDP1ZsO3ACqhHEt2LF8BRCiv8CJp0QBlYnOX2Vpa5jeHnEm5gUO7U71agH0WuVXiAjJa/YWfK0jqatdSnwHYudNuOj/BbNsNYkr4/r2dayB3GZdxbhZ4k0wdiwOkRBr48ulhxRj2FjJumcRWws77c582BSBq80Eo7JZ/XwAXcGfQS3fdBaWJqV2tHSOHi2rXsjbOSUPh/3KL+5UZu2j0mGA3L3sgNMxPGppLiTNyA1U2etoQCLsjO/jm7IyueY4CUa3xJL7Q9hNvVg9Z dintama@dintamadeMacBook-Pro.local
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc3SY0fLX1qiYFO5aiQvUP7F4j/GQpYCsT36aezqB+lXK6tO4tcOmu73YMHmKoLuhYM+HDrOIdeOn+Fww3OTFAQEmc9uQY6qQFtJKvAvetCAsY7TUtBo277JypYCji2TziwodEGNLn19yP5SRTuE7uJ7PcrAKCj7vmxTKgOrm+SxTZrtLfUcv4WR+S1iiIn5pprhQE82x54k87qhqw40DIJ6Yqj2KNWGzQ/O9TvSyvbUyLT7AgfL6oH8I/Uj0ZpTX58TdhO/tnEM44zJ8yx+1l5d6BuvO4WKhXYIezilfNkCK+4eFrcD4YDQlkZhM1EeODHvpydwPhPJOrHj+qy1Ap root@iZ281hgovp7Z
@@ -242,8 +240,8 @@ echo "alias redis.start='redis-server /etc/sentinel.conf --sentinel'"
 echo '[+] 导出环境变量中'
 echo 'export REDIS_HOME=/usr/local/share/redis-3.0.4' >> ~/custom_profile
 echo 'export PATH=$PATH:$REDIS_HOME/bin' >> ~/custom_profile
-echo "alias redis.start='usr/local/share/redis-3.0.4/src/redis-server /etc/sentinel.conf --sentinel'" >> ~/custom_alias
-echo "alias nginx.start='usr/local/share/redis-3.0.4/src/redis-server stop'" >> ~/custom_alias
+echo "alias redis.start='/usr/local/share/redis-3.0.4/src/redis-server /etc/sentinel.conf --sentinel'" >> ~/custom_alias
+echo "alias redis.stop='/usr/local/share/redis-3.0.4/src/redis-server stop'" >> ~/custom_alias
 
 #MYSQL读写分离
 
@@ -284,6 +282,12 @@ cd /usr/local/share/elasticsearch-rtf/config
 rm /usr/local/share/elasticsearch-rtf/config/elasticsearch.yml
 wget https://raw.githubusercontent.com/Hope6537/hope-tactical-equipment/master/hope-note-module/hope-config-note/elasticsearch.conf
 sudo chown -R elatsicsearch:admin /usr/local/share/elasticsearch-rtf/
+
+echo '[+] 导出环境变量中'
+echo 'export ES_HOME=/usr/local/share/redis-3.0.4' >> ~/custom_profile
+echo 'export PATH=$PATH:$ES_HOME/bin' >> ~/custom_profile
+echo "alias es.start='/usr/local/share/elasticsearch-rtf/bin/elasticsearch'" >> ~/custom_alias
+echo "alias es.stop='/usr/local/share/elasticsearch-rtf/bin/elasticsearch stop'" >> ~/custom_alias
 
 #测试
 
