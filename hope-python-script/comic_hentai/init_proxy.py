@@ -345,7 +345,7 @@ def gen_fpl_proxy():
         return False
 
 
-def create_proxy(mode='foreign'):
+def create_proxy(mode='fpl'):
     """
     懒得梳理代码了
     :param mode:
