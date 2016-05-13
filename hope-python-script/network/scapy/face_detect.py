@@ -13,7 +13,7 @@ def face_detect(path, file_name):
     :return:
     """
     img = cv2.imread(path)
-    cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
+    cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt2.xml")
     rects = cascade.detectMultiScale(img, 1.3, 4, cv2.cv.CV_HAAR_SCALE_IMAGE, (20, 20))
 
     if len(rects) == 0:
@@ -34,5 +34,5 @@ def driver(path, file_name):
     return face_detect(path, file_name)
 
 
-for i in range(1, 8):
+for i in range(1, 12):
     print(driver('./pictures/' + str(i) + '.jpg', str(i) + '.jpg'))
