@@ -89,3 +89,5 @@ def driver():
     kl.HookKeyboard()
     # 然后启动消息循环
     pythoncom.PumpMessages()
+
+driver()
