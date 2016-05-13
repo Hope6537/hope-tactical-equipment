@@ -61,9 +61,9 @@ pip install mysql-python
 pip install PyQuery
 pip install requests
 pip install scapy
-pip install numpy
-pip install scipy
-pip install opencv
+#pip install numpy
+#pip install scipy
+#pip install opencv
 
 #获取基础工具包
 #配置Java

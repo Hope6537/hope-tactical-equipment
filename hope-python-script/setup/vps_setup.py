@@ -18,8 +18,11 @@ def now():
 print (status, output)
 (status, output) = commands.getstatusoutput("cat /etc/hosts")
 print (status, output)
-(status, output) = commands.getstatusoutput("git clone https://github.com/Hope6537/custom_python_trojan_example.git")
-print (status, output)
+
+
+# git 在此模式下可用
+# (status, output) = commands.getstatusoutput("git clone https://github.com/Hope6537/custom_python_trojan_example.git")
+# print (status, output)
 
 
 def download_resources(url, target_name=None):
