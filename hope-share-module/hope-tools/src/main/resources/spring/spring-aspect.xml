@@ -7,17 +7,10 @@
     http://www.springframework.org/schema/aop
     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
-    <!-- mapping -->
-    <bean id="mapper" class="org.dozer.spring.DozerBeanMapperFactoryBean">
-        <property name="mappingFiles">
-            <list>
-                <value>/convert/do-to-dto-mapping.xml</value>
-            </list>
-        </property>
-    </bean>
-    <bean id="mappingConverter" class="org.hope6537.convert.impl.DozerMappingConverter">
-        <property name="mapper" ref="mapper"/>
-    </bean>
+    <!-- aspect -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <bean name="methodMonitor" class="org.hope6537.monitor.MethodMonitor"/>
+    <bean name="requestDefaultHandler" class="org.hope6537.rest.utils.RequestDefaultHandler"/>
 
 
 </beans>

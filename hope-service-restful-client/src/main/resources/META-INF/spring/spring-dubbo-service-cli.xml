@@ -9,7 +9,8 @@
        http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="org.hope6537.controller.*"/>
-
+    <import resource="classpath*:/spring/spring-aspect.xml"/>
+    
     <!--<import resource="classpath*:/redis/spring-redis.xml"/>-->
 
     <bean id="elasticSearchUtil" class="org.hope6537.rest.utils.ElasticSearchUtil" init-method="init"

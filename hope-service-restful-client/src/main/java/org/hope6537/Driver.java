@@ -1,6 +1,8 @@
 package org.hope6537;
 
-import org.hope6537.controller.*;
+import org.hope6537.controller.ComicController;
+import org.hope6537.controller.LockerController;
+import org.hope6537.controller.WelcomeController;
 import org.springframework.boot.SpringApplication;
 
 /**
@@ -9,9 +11,7 @@ import org.springframework.boot.SpringApplication;
 public class Driver {
 
     public static void main(String[] args) {
-        Class[] classes = new Class[]{LockerController.class, ComicController.class, WelcomeController.class,
-                ClassifiedController.class, MineController.class, SearchController.class, SpecialController.class,
-                UserInfoController.class};
+        Class[] classes = new Class[]{LockerController.class, ComicController.class, WelcomeController.class};
         SpringApplication.run(classes, args);
     }
 

@@ -1,20 +1,22 @@
 package org.hope6537.monitor;
 
 import com.alibaba.fastjson.JSON;
-import org.hope6537.annotation.WatchedMethod;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.hope6537.annotation.WatchedMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * 方法监控切面
@@ -26,6 +28,7 @@ public class MethodMonitor {
     private final Logger logger = LoggerFactory.getLogger("monitor");
 
     private static final String businessExecution = "execution(* org.hope6537.business.*.*(..))";
+    private static final String controllerExecution = "execution(* org.hope6537.controller.*.*(..))";
     private static final String serviceExecution = "execution(* org.hope6537.service.*.*(..))";
 
     public MethodMonitor() {
@@ -51,11 +54,16 @@ public class MethodMonitor {
     private void basicBusiness() {
     }
 
+    @Pointcut(MethodMonitor.controllerExecution)
+    private void basicController() {
+
+    }
+
     @Pointcut("@annotation(org.hope6537.annotation.WatchedMethod)")
     private void annotationMethods() {
     }
 
-    @Around("basicServices() || basicBusiness() || annotationMethods()")
+    @Around("basicServices() || basicBusiness() || basicController() || annotationMethods()")
     public Object intercept(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long localStart = System.nanoTime();
         String executionId = UUID.randomUUID().toString();
@@ -63,7 +71,14 @@ public class MethodMonitor {
         Object[] methodArgs;
         if (signature instanceof MethodSignature) {
             methodArgs = proceedingJoinPoint.getArgs();
-            String parameterString = JSON.toJSONString(methodArgs);
+            AtomicReferenceArray<Object> methodArgArray = new AtomicReferenceArray<>(new Object[methodArgs.length]);
+            for (int i = 0; i < methodArgs.length; i++) {
+                methodArgArray.set(i, methodArgs[i]);
+                if (methodArgs[i] instanceof HttpServletRequest) {
+                    methodArgArray.set(i, "HttpServletRequest");
+                }
+            }
+            String parameterString = JSON.toJSONString(methodArgArray);
             this.logMethodDetail(executionId, signature.toLongString());
             this.logMethodInParameters(executionId, parameterString);
         } else {
@@ -86,7 +101,7 @@ public class MethodMonitor {
         } finally {
             long localEnd = System.nanoTime();
             this.logMethodMonitorDumpMillisecond(executionId, nanoTimeToMillisecond(localEnd - localStart - (nanoEndTime - nanoTimeStart)));
-            logger.debug("完成监控");
+            logger.debug("[完成监控]");
         }
     }
 

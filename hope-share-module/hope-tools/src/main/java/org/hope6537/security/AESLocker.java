@@ -1,5 +1,7 @@
 package org.hope6537.security;
 
+import org.hope6537.exception.DecryptException;
+import org.hope6537.exception.EncryptException;
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
@@ -16,7 +18,7 @@ public class AESLocker {
             return encrypt(data, "xComicHentai6537", HEX);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new EncryptException("加密失败");
         }
     }
 
@@ -25,7 +27,7 @@ public class AESLocker {
             return encrypt(data, "xComicHentai6537", BASE64);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new EncryptException("加密失败");
         }
     }
 
@@ -34,7 +36,7 @@ public class AESLocker {
             return decrypt(data, "xComicHentai6537", HEX);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new DecryptException("解密失败");
         }
     }
 
@@ -43,7 +45,7 @@ public class AESLocker {
             return decrypt(data, "xComicHentai6537", BASE64);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new DecryptException("解密失败");
         }
     }
 
@@ -51,7 +53,7 @@ public class AESLocker {
 
         try {
             if (key == null || key.length() != 16) {
-                throw new RuntimeException("key error");
+                throw new EncryptException("密钥不合法");
             }
             String iv = "4798145623545678";
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -90,7 +92,7 @@ public class AESLocker {
     private static String decrypt(String data, String key, int mode) throws Exception {
         try {
             if (key == null || key.length() != 16) {
-                throw new RuntimeException("key error");
+                throw new DecryptException("密钥不合法");
             }
             String iv = "4798145623545678";
             byte[] encrypted1;

@@ -9,6 +9,7 @@
 
     <import resource="classpath*:/spring/spring-transaction.xml"/>
     <import resource="classpath*:/spring/spring-mapper.xml"/>
+    <import resource="classpath*:/spring/spring-aspect.xml"/>
     <!-- 自动扫描(自动注入) -->
     <context:component-scan base-package="org.hope6537.*"/>
 
