@@ -46,7 +46,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * 默认RESTFul API实现类
- * Created by hope6537 on 16/5/15.
+ * Created by hope6537 by Code Generator
  */
 @Controller
 @RequestMapping("/{objectName}/")
