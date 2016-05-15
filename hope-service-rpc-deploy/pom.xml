@@ -22,12 +22,6 @@
             <artifactId>hope-service-default-implement</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <!-- custom logger -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback_version}</version>
-        </dependency>
     </dependencies>
 
 

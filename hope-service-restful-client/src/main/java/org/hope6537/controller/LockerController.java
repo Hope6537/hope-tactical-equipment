@@ -1,7 +1,6 @@
 package org.hope6537.controller;
 
 import org.hope6537.security.AESLocker;
-import org.hope6537.service.ComicService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Controller;
@@ -18,9 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 public class LockerController {
 
     private static final String IILEGAL_REQUEST = "非法请求";
-
-    @Resource(name = "comicService")
-    public ComicService comicService;
 
     @RequestMapping(value = "/encrypt", method = RequestMethod.GET)
     @ResponseBody
