@@ -14,10 +14,10 @@ def generate(objectName, columns):
             params += "Integer " + c[0] + ","
     params = params[0:-1]
     text = """
-package com.comichentai.service;
+package org.hope6537.service;
 
-import com.comichentai.dto.{ObjectName}Dto;
-import com.comichentai.entity.ResultSupport;
+import org.hope6537.dto.{ObjectName}Dto;
+import org.hope6537.entity.ResultSupport;
 
 import java.util.List;
 

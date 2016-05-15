@@ -19,3 +19,5 @@ def generate():
         os.mkdir("./impl")
     if not os.path.exists("./test"):
         os.mkdir("./test")
+    if not os.path.exists("./controller"):
+        os.mkdir("./controller")

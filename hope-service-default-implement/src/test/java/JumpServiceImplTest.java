@@ -1,4 +1,5 @@
-import com.alibaba.fastjson.JSON;
+
+    import com.alibaba.fastjson.JSON;
 import org.hope6537.dto.JumpDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.helper.SpringTestHelper;
@@ -15,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.io.IOException;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -28,63 +30,72 @@ public class JumpServiceImplTest extends SpringTestHelper {
     @Autowired
     private JumpService jumpService;
 
-    static void pro() throws IOException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring/spring-dubbo-service-impl.xml");
-        context.start();
-        System.in.read();
-    }
+    private List<Integer> idList;
 
     @Before
     public void init() {
         logger.info(jumpService.toString());
+        idList = Lists.newArrayList();
+        for (int i = 0; i < 5; i++) {
+            ResultSupport<Integer> integerResultSupport = jumpService.addJump(90,91);
+            logger.info(JSON.toJSONString(integerResultSupport));
+            assertTrue(integerResultSupport.getModule() > 0);
+            idList.add(integerResultSupport.getModule());
+        }
+        System.out.println(idList.toString());
+        logger.info(idList.toString());
     }
 
     @Test
     public void testAddJump() {
-        ResultSupport<Integer> integerResultSupport = jumpService.addJump(90, 91);
+        ResultSupport<Integer> integerResultSupport = jumpService.addJump(90,91);
         logger.info(JSON.toJSONString(integerResultSupport));
         assertTrue(integerResultSupport.getModule() > 0);
     }
 
     @Test
     public void testModifyJump() {
-        ResultSupport<Integer> resultSupport = jumpService.addJump(90, 91);
+        ResultSupport<Integer> resultSupport = jumpService.addJump(90,91);
         Integer id = resultSupport.getModule();
-        JumpDto dto = new JumpDto(80, 81);
+        JumpDto dto = new JumpDto(80,81);
         dto.setId(id);
         ResultSupport<Integer> modifyResultSupport = jumpService.modifyJump(dto);
         logger.info(JSON.toJSONString(modifyResultSupport));
         assertTrue(modifyResultSupport.getModule() == 1);
-        ResultSupport<Integer> batchModifyResultSupport = jumpService.batchModifyJump(dto, Lists.newArrayList(1, 2, 3));
+        ResultSupport<Integer> batchModifyResultSupport = jumpService.batchModifyJump(dto, idList);
         logger.info(JSON.toJSONString(batchModifyResultSupport));
-        assertTrue(batchModifyResultSupport.getModule() == 3);
-        logger.info(JSON.toJSONString(jumpService.getJumpListByIdList(Lists.newArrayList(1, 2, 3))));
+        assertTrue(batchModifyResultSupport.getModule() == 5);
+        logger.info(JSON.toJSONString(jumpService.getJumpListByIdList(idList)));
     }
 
     @Test
     public void testRemoveJump() {
-        ResultSupport<Integer> resultSupport = jumpService.addJump(70, 71);
+        ResultSupport<Integer> resultSupport = jumpService.addJump(70,71);
         Integer id = resultSupport.getModule();
         ResultSupport<Integer> modifyResultSupport = jumpService.removeJump(id);
         logger.info(JSON.toJSONString(modifyResultSupport));
         assertTrue(modifyResultSupport.getModule() == 1);
-        ResultSupport<Integer> batchModifyResultSupport = jumpService.batchRemoveJump(Lists.newArrayList(1, 2, 3));
+        ResultSupport<Integer> batchModifyResultSupport = jumpService.batchRemoveJump(idList);
         logger.info(JSON.toJSONString(batchModifyResultSupport));
-        assertTrue(batchModifyResultSupport.getModule() == 3);
-        logger.info(JSON.toJSONString(jumpService.getJumpListByIdList(Lists.newArrayList(1, 2, 3))));
+        assertTrue(batchModifyResultSupport.getModule() == 5);
+        logger.info(JSON.toJSONString(jumpService.getJumpListByIdList(idList)));
     }
 
 
     @Test
     public void testGetJumpById() {
-        String comic = JSON.toJSONString(jumpService.getJumpById(1));
-        logger.info(comic);
+        ResultSupport<JumpDto> result = jumpService.getJumpById(idList.get(0));
+        assertNotNull(result.getModule());
+        String json = JSON.toJSONString(result);
+        logger.info(json);
     }
 
     @Test
     public void testGetJumpListByIdList() {
-        String comicList = JSON.toJSONString(jumpService.getJumpListByIdList(Lists.newArrayList(1, 2, 3, 4)));
-        logger.info(comicList);
+        ResultSupport<List<JumpDto>> result = jumpService.getJumpListByIdList(idList);
+        assertNotNull(result.getModule());
+        String jsonList = JSON.toJSONString(result);
+        logger.info(jsonList);
     }
 
     @Test
@@ -102,10 +113,6 @@ public class JumpServiceImplTest extends SpringTestHelper {
         logger.info(JSON.toJSONString(jumpListByQuery));
     }
 
-    @Test
-    public void testDubbo() throws IOException {
-        pro();
-    }
 
 }
 

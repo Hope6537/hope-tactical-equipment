@@ -1,4 +1,5 @@
-import com.alibaba.fastjson.JSON;
+
+    import com.alibaba.fastjson.JSON;
 import org.hope6537.dto.ClassifiedDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.helper.SpringTestHelper;
@@ -15,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.io.IOException;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -28,63 +30,72 @@ public class ClassifiedServiceImplTest extends SpringTestHelper {
     @Autowired
     private ClassifiedService classifiedService;
 
-    static void pro() throws IOException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring/spring-dubbo-service-impl.xml");
-        context.start();
-        System.in.read();
-    }
+    private List<Integer> idList;
 
     @Before
     public void init() {
         logger.info(classifiedService.toString());
+        idList = Lists.newArrayList();
+        for (int i = 0; i < 5; i++) {
+            ResultSupport<Integer> integerResultSupport = classifiedService.addClassified("test0"+System.currentTimeMillis(),"test1"+System.currentTimeMillis());
+            logger.info(JSON.toJSONString(integerResultSupport));
+            assertTrue(integerResultSupport.getModule() > 0);
+            idList.add(integerResultSupport.getModule());
+        }
+        System.out.println(idList.toString());
+        logger.info(idList.toString());
     }
 
     @Test
     public void testAddClassified() {
-        ResultSupport<Integer> integerResultSupport = classifiedService.addClassified("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis());
+        ResultSupport<Integer> integerResultSupport = classifiedService.addClassified("test0"+System.currentTimeMillis(),"test1"+System.currentTimeMillis());
         logger.info(JSON.toJSONString(integerResultSupport));
         assertTrue(integerResultSupport.getModule() > 0);
     }
 
     @Test
     public void testModifyClassified() {
-        ResultSupport<Integer> resultSupport = classifiedService.addClassified("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis());
+        ResultSupport<Integer> resultSupport = classifiedService.addClassified("test0"+System.currentTimeMillis(),"test1"+System.currentTimeMillis());
         Integer id = resultSupport.getModule();
-        ClassifiedDto dto = new ClassifiedDto("modify0" + System.currentTimeMillis(), "modify1" + System.currentTimeMillis());
+        ClassifiedDto dto = new ClassifiedDto("modify0"+System.currentTimeMillis(),"modify1"+System.currentTimeMillis());
         dto.setId(id);
         ResultSupport<Integer> modifyResultSupport = classifiedService.modifyClassified(dto);
         logger.info(JSON.toJSONString(modifyResultSupport));
         assertTrue(modifyResultSupport.getModule() == 1);
-        ResultSupport<Integer> batchModifyResultSupport = classifiedService.batchModifyClassified(dto, Lists.newArrayList(1, 2, 3));
+        ResultSupport<Integer> batchModifyResultSupport = classifiedService.batchModifyClassified(dto, idList);
         logger.info(JSON.toJSONString(batchModifyResultSupport));
-        assertTrue(batchModifyResultSupport.getModule() == 3);
-        logger.info(JSON.toJSONString(classifiedService.getClassifiedListByIdList(Lists.newArrayList(1, 2, 3))));
+        assertTrue(batchModifyResultSupport.getModule() == 5);
+        logger.info(JSON.toJSONString(classifiedService.getClassifiedListByIdList(idList)));
     }
 
     @Test
     public void testRemoveClassified() {
-        ResultSupport<Integer> resultSupport = classifiedService.addClassified("wait_delete0" + System.currentTimeMillis(), "wait_delete1" + System.currentTimeMillis());
+        ResultSupport<Integer> resultSupport = classifiedService.addClassified("wait_delete0"+System.currentTimeMillis(),"wait_delete1"+System.currentTimeMillis());
         Integer id = resultSupport.getModule();
         ResultSupport<Integer> modifyResultSupport = classifiedService.removeClassified(id);
         logger.info(JSON.toJSONString(modifyResultSupport));
         assertTrue(modifyResultSupport.getModule() == 1);
-        ResultSupport<Integer> batchModifyResultSupport = classifiedService.batchRemoveClassified(Lists.newArrayList(1, 2, 3));
+        ResultSupport<Integer> batchModifyResultSupport = classifiedService.batchRemoveClassified(idList);
         logger.info(JSON.toJSONString(batchModifyResultSupport));
-        assertTrue(batchModifyResultSupport.getModule() == 3);
-        logger.info(JSON.toJSONString(classifiedService.getClassifiedListByIdList(Lists.newArrayList(1, 2, 3))));
+        assertTrue(batchModifyResultSupport.getModule() == 5);
+        logger.info(JSON.toJSONString(classifiedService.getClassifiedListByIdList(idList)));
     }
 
 
     @Test
     public void testGetClassifiedById() {
-        String comic = JSON.toJSONString(classifiedService.getClassifiedById(1));
-        logger.info(comic);
+        ResultSupport<ClassifiedDto> result = classifiedService.getClassifiedById(idList.get(0));
+        assertNotNull(result.getModule());
+        String json = JSON.toJSONString(result);
+        logger.info(json);
     }
 
     @Test
     public void testGetClassifiedListByIdList() {
-        String comicList = JSON.toJSONString(classifiedService.getClassifiedListByIdList(Lists.newArrayList(1, 2, 3, 4)));
-        logger.info(comicList);
+        ResultSupport<List<ClassifiedDto>> result = classifiedService.getClassifiedListByIdList(idList);
+        assertNotNull(result.getModule());
+        String jsonList = JSON.toJSONString(result);
+        logger.info(jsonList);
     }
 
     @Test
@@ -102,10 +113,6 @@ public class ClassifiedServiceImplTest extends SpringTestHelper {
         logger.info(JSON.toJSONString(classifiedListByQuery));
     }
 
-    @Test
-    public void testDubbo() throws IOException {
-        pro();
-    }
 
 }
 

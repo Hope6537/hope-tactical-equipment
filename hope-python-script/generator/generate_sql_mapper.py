@@ -22,7 +22,7 @@ def generate(objectName, columns):
             0] + '} </if>\n\t\t\t'
     text = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.comichentai.dao.{ObjectName}Dao">
+<mapper namespace="org.hope6537.dao.{ObjectName}Dao">
     <!-- 默认模板生成 添加单行记录 -->
     <insert id="insert{ObjectName}"> INSERT INTO `{ObjectName}`
         (""" + insertColumns + """
@@ -65,9 +65,9 @@ def generate(objectName, columns):
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 根据ID选取单行记录 -->
-    <select id="select{ObjectName}ById" resultType="com.comichentai.dataobject.{ObjectName}Do"> SELECT * FROM `{ObjectName}` WHERE id = ${id} LIMIT 1 </select>
+    <select id="select{ObjectName}ById" resultType="org.hope6537.dataobject.{ObjectName}Do"> SELECT * FROM `{ObjectName}` WHERE id = ${id} LIMIT 1 </select>
     <!-- 默认模板生成 根据ID集合选取多行记录-->
-    <select id="select{ObjectName}ListByIds" resultType="com.comichentai.dataobject.{ObjectName}Do"> SELECT * FROM `{ObjectName}`
+    <select id="select{ObjectName}ListByIds" resultType="org.hope6537.dataobject.{ObjectName}Do"> SELECT * FROM `{ObjectName}`
         <where>
             id in (
             <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
@@ -89,14 +89,14 @@ def generate(objectName, columns):
         </where>
     </sql>
     <!-- 默认模板生成 根据Query对象查询记录 -->
-    <select id="select{ObjectName}ListByQuery" resultType="com.comichentai.dataobject.{ObjectName}Do" parameterType="com.comichentai.dto.{ObjectName}Dto"> SELECT * FROM `{ObjectName}`
+    <select id="select{ObjectName}ListByQuery" resultType="org.hope6537.dataobject.{ObjectName}Do" parameterType="org.hope6537.dto.{ObjectName}Dto"> SELECT * FROM `{ObjectName}`
         <include refid="where"/>
         ORDER BY `created` DESC
         <if test="limit!=null and limit!=''"> LIMIT
             <if test="offset!=null and offset!=''">#{offset},</if> #{limit} </if>
     </select>
     <!-- 默认模板生成 根据Query对象查询符合条件的个数 -->
-    <select id="select{ObjectName}CountByQuery" resultType="Integer" parameterType="com.comichentai.dataobject.{ObjectName}Do"> SELECT count(*) FROM `{ObjectName}`
+    <select id="select{ObjectName}CountByQuery" resultType="Integer" parameterType="org.hope6537.dataobject.{ObjectName}Do"> SELECT count(*) FROM `{ObjectName}`
         <include refid="where"/>
     </select>
 </mapper>

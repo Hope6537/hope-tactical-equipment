@@ -10,7 +10,7 @@ def generate(objectName, columns):
     :return:
     """
     text = """
-    package com.comichentai.dataobject;
+    package org.hope6537.dataobject;
 
     /**
      * 实体DO

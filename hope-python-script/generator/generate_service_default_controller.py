@@ -1,15 +1,36 @@
+# encoding:UTF-8
+import os
+
+
+def generate(objectName, columns):
+    params = ""
+    validation = ''
+    nextStep = ""
+    for c in columns:
+        if c[1] == 'varchar' or c[1] == 'text':
+            params += "String " + c[0] + ","
+        if c[1] == 'int':
+            params += "Integer " + c[0] + ","
+        validation += 'checkNotNull(' + c[0] + ', "[添加失败][当前插入数据字段(' + c[0] + ')为空]");\n'
+        nextStep += c[0] + ','
+
+    params = params[0:-1]
+    nextStep = nextStep[0:-1]
+
+    text = """
 package org.hope6537.controller;
 
+import com.google.common.collect.Lists;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.hope6537.annotation.WatchedAuthRequest;
 import org.hope6537.annotation.WatchedNoAuthRequest;
-import org.hope6537.dto.ComicDto;
+import org.hope6537.dto.{ObjectName}Dto;
 import org.hope6537.entity.Response;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.page.PageMapUtil;
 import org.hope6537.rest.utils.ResponseDict;
-import org.hope6537.service.ComicService;
+import org.hope6537.service.{ObjectName}Service;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +41,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -29,31 +49,30 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by hope6537 on 16/5/15.
  */
 @Controller
-@RequestMapping("/template/")
+@RequestMapping("/{objectName}/")
 @EnableAutoConfiguration
-public class ComicController {
+public class {ObjectName}Controller {
 
-    @Resource(name = "comicService")
-    private ComicService comicService;
+    @Resource(name = "{objectName}Service")
+    private {ObjectName}Service {objectName}Service;
 
-    @WatchedNoAuthRequest
+    @WatchedAuthRequest
     @RequestMapping(value = "post", method = RequestMethod.POST)
     @ResponseBody
-    public Response postTemplateData(HttpServletRequest request, @RequestBody String receiveData) {
+    public Response post{ObjectName}Data(HttpServletRequest request, @RequestBody String receiveData) {
         //获取设备信息
         try {
-            checkNotNull(receiveData,ResponseDict.ILLEGAL_PARAM);
+            checkNotNull(receiveData, ResponseDict.ILLEGAL_PARAM);
             JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
             if (dataMap == null) {
                 Object errorResponse = request.getAttribute("errorResponse");
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //--公共部分完成--
-            ComicDto comicDto = dataMap.getObject("postObject", ComicDto.class);
-            //判断comicDto是否合法,还需要校验其他字段
-            checkNotNull(comicDto, ResponseDict.ILLEGAL_REQUEST);
-            //验证完成 -- username和nickname应该在焦点离开时异步校验的吧= =
-            ResultSupport<Integer> operationResult = comicService.addComic(comicDto);
+            {ObjectName}Dto {objectName}Dto = dataMap.getObject("postObject", {ObjectName}Dto.class);
+            //判断{objectName}Dto是否合法,还需要校验其他字段
+            checkNotNull({objectName}Dto, ResponseDict.ILLEGAL_REQUEST);
+            ResultSupport<Integer> operationResult = {objectName}Service.add{ObjectName}({objectName}Dto);
             return Response.getInstance(operationResult.isSuccess()).addAttribute("result", operationResult.getModule());
         } catch (JSONException jsonException) {
             return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
@@ -66,19 +85,19 @@ public class ComicController {
     @WatchedAuthRequest
     @RequestMapping(value = "put", method = RequestMethod.PUT)
     @ResponseBody
-    public Response putTemplateData(HttpServletRequest request, @RequestBody String receiveData) {
+    public Response put{ObjectName}Data(HttpServletRequest request, @RequestBody String receiveData) {
         try {
-            checkNotNull(receiveData,ResponseDict.ILLEGAL_PARAM);
+            checkNotNull(receiveData, ResponseDict.ILLEGAL_PARAM);
             JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
             if (dataMap == null) {
                 Object errorResponse = request.getAttribute("errorResponse");
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
-            ComicDto comicDto = dataMap.getObject("putObject", ComicDto.class);
-            //判断comicDto是否合法,还需要校验其他字段
-            checkNotNull(comicDto, ResponseDict.ILLEGAL_REQUEST);
-            //验证完成 -- username和nickname应该在焦点离开时异步校验的吧= =
-            ResultSupport<Integer> operationResult = comicService.modifyComic(comicDto);
+            {ObjectName}Dto {objectName}Dto = dataMap.getObject("putObject", {ObjectName}Dto.class);
+            //判断{objectName}Dto是否合法,还需要校验其他字段
+            checkNotNull({objectName}Dto, ResponseDict.ILLEGAL_REQUEST);
+            checkNotNull({objectName}Dto.getId(), ResponseDict.ILLEGAL_REQUEST);
+            ResultSupport<Integer> operationResult = {objectName}Service.modify{ObjectName}({objectName}Dto);
             return Response.getInstance(operationResult.isSuccess()).addAttribute("result", operationResult.getModule());
         } catch (JSONException jsonException) {
             return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
@@ -92,19 +111,19 @@ public class ComicController {
     @WatchedAuthRequest
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     @ResponseBody
-    public Response deleteTemplateData(HttpServletRequest request, @RequestBody String receiveData) {
+    public Response delete{ObjectName}Data(HttpServletRequest request, @RequestBody String receiveData) {
         try {
-            checkNotNull(receiveData,ResponseDict.ILLEGAL_PARAM);
+            checkNotNull(receiveData, ResponseDict.ILLEGAL_PARAM);
             JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
             if (dataMap == null) {
                 Object errorResponse = request.getAttribute("errorResponse");
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
-            ComicDto comicDto = dataMap.getObject("deleteObject", ComicDto.class);
-            //判断comicDto是否合法,还需要校验其他字段
-            checkNotNull(comicDto, ResponseDict.ILLEGAL_REQUEST);
-            //验证完成 -- username和nickname应该在焦点离开时异步校验的吧= =
-            ResultSupport<Integer> operationResult = comicService.removeComic(comicDto.getId());
+            {ObjectName}Dto {objectName}Dto = dataMap.getObject("deleteObject", {ObjectName}Dto.class);
+            //判断{objectName}Dto是否合法,还需要校验其他字段
+            checkNotNull({objectName}Dto, ResponseDict.ILLEGAL_REQUEST);
+            checkNotNull({objectName}Dto.getId(), ResponseDict.ILLEGAL_REQUEST);
+            ResultSupport<Integer> operationResult = {objectName}Service.remove{ObjectName}({objectName}Dto.getId());
             return Response.getInstance(operationResult.isSuccess()).addAttribute("result", operationResult.getModule());
         } catch (JSONException jsonException) {
             return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
@@ -118,17 +137,18 @@ public class ComicController {
     @WatchedNoAuthRequest
     @RequestMapping(value = "get", method = RequestMethod.GET)
     @ResponseBody
-    public Response getTemplateData(HttpServletRequest request) {
+    public Response get{ObjectName}Data(HttpServletRequest request) {
         try {
             JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
             if (dataMap == null) {
                 Object errorResponse = request.getAttribute("errorResponse");
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
-            ComicDto comicDto = dataMap.getObject("comic", ComicDto.class);
-            //判断comicDto是否合法,还需要校验其他字段
-            checkNotNull(comicDto, ResponseDict.ILLEGAL_REQUEST);
-            ResultSupport<ComicDto> result = comicService.getComicById(comicDto.getId());
+            {ObjectName}Dto {objectName}Dto = dataMap.getObject("{objectName}", {ObjectName}Dto.class);
+            //判断{objectName}Dto是否合法,还需要校验其他字段
+            checkNotNull({objectName}Dto, ResponseDict.ILLEGAL_REQUEST);
+            checkNotNull({objectName}Dto.getId(), ResponseDict.ILLEGAL_REQUEST);
+            ResultSupport<{ObjectName}Dto> result = {objectName}Service.get{ObjectName}ById({objectName}Dto.getId());
             return Response.getInstance(result.isSuccess()).addAttribute("result", result.getModule());
         } catch (JSONException jsonException) {
             return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
@@ -139,10 +159,10 @@ public class ComicController {
 
     }
 
-    @WatchedAuthRequest
+    @WatchedNoAuthRequest
     @RequestMapping(value = "fetch", method = RequestMethod.GET)
     @ResponseBody
-    public Response fetchTemplateData(HttpServletRequest request) {
+    public Response fetch{ObjectName}Data(HttpServletRequest request) {
         try {
             JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
             if (dataMap == null) {
@@ -150,11 +170,11 @@ public class ComicController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            ComicDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), ComicDto.class);
-            ResultSupport<List<ComicDto>> comicListByQuery = comicService.getComicListByQuery(query);
-            return Response.getInstance(comicListByQuery.isSuccess())
-                    .addAttribute("result", comicListByQuery.getModule())
-                    .addAttribute("isEnd", comicListByQuery.getTotalCount() < query.getPageSize() * query.getCurrentPage())
+            {ObjectName}Dto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), {ObjectName}Dto.class);
+            ResultSupport<List<{ObjectName}Dto>> {objectName}ListByQuery = {objectName}Service.get{ObjectName}ListByQuery(query);
+            return Response.getInstance({objectName}ListByQuery.isSuccess())
+                    .addAttribute("result", {objectName}ListByQuery.getModule())
+                    .addAttribute("isEnd", {objectName}ListByQuery.getTotalCount() < query.getPageSize() * query.getCurrentPage())
                     .addAttribute("pageMap", PageMapUtil.sendNextPage(query));
         } catch (JSONException e) {
             return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
@@ -165,3 +185,13 @@ public class ComicController {
     }
 
 }
+
+    """
+    text = text.replace("{ObjectName}", objectName)
+    lower = objectName[0].lower() + objectName[1:]
+    text = text.replace("{objectName}", lower)
+    fileName = "./controller/" + objectName + "Controller.java"
+    with open(fileName, 'w') as f:
+        f.write(text)
+
+    return os.getcwd() + '/' + fileName

@@ -1,20 +1,20 @@
+
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import org.hope6537.dto.CategoryDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.helper.SpringTestHelper;
 import org.hope6537.service.CategoryService;
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.io.IOException;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -28,15 +28,20 @@ public class CategoryServiceImplTest extends SpringTestHelper {
     @Autowired
     private CategoryService categoryService;
 
-    static void pro() throws IOException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring/spring-dubbo-service-impl.xml");
-        context.start();
-        System.in.read();
-    }
+    private List<Integer> idList;
 
     @Before
     public void init() {
         logger.info(categoryService.toString());
+        idList = Lists.newArrayList();
+        for (int i = 0; i < 5; i++) {
+            ResultSupport<Integer> integerResultSupport = categoryService.addCategory(90, 91, 92);
+            logger.info(JSON.toJSONString(integerResultSupport));
+            assertTrue(integerResultSupport.getModule() > 0);
+            idList.add(integerResultSupport.getModule());
+        }
+        System.out.println(idList.toString());
+        logger.info(idList.toString());
     }
 
     @Test
@@ -55,10 +60,10 @@ public class CategoryServiceImplTest extends SpringTestHelper {
         ResultSupport<Integer> modifyResultSupport = categoryService.modifyCategory(dto);
         logger.info(JSON.toJSONString(modifyResultSupport));
         assertTrue(modifyResultSupport.getModule() == 1);
-        ResultSupport<Integer> batchModifyResultSupport = categoryService.batchModifyCategory(dto, Lists.newArrayList(1, 2, 3));
+        ResultSupport<Integer> batchModifyResultSupport = categoryService.batchModifyCategory(dto, idList);
         logger.info(JSON.toJSONString(batchModifyResultSupport));
-        assertTrue(batchModifyResultSupport.getModule() == 3);
-        logger.info(JSON.toJSONString(categoryService.getCategoryListByIdList(Lists.newArrayList(1, 2, 3))));
+        assertTrue(batchModifyResultSupport.getModule() == 5);
+        logger.info(JSON.toJSONString(categoryService.getCategoryListByIdList(idList)));
     }
 
     @Test
@@ -68,23 +73,27 @@ public class CategoryServiceImplTest extends SpringTestHelper {
         ResultSupport<Integer> modifyResultSupport = categoryService.removeCategory(id);
         logger.info(JSON.toJSONString(modifyResultSupport));
         assertTrue(modifyResultSupport.getModule() == 1);
-        ResultSupport<Integer> batchModifyResultSupport = categoryService.batchRemoveCategory(Lists.newArrayList(1, 2, 3));
+        ResultSupport<Integer> batchModifyResultSupport = categoryService.batchRemoveCategory(idList);
         logger.info(JSON.toJSONString(batchModifyResultSupport));
-        assertTrue(batchModifyResultSupport.getModule() == 3);
-        logger.info(JSON.toJSONString(categoryService.getCategoryListByIdList(Lists.newArrayList(1, 2, 3))));
+        assertTrue(batchModifyResultSupport.getModule() == 5);
+        logger.info(JSON.toJSONString(categoryService.getCategoryListByIdList(idList)));
     }
 
 
     @Test
     public void testGetCategoryById() {
-        String comic = JSON.toJSONString(categoryService.getCategoryById(1));
-        logger.info(comic);
+        ResultSupport<CategoryDto> result = categoryService.getCategoryById(idList.get(0));
+        assertNotNull(result.getModule());
+        String json = JSON.toJSONString(result);
+        logger.info(json);
     }
 
     @Test
     public void testGetCategoryListByIdList() {
-        String comicList = JSON.toJSONString(categoryService.getCategoryListByIdList(Lists.newArrayList(1, 2, 3, 4)));
-        logger.info(comicList);
+        ResultSupport<List<CategoryDto>> result = categoryService.getCategoryListByIdList(idList);
+        assertNotNull(result.getModule());
+        String jsonList = JSON.toJSONString(result);
+        logger.info(jsonList);
     }
 
     @Test
@@ -102,10 +111,6 @@ public class CategoryServiceImplTest extends SpringTestHelper {
         logger.info(JSON.toJSONString(categoryListByQuery));
     }
 
-    @Test
-    public void testDubbo() throws IOException {
-        pro();
-    }
 
 }
 

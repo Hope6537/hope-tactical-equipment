@@ -14,7 +14,9 @@ import generate_service
 import generate_service_default_implement
 import generate_sql_mapper
 import generate_test
+import generate_service_default_controller
 from comic_hentai import comic_hentai_data_source
+
 
 
 def initAll(objectName, columns):
@@ -26,6 +28,7 @@ def initAll(objectName, columns):
     print(generate_service.generate(objectName, columns))
     print(generate_service_default_implement.generate(objectName, columns))
     print(generate_test.generate(objectName, columns))
+    print(generate_service_default_controller.generate(objectName, columns))
 
 
 def mysql_connect():

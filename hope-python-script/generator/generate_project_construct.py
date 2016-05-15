@@ -20,7 +20,7 @@ def generate(project_name):
     使用字符串替换的方式来更改
     groupId -> org.hope6537 该成目标包名
     artifactId -> 改成工程名 + 后缀 (除了我貌似没人以[hope-]的artifactId开头)
-    4.包名比较好做,将所有的org.hope6537或com.comichentai换成 目标包名即可
+    4.包名比较好做,将所有的org.hope6537或org.hope6537换成 目标包名即可
     5.然后运行老版本的generator,将do->test的所有代码生成并移动
     6.需要新加一个controller模板类
     """

@@ -9,10 +9,10 @@ def generate(objectName):
     :return:
     """
     text = """
-    package com.comichentai.dao;
+    package org.hope6537.dao;
 
-    import com.comichentai.annotation.MybatisRepository;
-    import com.comichentai.dataobject.{ObjectName}Do;
+    import org.hope6537.annotation.MybatisRepository;
+    import org.hope6537.dataobject.{ObjectName}Do;
     import org.apache.ibatis.annotations.Param;
 
     import java.util.List;

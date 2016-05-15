@@ -18,17 +18,17 @@ def generate(objectName, columns):
     nextStep = nextStep[0:-1]
 
     text = """
-package com.comichentai.service.impl;
+package org.hope6537.service.impl;
 
-import com.comichentai.convert.impl.DozerMappingConverter;
-import com.comichentai.dao.{ObjectName}Dao;
-import com.comichentai.dataobject.BasicDo;
-import com.comichentai.dataobject.{ObjectName}Do;
-import com.comichentai.dto.{ObjectName}Dto;
-import com.comichentai.entity.ResultSupport;
-import com.comichentai.enums.IsDeleted;
-import com.comichentai.page.PageDto;
-import com.comichentai.service.{ObjectName}Service;
+import org.hope6537.convert.impl.DozerMappingConverter;
+import org.hope6537.dao.{ObjectName}Dao;
+import org.hope6537.dataobject.BasicDo;
+import org.hope6537.dataobject.{ObjectName}Do;
+import org.hope6537.dto.{ObjectName}Dto;
+import org.hope6537.entity.ResultSupport;
+import org.hope6537.enums.IsDeleted;
+import org.hope6537.page.PageDto;
+import org.hope6537.service.{ObjectName}Service;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
