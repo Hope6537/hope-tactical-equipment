@@ -1,4 +1,4 @@
-package org.hope6537.controller;
+package org.hope6537.comichentai.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
