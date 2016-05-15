@@ -35,7 +35,7 @@
     <dubbo:reference id="comicBusiness" interface="org.hope6537.bo.ComicBusiness"/>
     <dubbo:reference id="favoriteBusiness" interface="org.hope6537.bo.FavoriteBusiness"/>
 
-    <dubbo:application name="comic-rest-api"/>
+    <dubbo:application name="hope-service-rpc-rest-api"/>
 
     <dubbo:registry protocol="zookeeper" address="www.hope6537.com:2181"/>
 
