@@ -9,9 +9,7 @@ import java.io.IOException;
 public class DubboDriver {
 
     public static void main(String[] args) throws IOException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/META-INF/spring/spring-dubbo-service-impl.xml");
-        context.start();
-        System.in.read();
+        com.alibaba.dubbo.container.Main.main(args);
     }
 
 }
