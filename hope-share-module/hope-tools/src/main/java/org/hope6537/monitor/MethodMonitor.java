@@ -16,7 +16,6 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * 方法监控切面
@@ -71,11 +70,11 @@ public class MethodMonitor {
         Object[] methodArgs;
         if (signature instanceof MethodSignature) {
             methodArgs = proceedingJoinPoint.getArgs();
-            AtomicReferenceArray<Object> methodArgArray = new AtomicReferenceArray<>(new Object[methodArgs.length]);
+            Object[] methodArgArray = new Object[methodArgs.length];
             for (int i = 0; i < methodArgs.length; i++) {
-                methodArgArray.set(i, methodArgs[i]);
+                methodArgArray[i] = methodArgs[i];
                 if (methodArgs[i] instanceof HttpServletRequest) {
-                    methodArgArray.set(i, "HttpServletRequest");
+                    methodArgArray[i] = "HttpServletRequest";
                 }
             }
             String parameterString = JSON.toJSONString(methodArgArray);

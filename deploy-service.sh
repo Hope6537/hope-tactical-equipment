@@ -5,5 +5,5 @@ mvn clean install -Dmaven.test.skip;
 
 cd target;
 tar -xvzf hope-service-rpc-deploy.tar.gz
-cd hope-service-rpc-deploy.;
+cd hope-service-rpc-deploy;
 sh ./bin/start_low_mem.sh;
