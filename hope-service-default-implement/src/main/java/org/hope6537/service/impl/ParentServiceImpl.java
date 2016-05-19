@@ -1,6 +1,7 @@
 
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.ParentDao;
 import org.hope6537.dataobject.BasicDo;
@@ -8,15 +9,16 @@ import org.hope6537.dataobject.ParentDo;
 import org.hope6537.dto.ParentDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
+import org.hope6537.generator.data.*;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.ParentService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -36,6 +38,25 @@ public class ParentServiceImpl implements ParentService {
 
     @Resource(name = "mappingConverter")
     private DozerMappingConverter mappingConverter;
+
+    @Override
+    public ResultSupport<List<Integer>> generatorParents(int count) {
+        List<Integer> list = Lists.newArrayList();
+        if (count > 30 || count < 0) {
+            count = 30;
+        }
+        while (count-- != 0) {
+            ResultSupport<Integer> result = this.addParent(ChineseNameGenerator.generateChineseName(), SexGenator.generator(), TelGenerator.generateTel(), AddressGenerator.simpleGenerator(), EmailGenerator.generator(), "acde3e5760f9e9156fcb2ef62f190c658eba6ab1e555e1094c49d8a2b1cf09b2");
+            if (result.isSuccess()) {
+                list.add(result.getModule());
+            } else {
+                logger.error("生成家长出现错误" + result.getRemark());
+                continue;
+            }
+        }
+        boolean expr = list.size() > 0;
+        return ResultSupport.getInstance(expr, expr ? "家长完成生成" : "家长生成失败", list);
+    }
 
     @Override
     public ResultSupport<Integer> addParent(ParentDto parentDto) {
@@ -59,20 +80,20 @@ public class ParentServiceImpl implements ParentService {
     }
 
     @Override
-    public ResultSupport<Integer> addParent(String name,String sex,String tel,String address,String email,String password) {
+    public ResultSupport<Integer> addParent(String name, String sex, String tel, String address, String email, String password) {
         try {
             checkNotNull(name, "[添加失败][当前插入数据字段(name)为空]");
-checkNotNull(sex, "[添加失败][当前插入数据字段(sex)为空]");
-checkNotNull(tel, "[添加失败][当前插入数据字段(tel)为空]");
-checkNotNull(address, "[添加失败][当前插入数据字段(address)为空]");
-checkNotNull(email, "[添加失败][当前插入数据字段(email)为空]");
-checkNotNull(password, "[添加失败][当前插入数据字段(password)为空]");
+            checkNotNull(sex, "[添加失败][当前插入数据字段(sex)为空]");
+            checkNotNull(tel, "[添加失败][当前插入数据字段(tel)为空]");
+            checkNotNull(address, "[添加失败][当前插入数据字段(address)为空]");
+            checkNotNull(email, "[添加失败][当前插入数据字段(email)为空]");
+            checkNotNull(password, "[添加失败][当前插入数据字段(password)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addParent(new ParentDto(name,sex,tel,address,email,password));
+        return this.addParent(new ParentDto(name, sex, tel, address, email, password));
     }
 
     @Override

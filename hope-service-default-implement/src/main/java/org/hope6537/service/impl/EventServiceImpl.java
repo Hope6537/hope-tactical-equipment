@@ -1,6 +1,7 @@
 
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.EventDao;
 import org.hope6537.dataobject.BasicDo;
@@ -10,7 +11,6 @@ import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.EventService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,16 +59,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public ResultSupport<Integer> addEvent(String title,String des) {
+    public ResultSupport<Integer> addEvent(String title, String des) {
         try {
             checkNotNull(title, "[添加失败][当前插入数据字段(title)为空]");
-checkNotNull(des, "[添加失败][当前插入数据字段(des)为空]");
-
+            checkNotNull(des, "[添加失败][当前插入数据字段(des)为空]");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addEvent(new EventDto(title,des));
+        return this.addEvent(new EventDto(title, des));
     }
 
     @Override

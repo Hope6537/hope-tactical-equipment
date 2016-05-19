@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface StudentService {
 
+    public ResultSupport<List<Integer>> generatorStudents(int count);
+
     /**
      * 标准模板生成-向数据库添加单行记录
      *
@@ -22,6 +24,7 @@ public interface StudentService {
 
     /**
      * 标准模板生成-向数据库添加单行记录 参数集合
+     *
      * @param 数据字段集合
      * @return ResultSupport.getData = 更新行数
      */
@@ -39,7 +42,7 @@ public interface StudentService {
      * 标准模板生成-向数据库更新多行记录
      *
      * @param studentDto 数据转换对象
-     * @param idList       要更新的ID集合
+     * @param idList     要更新的ID集合
      * @return ResultSupport.getData = 更新行数
      */
     ResultSupport<Integer> batchModifyStudent(StudentDto studentDto, List<Integer> idList);

@@ -1,6 +1,7 @@
 
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.TeacherDao;
 import org.hope6537.dataobject.BasicDo;
@@ -8,9 +9,12 @@ import org.hope6537.dataobject.TeacherDo;
 import org.hope6537.dto.TeacherDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
+import org.hope6537.generator.data.ChineseNameGenerator;
+import org.hope6537.generator.data.EmailGenerator;
+import org.hope6537.generator.data.SexGenator;
+import org.hope6537.generator.data.TelGenerator;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.TeacherService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,6 +42,24 @@ public class TeacherServiceImpl implements TeacherService {
     private DozerMappingConverter mappingConverter;
 
     @Override
+    public ResultSupport<List<Integer>> generatorTeachers(int count) {
+        List<Integer> list = Lists.newArrayList();
+        if (count > 30 || count < 0) {
+            count = 30;
+        }
+        while (count-- != 0) {
+            ResultSupport<Integer> result = this.addTeacher(ChineseNameGenerator.generateChineseName(), SexGenator.generator(), TelGenerator.generateTel(), "", "0", EmailGenerator.generator(), "acde3e5760f9e9156fcb2ef62f190c658eba6ab1e555e1094c49d8a2b1cf09b2");
+            if (result.isSuccess()) {
+                list.add(result.getModule());
+            } else {
+                continue;
+            }
+        }
+        boolean expr = list.size() > 0;
+        return ResultSupport.getInstance(expr, expr ? "教师完成生成" : "教师生成失败", list);
+    }
+
+    @Override
     public ResultSupport<Integer> addTeacher(TeacherDto teacherDto) {
         Integer result;
         Integer id;
@@ -59,21 +81,21 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public ResultSupport<Integer> addTeacher(String name,String sex,String tel,String des,String level,String email,String password) {
+    public ResultSupport<Integer> addTeacher(String name, String sex, String tel, String des, String level, String email, String password) {
         try {
             checkNotNull(name, "[添加失败][当前插入数据字段(name)为空]");
-checkNotNull(sex, "[添加失败][当前插入数据字段(sex)为空]");
-checkNotNull(tel, "[添加失败][当前插入数据字段(tel)为空]");
-checkNotNull(des, "[添加失败][当前插入数据字段(des)为空]");
-checkNotNull(level, "[添加失败][当前插入数据字段(level)为空]");
-checkNotNull(email, "[添加失败][当前插入数据字段(email)为空]");
-checkNotNull(password, "[添加失败][当前插入数据字段(password)为空]");
+            checkNotNull(sex, "[添加失败][当前插入数据字段(sex)为空]");
+            checkNotNull(tel, "[添加失败][当前插入数据字段(tel)为空]");
+            checkNotNull(des, "[添加失败][当前插入数据字段(des)为空]");
+            checkNotNull(level, "[添加失败][当前插入数据字段(level)为空]");
+            checkNotNull(email, "[添加失败][当前插入数据字段(email)为空]");
+            checkNotNull(password, "[添加失败][当前插入数据字段(password)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addTeacher(new TeacherDto(name,sex,tel,des,level,email,password));
+        return this.addTeacher(new TeacherDto(name, sex, tel, des, level, email, password));
     }
 
     @Override

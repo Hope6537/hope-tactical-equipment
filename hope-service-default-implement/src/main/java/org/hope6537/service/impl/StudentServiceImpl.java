@@ -1,6 +1,7 @@
 
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.StudentDao;
 import org.hope6537.dataobject.BasicDo;
@@ -8,15 +9,17 @@ import org.hope6537.dataobject.StudentDo;
 import org.hope6537.dto.StudentDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
+import org.hope6537.generator.data.ChineseNameGenerator;
+import org.hope6537.generator.data.SexGenator;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.StudentService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -36,6 +39,25 @@ public class StudentServiceImpl implements StudentService {
 
     @Resource(name = "mappingConverter")
     private DozerMappingConverter mappingConverter;
+
+    @Override
+    public ResultSupport<List<Integer>> generatorStudents(int count) {
+        List<Integer> list = Lists.newArrayList();
+        if (count > 30 || count < 0) {
+            count = 30;
+        }
+        Random random = new Random();
+        while (count-- != 0) {
+            ResultSupport<Integer> result = this.addStudent(ChineseNameGenerator.generateChineseName(), SexGenator.generator(), String.valueOf(random.nextInt(13) + 5), 0, 0);
+            if (result.isSuccess()) {
+                list.add(result.getModule());
+            } else {
+                continue;
+            }
+        }
+        boolean expr = list.size() > 0;
+        return ResultSupport.getInstance(expr, expr ? "学生完成生成" : "学生生成失败", list);
+    }
 
     @Override
     public ResultSupport<Integer> addStudent(StudentDto studentDto) {
@@ -59,19 +81,19 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public ResultSupport<Integer> addStudent(String name,String sex,String age,Integer parentId,Integer classesId) {
+    public ResultSupport<Integer> addStudent(String name, String sex, String age, Integer parentId, Integer classesId) {
         try {
             checkNotNull(name, "[添加失败][当前插入数据字段(name)为空]");
-checkNotNull(sex, "[添加失败][当前插入数据字段(sex)为空]");
-checkNotNull(age, "[添加失败][当前插入数据字段(age)为空]");
-checkNotNull(parentId, "[添加失败][当前插入数据字段(parentId)为空]");
-checkNotNull(classesId, "[添加失败][当前插入数据字段(classesId)为空]");
+            checkNotNull(sex, "[添加失败][当前插入数据字段(sex)为空]");
+            checkNotNull(age, "[添加失败][当前插入数据字段(age)为空]");
+            checkNotNull(parentId, "[添加失败][当前插入数据字段(parentId)为空]");
+            checkNotNull(classesId, "[添加失败][当前插入数据字段(classesId)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addStudent(new StudentDto(name,sex,age,parentId,classesId));
+        return this.addStudent(new StudentDto(name, sex, age, parentId, classesId));
     }
 
     @Override

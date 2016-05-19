@@ -1,6 +1,7 @@
 
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.ClassesDao;
 import org.hope6537.dataobject.BasicDo;
@@ -8,15 +9,16 @@ import org.hope6537.dataobject.ClassesDo;
 import org.hope6537.dto.ClassesDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
+import org.hope6537.generator.data.ChineseNameGenerator;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.ClassesService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -36,6 +38,26 @@ public class ClassesServiceImpl implements ClassesService {
 
     @Resource(name = "mappingConverter")
     private DozerMappingConverter mappingConverter;
+
+    @Override
+    public ResultSupport<List<Integer>> generatorClasses(int count) {
+        List<Integer> list = Lists.newArrayList();
+        if (count > 30 || count < 0) {
+            count = 30;
+        }
+        while (count-- != 0) {
+            Random random = new Random();
+            ResultSupport<Integer> result = this.addClasses(random.nextInt(9) + 1 + "年" + (random.nextInt(35) + 1) + "" + ChineseNameGenerator.generateChineseName().charAt(1) + "" + ChineseNameGenerator.generateChineseName().charAt(1) + "班");
+            if (result.isSuccess()) {
+                list.add(result.getModule());
+            } else {
+                logger.error("生成家长出现错误" + result.getRemark());
+                continue;
+            }
+        }
+        boolean expr = list.size() > 0;
+        return ResultSupport.getInstance(expr, expr ? "家长完成生成" : "家长生成失败", list);
+    }
 
     @Override
     public ResultSupport<Integer> addClasses(ClassesDto classesDto) {

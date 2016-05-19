@@ -88,6 +88,10 @@ public class AESLocker {
         }
     }
 
+    public static void main(String[] args) {
+        System.out.println(AESLocker.encrypt("123"));
+    }
+
 
     private static String decrypt(String data, String key, int mode) throws Exception {
         try {

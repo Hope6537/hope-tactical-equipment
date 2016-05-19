@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface ClassesService {
 
+    ResultSupport<List<Integer>> generatorClasses(int count);
+
     /**
      * 标准模板生成-向数据库添加单行记录
      *
