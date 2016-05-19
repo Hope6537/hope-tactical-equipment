@@ -23,7 +23,8 @@ public class Driver {
                 PlanController.class,
                 RequireController.class,
                 StudentController.class,
-                TeacherController.class
+                TeacherController.class,
+                GeneratorController.class
         };
         SpringApplication.run(classes, args);
     }
