@@ -1,7 +1,6 @@
 
 package org.hope6537.controller;
 
-import com.google.common.collect.Lists;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.hope6537.annotation.WatchedAuthRequest;
@@ -149,7 +148,7 @@ public class MealController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            MealDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), MealDto.class);
+            MealDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), MealDto.class);
             ResultSupport<List<MealDto>> mealListByQuery = mealService.getMealListByQuery(query);
             return Response.getInstance(mealListByQuery.isSuccess())
                     .addAttribute("result", mealListByQuery.getModule())

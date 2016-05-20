@@ -149,7 +149,7 @@ public class ApplyController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            ApplyDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), ApplyDto.class);
+            ApplyDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), ApplyDto.class);
             ResultSupport<List<ApplyDto>> applyListByQuery = applyService.getApplyListByQuery(query);
             return Response.getInstance(applyListByQuery.isSuccess())
                     .addAttribute("result", applyListByQuery.getModule())

@@ -149,7 +149,7 @@ public class FeedbackController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            FeedbackDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), FeedbackDto.class);
+            FeedbackDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), FeedbackDto.class);
             ResultSupport<List<FeedbackDto>> feedbackListByQuery = feedbackService.getFeedbackListByQuery(query);
             return Response.getInstance(feedbackListByQuery.isSuccess())
                     .addAttribute("result", feedbackListByQuery.getModule())

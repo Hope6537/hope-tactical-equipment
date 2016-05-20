@@ -148,7 +148,7 @@ public class EventController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            EventDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), EventDto.class);
+            EventDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), EventDto.class);
             ResultSupport<List<EventDto>> eventListByQuery = eventService.getEventListByQuery(query);
             return Response.getInstance(eventListByQuery.isSuccess())
                     .addAttribute("result", eventListByQuery.getModule())

@@ -149,7 +149,7 @@ public class JoinController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            JoinDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), JoinDto.class);
+            JoinDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), JoinDto.class);
             ResultSupport<List<JoinDto>> joinListByQuery = joinService.getJoinListByQuery(query);
             return Response.getInstance(joinListByQuery.isSuccess())
                     .addAttribute("result", joinListByQuery.getModule())

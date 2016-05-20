@@ -149,7 +149,7 @@ public class ParentController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            ParentDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), ParentDto.class);
+            ParentDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), ParentDto.class);
             ResultSupport<List<ParentDto>> parentListByQuery = parentService.getParentListByQuery(query);
             return Response.getInstance(parentListByQuery.isSuccess())
                     .addAttribute("result", parentListByQuery.getModule())

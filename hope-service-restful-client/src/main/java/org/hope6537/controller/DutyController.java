@@ -149,7 +149,7 @@ public class DutyController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            DutyDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), DutyDto.class);
+            DutyDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), DutyDto.class);
             ResultSupport<List<DutyDto>> dutyListByQuery = dutyService.getDutyListByQuery(query);
             return Response.getInstance(dutyListByQuery.isSuccess())
                     .addAttribute("result", dutyListByQuery.getModule())

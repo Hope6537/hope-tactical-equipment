@@ -149,7 +149,7 @@ public class NoticeController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            NoticeDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), NoticeDto.class);
+            NoticeDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), NoticeDto.class);
             ResultSupport<List<NoticeDto>> noticeListByQuery = noticeService.getNoticeListByQuery(query);
             return Response.getInstance(noticeListByQuery.isSuccess())
                     .addAttribute("result", noticeListByQuery.getModule())

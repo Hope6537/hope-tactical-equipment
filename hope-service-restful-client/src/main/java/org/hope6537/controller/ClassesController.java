@@ -149,7 +149,7 @@ public class ClassesController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            ClassesDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), ClassesDto.class);
+            ClassesDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), ClassesDto.class);
             ResultSupport<List<ClassesDto>> classesListByQuery = classesService.getClassesListByQuery(query);
             return Response.getInstance(classesListByQuery.isSuccess())
                     .addAttribute("result", classesListByQuery.getModule())

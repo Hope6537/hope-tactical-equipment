@@ -148,7 +148,7 @@ public class TeacherController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            TeacherDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), TeacherDto.class);
+            TeacherDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), TeacherDto.class);
             ResultSupport<List<TeacherDto>> teacherListByQuery = teacherService.getTeacherListByQuery(query);
             return Response.getInstance(teacherListByQuery.isSuccess())
                     .addAttribute("result", teacherListByQuery.getModule())

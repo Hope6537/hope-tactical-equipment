@@ -149,7 +149,7 @@ public class MessageController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            MessageDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), MessageDto.class);
+            MessageDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), MessageDto.class);
             ResultSupport<List<MessageDto>> messageListByQuery = messageService.getMessageListByQuery(query);
             return Response.getInstance(messageListByQuery.isSuccess())
                     .addAttribute("result", messageListByQuery.getModule())

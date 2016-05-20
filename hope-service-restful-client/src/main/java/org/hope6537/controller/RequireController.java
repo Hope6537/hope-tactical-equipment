@@ -149,7 +149,7 @@ public class RequireController {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            RequireDto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), RequireDto.class);
+            RequireDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), RequireDto.class);
             ResultSupport<List<RequireDto>> requireListByQuery = requireService.getRequireListByQuery(query);
             return Response.getInstance(requireListByQuery.isSuccess())
                     .addAttribute("result", requireListByQuery.getModule())
