@@ -1,6 +1,6 @@
-
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.JoinDao;
 import org.hope6537.dataobject.BasicDo;
@@ -10,7 +10,6 @@ import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.JoinService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,16 +58,16 @@ public class JoinServiceImpl implements JoinService {
     }
 
     @Override
-    public ResultSupport<Integer> addJoin(Integer eventId,Integer studentId) {
+    public ResultSupport<Integer> addJoin(Integer eventId, Integer studentId) {
         try {
             checkNotNull(eventId, "[添加失败][当前插入数据字段(eventId)为空]");
-checkNotNull(studentId, "[添加失败][当前插入数据字段(studentId)为空]");
+            checkNotNull(studentId, "[添加失败][当前插入数据字段(studentId)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addJoin(new JoinDto(eventId,studentId));
+        return this.addJoin(new JoinDto(eventId, studentId));
     }
 
     @Override

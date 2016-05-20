@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
-public class ResultSupport<T> implements Serializable{
+public class ResultSupport<T> implements Serializable {
 
     public static final String AugumentIsNull = "augument is null";
 

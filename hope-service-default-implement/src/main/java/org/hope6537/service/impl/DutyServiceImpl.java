@@ -1,6 +1,6 @@
-
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.DutyDao;
 import org.hope6537.dataobject.BasicDo;
@@ -10,7 +10,6 @@ import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.DutyService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,16 +58,16 @@ public class DutyServiceImpl implements DutyService {
     }
 
     @Override
-    public ResultSupport<Integer> addDuty(Integer classesId,Integer teacherId) {
+    public ResultSupport<Integer> addDuty(Integer classesId, Integer teacherId) {
         try {
             checkNotNull(classesId, "[添加失败][当前插入数据字段(classesId)为空]");
-checkNotNull(teacherId, "[添加失败][当前插入数据字段(teacherId)为空]");
+            checkNotNull(teacherId, "[添加失败][当前插入数据字段(teacherId)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addDuty(new DutyDto(classesId,teacherId));
+        return this.addDuty(new DutyDto(classesId, teacherId));
     }
 
     @Override

@@ -1,37 +1,36 @@
+package org.hope6537.dao;
 
-    package org.hope6537.dao;
+import org.apache.ibatis.annotations.Param;
+import org.hope6537.annotation.MybatisRepository;
+import org.hope6537.dataobject.DutyDo;
 
-    import org.hope6537.annotation.MybatisRepository;
-    import org.hope6537.dataobject.DutyDo;
-    import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
-    import java.util.List;
+/**
+ * 实体数据访问接口
+ * Created by hope6537 by Code Generator
+ */
+@MybatisRepository
+public interface DutyDao {
 
-    /**
-     * 实体数据访问接口
-     * Created by hope6537 by Code Generator
-     */
-    @MybatisRepository
-    public interface DutyDao {
+    int insertDuty(DutyDo dutyDo);
 
-        int insertDuty(DutyDo dutyDo);
+    int updateDuty(DutyDo dutyDo);
 
-        int updateDuty(DutyDo dutyDo);
+    int batchUpdateDuty(@Param("data") DutyDo dutyDo, @Param("idList") List<Integer> idList);
 
-        int batchUpdateDuty(@Param("data") DutyDo dutyDo, @Param("idList") List<Integer> idList);
+    int deleteDuty(@Param("id") Integer id);
 
-        int deleteDuty(@Param("id") Integer id);
+    int batchDeleteDuty(@Param("idList") List<Integer> idList);
 
-        int batchDeleteDuty(@Param("idList") List<Integer> idList);
+    DutyDo selectDutyById(@Param("id") Integer id);
 
-        DutyDo selectDutyById(@Param("id") Integer id);
+    List<DutyDo> selectDutyListByIds(@Param("idList") List<Integer> idList);
 
-        List<DutyDo> selectDutyListByIds(@Param("idList") List<Integer> idList);
+    List<DutyDo> selectDutyListByQuery(DutyDo query);
 
-        List<DutyDo> selectDutyListByQuery(DutyDo query);
+    int selectDutyCountByQuery(DutyDo query);
 
-        int selectDutyCountByQuery(DutyDo query);
-
-    }
+}
 
     

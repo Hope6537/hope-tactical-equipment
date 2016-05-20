@@ -1,7 +1,5 @@
-
 package org.hope6537.controller;
 
-import com.google.common.collect.Lists;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.hope6537.annotation.WatchedAuthRequest;

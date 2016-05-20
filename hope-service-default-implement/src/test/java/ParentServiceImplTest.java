@@ -1,19 +1,16 @@
-
-    import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import org.hope6537.dto.ParentDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.helper.SpringTestHelper;
 import org.hope6537.service.ParentService;
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -37,7 +34,7 @@ public class ParentServiceImplTest extends SpringTestHelper {
         logger.info(parentService.toString());
         idList = Lists.newArrayList();
         for (int i = 0; i < 5; i++) {
-            ResultSupport<Integer> integerResultSupport = parentService.addParent("test0"+System.currentTimeMillis(),"test1"+System.currentTimeMillis(),"test2"+System.currentTimeMillis(),"test3"+System.currentTimeMillis(),"test4"+System.currentTimeMillis(),"test5"+System.currentTimeMillis());
+            ResultSupport<Integer> integerResultSupport = parentService.addParent("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), "test2" + System.currentTimeMillis(), "test3" + System.currentTimeMillis(), "test4" + System.currentTimeMillis(), "test5" + System.currentTimeMillis());
             logger.info(JSON.toJSONString(integerResultSupport));
             assertTrue(integerResultSupport.getModule() > 0);
             idList.add(integerResultSupport.getModule());
@@ -48,16 +45,16 @@ public class ParentServiceImplTest extends SpringTestHelper {
 
     @Test
     public void testAddParent() {
-        ResultSupport<Integer> integerResultSupport = parentService.addParent("test0"+System.currentTimeMillis(),"test1"+System.currentTimeMillis(),"test2"+System.currentTimeMillis(),"test3"+System.currentTimeMillis(),"test4"+System.currentTimeMillis(),"test5"+System.currentTimeMillis());
+        ResultSupport<Integer> integerResultSupport = parentService.addParent("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), "test2" + System.currentTimeMillis(), "test3" + System.currentTimeMillis(), "test4" + System.currentTimeMillis(), "test5" + System.currentTimeMillis());
         logger.info(JSON.toJSONString(integerResultSupport));
         assertTrue(integerResultSupport.getModule() > 0);
     }
 
     @Test
     public void testModifyParent() {
-        ResultSupport<Integer> resultSupport = parentService.addParent("test0"+System.currentTimeMillis(),"test1"+System.currentTimeMillis(),"test2"+System.currentTimeMillis(),"test3"+System.currentTimeMillis(),"test4"+System.currentTimeMillis(),"test5"+System.currentTimeMillis());
+        ResultSupport<Integer> resultSupport = parentService.addParent("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), "test2" + System.currentTimeMillis(), "test3" + System.currentTimeMillis(), "test4" + System.currentTimeMillis(), "test5" + System.currentTimeMillis());
         Integer id = resultSupport.getModule();
-        ParentDto dto = new ParentDto("modify0"+System.currentTimeMillis(),"modify1"+System.currentTimeMillis(),"modify2"+System.currentTimeMillis(),"modify3"+System.currentTimeMillis(),"modify4"+System.currentTimeMillis(),"modify5"+System.currentTimeMillis());
+        ParentDto dto = new ParentDto("modify0" + System.currentTimeMillis(), "modify1" + System.currentTimeMillis(), "modify2" + System.currentTimeMillis(), "modify3" + System.currentTimeMillis(), "modify4" + System.currentTimeMillis(), "modify5" + System.currentTimeMillis());
         dto.setId(id);
         ResultSupport<Integer> modifyResultSupport = parentService.modifyParent(dto);
         logger.info(JSON.toJSONString(modifyResultSupport));
@@ -70,7 +67,7 @@ public class ParentServiceImplTest extends SpringTestHelper {
 
     @Test
     public void testRemoveParent() {
-        ResultSupport<Integer> resultSupport = parentService.addParent("wait_delete0"+System.currentTimeMillis(),"wait_delete1"+System.currentTimeMillis(),"wait_delete2"+System.currentTimeMillis(),"wait_delete3"+System.currentTimeMillis(),"wait_delete4"+System.currentTimeMillis(),"wait_delete5"+System.currentTimeMillis());
+        ResultSupport<Integer> resultSupport = parentService.addParent("wait_delete0" + System.currentTimeMillis(), "wait_delete1" + System.currentTimeMillis(), "wait_delete2" + System.currentTimeMillis(), "wait_delete3" + System.currentTimeMillis(), "wait_delete4" + System.currentTimeMillis(), "wait_delete5" + System.currentTimeMillis());
         Integer id = resultSupport.getModule();
         ResultSupport<Integer> modifyResultSupport = parentService.removeParent(id);
         logger.info(JSON.toJSONString(modifyResultSupport));

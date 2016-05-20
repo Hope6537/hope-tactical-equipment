@@ -1,37 +1,36 @@
+package org.hope6537.dao;
 
-    package org.hope6537.dao;
+import org.apache.ibatis.annotations.Param;
+import org.hope6537.annotation.MybatisRepository;
+import org.hope6537.dataobject.JoinDo;
 
-    import org.hope6537.annotation.MybatisRepository;
-    import org.hope6537.dataobject.JoinDo;
-    import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
-    import java.util.List;
+/**
+ * 实体数据访问接口
+ * Created by hope6537 by Code Generator
+ */
+@MybatisRepository
+public interface JoinDao {
 
-    /**
-     * 实体数据访问接口
-     * Created by hope6537 by Code Generator
-     */
-    @MybatisRepository
-    public interface JoinDao {
+    int insertJoin(JoinDo joinDo);
 
-        int insertJoin(JoinDo joinDo);
+    int updateJoin(JoinDo joinDo);
 
-        int updateJoin(JoinDo joinDo);
+    int batchUpdateJoin(@Param("data") JoinDo joinDo, @Param("idList") List<Integer> idList);
 
-        int batchUpdateJoin(@Param("data") JoinDo joinDo, @Param("idList") List<Integer> idList);
+    int deleteJoin(@Param("id") Integer id);
 
-        int deleteJoin(@Param("id") Integer id);
+    int batchDeleteJoin(@Param("idList") List<Integer> idList);
 
-        int batchDeleteJoin(@Param("idList") List<Integer> idList);
+    JoinDo selectJoinById(@Param("id") Integer id);
 
-        JoinDo selectJoinById(@Param("id") Integer id);
+    List<JoinDo> selectJoinListByIds(@Param("idList") List<Integer> idList);
 
-        List<JoinDo> selectJoinListByIds(@Param("idList") List<Integer> idList);
+    List<JoinDo> selectJoinListByQuery(JoinDo query);
 
-        List<JoinDo> selectJoinListByQuery(JoinDo query);
+    int selectJoinCountByQuery(JoinDo query);
 
-        int selectJoinCountByQuery(JoinDo query);
-
-    }
+}
 
     

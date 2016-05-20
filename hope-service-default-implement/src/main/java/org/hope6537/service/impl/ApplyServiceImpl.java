@@ -1,16 +1,15 @@
-
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.ApplyDao;
-import org.hope6537.dataobject.BasicDo;
 import org.hope6537.dataobject.ApplyDo;
+import org.hope6537.dataobject.BasicDo;
 import org.hope6537.dto.ApplyDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.ApplyService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,16 +58,16 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
-    public ResultSupport<Integer> addApply(Integer teacherId,Integer requiredId) {
+    public ResultSupport<Integer> addApply(Integer teacherId, Integer requiredId) {
         try {
             checkNotNull(teacherId, "[添加失败][当前插入数据字段(teacherId)为空]");
-checkNotNull(requiredId, "[添加失败][当前插入数据字段(requiredId)为空]");
+            checkNotNull(requiredId, "[添加失败][当前插入数据字段(requiredId)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addApply(new ApplyDto(teacherId,requiredId));
+        return this.addApply(new ApplyDto(teacherId, requiredId));
     }
 
     @Override

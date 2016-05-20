@@ -1,19 +1,16 @@
-
-    import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import org.hope6537.dto.FeedbackDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.helper.SpringTestHelper;
 import org.hope6537.service.FeedbackService;
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
@@ -37,7 +34,7 @@ public class FeedbackServiceImplTest extends SpringTestHelper {
         logger.info(feedbackService.toString());
         idList = Lists.newArrayList();
         for (int i = 0; i < 5; i++) {
-            ResultSupport<Integer> integerResultSupport = feedbackService.addFeedback("test0"+System.currentTimeMillis(),"test1"+System.currentTimeMillis(),92,"test3"+System.currentTimeMillis());
+            ResultSupport<Integer> integerResultSupport = feedbackService.addFeedback("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, "test3" + System.currentTimeMillis());
             logger.info(JSON.toJSONString(integerResultSupport));
             assertTrue(integerResultSupport.getModule() > 0);
             idList.add(integerResultSupport.getModule());
@@ -48,16 +45,16 @@ public class FeedbackServiceImplTest extends SpringTestHelper {
 
     @Test
     public void testAddFeedback() {
-        ResultSupport<Integer> integerResultSupport = feedbackService.addFeedback("test0"+System.currentTimeMillis(),"test1"+System.currentTimeMillis(),92,"test3"+System.currentTimeMillis());
+        ResultSupport<Integer> integerResultSupport = feedbackService.addFeedback("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, "test3" + System.currentTimeMillis());
         logger.info(JSON.toJSONString(integerResultSupport));
         assertTrue(integerResultSupport.getModule() > 0);
     }
 
     @Test
     public void testModifyFeedback() {
-        ResultSupport<Integer> resultSupport = feedbackService.addFeedback("test0"+System.currentTimeMillis(),"test1"+System.currentTimeMillis(),92,"test3"+System.currentTimeMillis());
+        ResultSupport<Integer> resultSupport = feedbackService.addFeedback("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, "test3" + System.currentTimeMillis());
         Integer id = resultSupport.getModule();
-        FeedbackDto dto = new FeedbackDto("modify0"+System.currentTimeMillis(),"modify1"+System.currentTimeMillis(),82,"modify3"+System.currentTimeMillis());
+        FeedbackDto dto = new FeedbackDto("modify0" + System.currentTimeMillis(), "modify1" + System.currentTimeMillis(), 82, "modify3" + System.currentTimeMillis());
         dto.setId(id);
         ResultSupport<Integer> modifyResultSupport = feedbackService.modifyFeedback(dto);
         logger.info(JSON.toJSONString(modifyResultSupport));
@@ -70,7 +67,7 @@ public class FeedbackServiceImplTest extends SpringTestHelper {
 
     @Test
     public void testRemoveFeedback() {
-        ResultSupport<Integer> resultSupport = feedbackService.addFeedback("wait_delete0"+System.currentTimeMillis(),"wait_delete1"+System.currentTimeMillis(),72,"wait_delete3"+System.currentTimeMillis());
+        ResultSupport<Integer> resultSupport = feedbackService.addFeedback("wait_delete0" + System.currentTimeMillis(), "wait_delete1" + System.currentTimeMillis(), 72, "wait_delete3" + System.currentTimeMillis());
         Integer id = resultSupport.getModule();
         ResultSupport<Integer> modifyResultSupport = feedbackService.removeFeedback(id);
         logger.info(JSON.toJSONString(modifyResultSupport));

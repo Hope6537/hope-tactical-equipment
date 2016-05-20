@@ -1,4 +1,3 @@
-
 package org.hope6537.service.impl;
 
 import com.google.common.collect.Lists;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;

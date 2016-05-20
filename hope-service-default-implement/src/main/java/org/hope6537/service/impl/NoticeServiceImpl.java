@@ -1,6 +1,6 @@
-
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.NoticeDao;
 import org.hope6537.dataobject.BasicDo;
@@ -10,7 +10,6 @@ import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.NoticeService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,16 +58,16 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public ResultSupport<Integer> addNotice(String title,String des) {
+    public ResultSupport<Integer> addNotice(String title, String des) {
         try {
             checkNotNull(title, "[添加失败][当前插入数据字段(title)为空]");
-checkNotNull(des, "[添加失败][当前插入数据字段(des)为空]");
+            checkNotNull(des, "[添加失败][当前插入数据字段(des)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addNotice(new NoticeDto(title,des));
+        return this.addNotice(new NoticeDto(title, des));
     }
 
     @Override

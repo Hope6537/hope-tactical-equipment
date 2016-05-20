@@ -1,4 +1,3 @@
-
 package org.hope6537.service;
 
 import org.hope6537.dto.ClassesDto;
@@ -24,6 +23,7 @@ public interface ClassesService {
 
     /**
      * 标准模板生成-向数据库添加单行记录 参数集合
+     *
      * @param 数据字段集合
      * @return ResultSupport.getData = 更新行数
      */
@@ -41,7 +41,7 @@ public interface ClassesService {
      * 标准模板生成-向数据库更新多行记录
      *
      * @param classesDto 数据转换对象
-     * @param idList       要更新的ID集合
+     * @param idList     要更新的ID集合
      * @return ResultSupport.getData = 更新行数
      */
     ResultSupport<Integer> batchModifyClasses(ClassesDto classesDto, List<Integer> idList);

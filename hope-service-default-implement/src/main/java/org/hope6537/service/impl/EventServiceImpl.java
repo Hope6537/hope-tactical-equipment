@@ -1,4 +1,3 @@
-
 package org.hope6537.service.impl;
 
 import com.google.common.collect.Lists;

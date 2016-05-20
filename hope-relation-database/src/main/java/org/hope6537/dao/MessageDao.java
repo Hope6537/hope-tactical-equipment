@@ -1,37 +1,36 @@
+package org.hope6537.dao;
 
-    package org.hope6537.dao;
+import org.apache.ibatis.annotations.Param;
+import org.hope6537.annotation.MybatisRepository;
+import org.hope6537.dataobject.MessageDo;
 
-    import org.hope6537.annotation.MybatisRepository;
-    import org.hope6537.dataobject.MessageDo;
-    import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
-    import java.util.List;
+/**
+ * 实体数据访问接口
+ * Created by hope6537 by Code Generator
+ */
+@MybatisRepository
+public interface MessageDao {
 
-    /**
-     * 实体数据访问接口
-     * Created by hope6537 by Code Generator
-     */
-    @MybatisRepository
-    public interface MessageDao {
+    int insertMessage(MessageDo messageDo);
 
-        int insertMessage(MessageDo messageDo);
+    int updateMessage(MessageDo messageDo);
 
-        int updateMessage(MessageDo messageDo);
+    int batchUpdateMessage(@Param("data") MessageDo messageDo, @Param("idList") List<Integer> idList);
 
-        int batchUpdateMessage(@Param("data") MessageDo messageDo, @Param("idList") List<Integer> idList);
+    int deleteMessage(@Param("id") Integer id);
 
-        int deleteMessage(@Param("id") Integer id);
+    int batchDeleteMessage(@Param("idList") List<Integer> idList);
 
-        int batchDeleteMessage(@Param("idList") List<Integer> idList);
+    MessageDo selectMessageById(@Param("id") Integer id);
 
-        MessageDo selectMessageById(@Param("id") Integer id);
+    List<MessageDo> selectMessageListByIds(@Param("idList") List<Integer> idList);
 
-        List<MessageDo> selectMessageListByIds(@Param("idList") List<Integer> idList);
+    List<MessageDo> selectMessageListByQuery(MessageDo query);
 
-        List<MessageDo> selectMessageListByQuery(MessageDo query);
+    int selectMessageCountByQuery(MessageDo query);
 
-        int selectMessageCountByQuery(MessageDo query);
-
-    }
+}
 
     

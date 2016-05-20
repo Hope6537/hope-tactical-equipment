@@ -24,11 +24,10 @@ import java.util.UUID;
 @Aspect
 public class MethodMonitor {
 
-    private final Logger logger = LoggerFactory.getLogger("monitor");
-
     private static final String businessExecution = "execution(* org.hope6537.business.*.*(..))";
     private static final String controllerExecution = "execution(* org.hope6537.controller.*.*(..))";
     private static final String serviceExecution = "execution(* org.hope6537.service.*.*(..))";
+    private final Logger logger = LoggerFactory.getLogger("monitor");
 
     public MethodMonitor() {
         this.scanAnnotations();

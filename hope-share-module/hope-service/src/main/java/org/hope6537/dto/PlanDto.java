@@ -1,4 +1,3 @@
-
 package org.hope6537.dto;
 
 /**
