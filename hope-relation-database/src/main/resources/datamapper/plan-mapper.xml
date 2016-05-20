@@ -40,10 +40,8 @@
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 删除单行记录-->
-    <update id="deletePlan"> UPDATE `Plan`
-    SET isDeleted = 1, updated = UNIX_TIMESTAMP()
-    WHERE id = ${id}
-    LIMIT 1 </update>
+    <update id="deletePlan">UPDATE `Plan` SET isDeleted = 1, updated = UNIX_TIMESTAMP() WHERE id = ${id} LIMIT 1
+    </update>
     <!-- 默认模板生成 删除多行记录-->
     <update id="batchDeletePlan">UPDATE `Plan` SET isDeleted = 1,updated = UNIX_TIMESTAMP()
         <where>
@@ -52,10 +50,9 @@
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 根据ID选取单行记录 -->
-    <select id="selectPlanById" resultType="org.hope6537.dataobject.PlanDo"> SELECT *
-                                                                             FROM `Plan`
-                                                                             WHERE id = ${id}
-                                                                             LIMIT 1 </select>
+    <select id="selectPlanById" resultType="org.hope6537.dataobject.PlanDo">SELECT * FROM `Plan` WHERE id = ${id} LIMIT
+        1
+    </select>
     <!-- 默认模板生成 根据ID集合选取多行记录-->
     <select id="selectPlanListByIds" resultType="org.hope6537.dataobject.PlanDo">SELECT * FROM `Plan`
         <where>
@@ -65,6 +62,16 @@
         </where>
         LIMIT ${idList.size}
     </select>
+    <!-- 默认模板生成 根据外部ID集合选取多行记录-->
+    <select id="selectPlanListByClassesIds" resultType="org.hope6537.dataobject.PlanDo">SELECT * FROM `Plan`
+        <where>
+            classesId in (
+            <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
+            )
+        </where>
+        LIMIT ${idList.size}
+    </select>
+
     <!-- 默认模板生成 动态SQL语句 通常字段判断是否为空 并增加日期范围 -->
     <sql id="where">
         <where>1 = 1

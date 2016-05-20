@@ -38,10 +38,7 @@
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 删除单行记录-->
-    <update id="deletePublish">UPDATE `Publish`
-        SET isDeleted = 1, updated = UNIX_TIMESTAMP()
-        WHERE id = ${id}
-        LIMIT 1
+    <update id="deletePublish">UPDATE `Publish` SET isDeleted = 1, updated = UNIX_TIMESTAMP() WHERE id = ${id} LIMIT 1
     </update>
     <!-- 默认模板生成 删除多行记录-->
     <update id="batchDeletePublish">UPDATE `Publish` SET isDeleted = 1,updated = UNIX_TIMESTAMP()
@@ -51,10 +48,8 @@
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 根据ID选取单行记录 -->
-    <select id="selectPublishById" resultType="org.hope6537.dataobject.PublishDo">SELECT *
-        FROM `Publish`
-        WHERE id = ${id}
-        LIMIT 1
+    <select id="selectPublishById" resultType="org.hope6537.dataobject.PublishDo">SELECT * FROM `Publish` WHERE id =
+        ${id} LIMIT 1
     </select>
     <!-- 默认模板生成 根据ID集合选取多行记录-->
     <select id="selectPublishListByIds" resultType="org.hope6537.dataobject.PublishDo">SELECT * FROM `Publish`
@@ -65,7 +60,6 @@
         </where>
         LIMIT ${idList.size}
     </select>
-
     <!-- 默认模板生成 根据外部ID集合选取多行记录-->
     <select id="selectPublishListByEventIds" resultType="org.hope6537.dataobject.PublishDo">SELECT * FROM `Publish`
         <where>
