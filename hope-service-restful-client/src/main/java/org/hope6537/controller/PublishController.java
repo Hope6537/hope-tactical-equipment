@@ -1,7 +1,9 @@
 package org.hope6537.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import org.hope6537.annotation.WatchedAuthRequest;
 import org.hope6537.annotation.WatchedNoAuthRequest;
 import org.hope6537.dto.PublishDto;
@@ -51,6 +53,43 @@ public class PublishController {
             checkNotNull(publishDto, ResponseDict.ILLEGAL_REQUEST);
             ResultSupport<Integer> operationResult = publishService.addPublish(publishDto);
             return Response.getInstance(operationResult.isSuccess()).addAttribute("result", operationResult.getModule());
+        } catch (JSONException jsonException) {
+            return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.getInstance(false).setReturnMsg(e.getMessage());
+        }
+    }
+
+    @WatchedAuthRequest
+    @RequestMapping(value = "batchPost", method = RequestMethod.POST)
+    @ResponseBody
+    public Response batchPostPublishData(HttpServletRequest request, @RequestBody String receiveData) {
+        //获取设备信息
+        try {
+            checkNotNull(receiveData, ResponseDict.ILLEGAL_PARAM);
+            JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
+            if (dataMap == null) {
+                Object errorResponse = request.getAttribute("errorResponse");
+                return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
+            }
+            //--公共部分完成--
+            JSONObject postObject = dataMap.getJSONObject("postObject");
+            Integer eventId = postObject.getInteger("eventId");
+            JSONArray classesIdList = postObject.getJSONArray("classesIdList");
+
+            int serviceSuccess = 0;
+            for (Object o : classesIdList) {
+                Integer classesId = Integer.parseInt(o.toString());
+                PublishDto publishDto = new PublishDto(eventId, classesId);
+                checkNotNull(publishDto, ResponseDict.ILLEGAL_REQUEST);
+                ResultSupport<Integer> operationResult = publishService.addPublish(publishDto);
+                if (operationResult.isSuccess()) {
+                    serviceSuccess++;
+                }
+            }
+            boolean expr = classesIdList.size() == serviceSuccess;
+            return Response.getInstance(expr).setReturnMsg(expr ? "活动关联成功" : "活动关联失败");
         } catch (JSONException jsonException) {
             return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
         } catch (Exception e) {
@@ -160,6 +199,31 @@ public class PublishController {
             return Response.getInstance(false).setReturnMsg(e.getMessage());
         }
     }
+
+    @WatchedNoAuthRequest
+    @RequestMapping(value = "fetch/classesIdList", method = RequestMethod.GET)
+    @ResponseBody
+    public Response fetchEventClassesIdList(HttpServletRequest request) {
+        try {
+            JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
+            if (dataMap == null) {
+                Object errorResponse = request.getAttribute("errorResponse");
+                return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
+            }
+            //验证完成,开始查询
+            PublishDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), PublishDto.class);
+            ResultSupport<List<PublishDto>> publishListByQuery = publishService.getPublishListByQuery(query);
+            List<Integer> classesIdList = Lists.newArrayList();
+            publishListByQuery.getModule().stream().forEach(publishDto -> classesIdList.add(publishDto.getClassesId()));
+            return Response.getInstance(!classesIdList.isEmpty()).addAttribute("result", classesIdList);
+        } catch (JSONException e) {
+            return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.getInstance(false).setReturnMsg(e.getMessage());
+        }
+    }
+
 
 }
 

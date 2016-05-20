@@ -5,11 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import org.hope6537.annotation.WatchedAuthRequest;
 import org.hope6537.annotation.WatchedNoAuthRequest;
 import org.hope6537.dto.EventDto;
+import org.hope6537.dto.PublishDto;
 import org.hope6537.entity.Response;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.page.PageMapUtil;
 import org.hope6537.rest.utils.ResponseDict;
+import org.hope6537.service.ClassesService;
 import org.hope6537.service.EventService;
+import org.hope6537.service.PublishService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,12 @@ public class EventController {
 
     @Resource(name = "eventService")
     private EventService eventService;
+
+    @Resource(name = "publishService")
+    private PublishService publishService;
+
+    @Resource(name = "classesService")
+    private ClassesService classesService;
 
     @WatchedAuthRequest
     @RequestMapping(value = "post", method = RequestMethod.POST)

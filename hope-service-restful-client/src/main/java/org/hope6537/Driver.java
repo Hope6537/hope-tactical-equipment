@@ -23,6 +23,7 @@ public class Driver {
                 PlanController.class,
                 RequireController.class,
                 StudentController.class,
+                PublishController.class,
                 TeacherController.class,
                 GeneratorController.class
         };

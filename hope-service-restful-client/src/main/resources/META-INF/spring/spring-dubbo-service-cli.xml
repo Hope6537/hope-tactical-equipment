@@ -36,7 +36,7 @@
     <dubbo:reference timeout="10000" id="requireService" interface="org.hope6537.service.RequireService"/>
     <dubbo:reference timeout="10000" id="studentService" interface="org.hope6537.service.StudentService"/>
     <dubbo:reference timeout="10000" id="teacherService" interface="org.hope6537.service.TeacherService"/>
-
+    <dubbo:reference timeout="10000" id="publishService" interface="org.hope6537.service.PublishService"/>
     <dubbo:reference timeout="100000" id="generatorBusiness" interface="org.hope6537.business.GeneratorBusiness"/>
 
     <dubbo:application name="hope-service-rpc-rest-api"/>
