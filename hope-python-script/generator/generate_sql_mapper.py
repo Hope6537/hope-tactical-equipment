@@ -18,7 +18,7 @@ def generate(objectName, columns):
             <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
             )
         </where>
-        LIMIT ${idList.size}
+        LIMIT 3000
     </select>
             """
     insertColumns = ""

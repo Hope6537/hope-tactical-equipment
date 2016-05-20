@@ -67,7 +67,7 @@
             <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
             )
         </where>
-        LIMIT ${idList.size}
+        LIMIT 3000
     </select>
 
     <!-- 默认模板生成 根据外部ID集合选取多行记录-->
@@ -77,7 +77,7 @@
             <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
             )
         </where>
-        LIMIT ${idList.size}
+        LIMIT 3000
     </select>
 
     <!-- 默认模板生成 动态SQL语句 通常字段判断是否为空 并增加日期范围 -->
