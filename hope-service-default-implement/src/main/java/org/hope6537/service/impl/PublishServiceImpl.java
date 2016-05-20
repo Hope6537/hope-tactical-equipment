@@ -197,6 +197,51 @@ public class PublishServiceImpl implements PublishService {
     }
 
     @Override
+    public ResultSupport<List<PublishDto>> getPublishListByEventIdList(List<Integer> idList) {
+        boolean flag;
+        List<PublishDto> result;
+        List<PublishDo> disableResultList;
+        try {
+            checkNotNull(idList, "[批量查询失败][当前入参实体为空]");
+            List<PublishDo> list = publishDao.selectPublishListByEventIds(idList);
+            checkNotNull(list, "[批量查询失败][查询为空]");
+            disableResultList = list.parallelStream().filter(o -> o.getId() == null || o.getStatus() == null || o.getIsDeleted() == null).collect(Collectors.toList());
+            if (disableResultList == null) {
+                disableResultList = Lists.newArrayList();
+            }
+            flag = disableResultList.size() == 0;
+            result = list.parallelStream().filter(o -> o.getId() != null).map(o -> mappingConverter.doMap(o, PublishDto.class)).collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return ResultSupport.getInstance(e);
+        }
+        return ResultSupport.getInstance(flag, flag ? "[批量查询成功]" : "[批量查询成功][存在不符合条件的数据][idList=" + disableResultList.toString() + "]", result);
+    }
+
+    @Override
+    public ResultSupport<List<PublishDto>> getPublishListByClassesIdList(List<Integer> idList) {
+        boolean flag;
+        List<PublishDto> result;
+        List<PublishDo> disableResultList;
+        try {
+            checkNotNull(idList, "[批量查询失败][当前入参实体为空]");
+            List<PublishDo> list = publishDao.selectPublishListByClassesIds(idList);
+            checkNotNull(list, "[批量查询失败][查询为空]");
+            disableResultList = list.parallelStream().filter(o -> o.getId() == null || o.getStatus() == null || o.getIsDeleted() == null).collect(Collectors.toList());
+            if (disableResultList == null) {
+                disableResultList = Lists.newArrayList();
+            }
+            flag = disableResultList.size() == 0;
+            result = list.parallelStream().filter(o -> o.getId() != null).map(o -> mappingConverter.doMap(o, PublishDto.class)).collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return ResultSupport.getInstance(e);
+        }
+        return ResultSupport.getInstance(flag, flag ? "[批量查询成功]" : "[批量查询成功][存在不符合条件的数据][idList=" + disableResultList.toString() + "]", result);
+    }
+
+
+    @Override
     public ResultSupport<List<PublishDto>> getPublishListByQuery(PublishDto query) {
         List<PublishDto> result;
         Integer countByQuery;

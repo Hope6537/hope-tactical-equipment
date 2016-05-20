@@ -222,6 +222,50 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public ResultSupport<List<StudentDto>> getStudentListByParentIdList(List<Integer> idList) {
+        boolean flag;
+        List<StudentDto> result;
+        List<StudentDo> disableResultList;
+        try {
+            checkNotNull(idList, "[批量查询失败][当前入参实体为空]");
+            List<StudentDo> list = studentDao.selectStudentListByParentIds(idList);
+            checkNotNull(list, "[批量查询失败][查询为空]");
+            disableResultList = list.parallelStream().filter(o -> o.getId() == null || o.getStatus() == null || o.getIsDeleted() == null).collect(Collectors.toList());
+            if (disableResultList == null) {
+                disableResultList = Lists.newArrayList();
+            }
+            flag = disableResultList.size() == 0;
+            result = list.parallelStream().filter(o -> o.getId() != null).map(o -> mappingConverter.doMap(o, StudentDto.class)).collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return ResultSupport.getInstance(e);
+        }
+        return ResultSupport.getInstance(flag, flag ? "[批量查询成功]" : "[批量查询成功][存在不符合条件的数据][idList=" + disableResultList.toString() + "]", result);
+    }
+
+    @Override
+    public ResultSupport<List<StudentDto>> getStudentListByClassesIdList(List<Integer> idList) {
+        boolean flag;
+        List<StudentDto> result;
+        List<StudentDo> disableResultList;
+        try {
+            checkNotNull(idList, "[批量查询失败][当前入参实体为空]");
+            List<StudentDo> list = studentDao.selectStudentListByClassesIds(idList);
+            checkNotNull(list, "[批量查询失败][查询为空]");
+            disableResultList = list.parallelStream().filter(o -> o.getId() == null || o.getStatus() == null || o.getIsDeleted() == null).collect(Collectors.toList());
+            if (disableResultList == null) {
+                disableResultList = Lists.newArrayList();
+            }
+            flag = disableResultList.size() == 0;
+            result = list.parallelStream().filter(o -> o.getId() != null).map(o -> mappingConverter.doMap(o, StudentDto.class)).collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return ResultSupport.getInstance(e);
+        }
+        return ResultSupport.getInstance(flag, flag ? "[批量查询成功]" : "[批量查询成功][存在不符合条件的数据][idList=" + disableResultList.toString() + "]", result);
+    }
+
+    @Override
     public ResultSupport<List<StudentDto>> getStudentListByQuery(StudentDto query) {
         List<StudentDto> result;
         Integer countByQuery;
