@@ -6,6 +6,20 @@ def generate(objectName, columns):
     """
     生成服务接口
     """
+
+    foreginIdListInterface = ''
+    for c in columns:
+        if c[1] == 'int' and "Id" in c[0]:
+            foreginName = c[0]
+            foreginIdListInterface += """
+            /**
+            * 标准模板生成-根据外部IDList查询多个数据
+            *
+            * @param idList 要查询的ID集合
+            * @return ResultSupport.getData = 多条符合条件的数据
+            */
+            ResultSupport<List<{ObjectName}Dto>> get{ObjectName}ListBy""" + (foreginName[0].upper() + foreginName[1:]) + """List(List<Integer> idList);
+            """
     params = ""
     for c in columns:
         if c[1] == 'varchar' or c[1] == 'text':
@@ -90,6 +104,7 @@ public interface {ObjectName}Service {
      * @return ResultSupport.getData = 多条符合条件的数据
      */
     ResultSupport<List<{ObjectName}Dto>> get{ObjectName}ListByIdList(List<Integer> idList);
+""" + foreginIdListInterface + """
 
     /**
      * 标准模板生成-根据Query对象查询符合条件的数据
