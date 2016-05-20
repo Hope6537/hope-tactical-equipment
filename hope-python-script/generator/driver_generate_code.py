@@ -11,12 +11,11 @@ import generate_data_object
 import generate_data_transform_object
 import generate_dir
 import generate_service
+import generate_service_default_controller
 import generate_service_default_implement
 import generate_sql_mapper
 import generate_test
-import generate_service_default_controller
 from comic_hentai import comic_hentai_data_source
-
 
 
 def initAll(objectName, columns):
