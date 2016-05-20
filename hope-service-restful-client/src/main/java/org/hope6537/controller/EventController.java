@@ -1,7 +1,6 @@
 
 package org.hope6537.controller;
 
-import com.google.common.collect.Lists;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.hope6537.annotation.WatchedAuthRequest;
@@ -14,10 +13,7 @@ import org.hope6537.rest.utils.ResponseDict;
 import org.hope6537.service.EventService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +25,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 默认RESTFul API实现类
  * Created by hope6537 by Code Generator
  */
+@CrossOrigin(maxAge = 3600)
 @Controller
 @RequestMapping("/event/")
 @EnableAutoConfiguration

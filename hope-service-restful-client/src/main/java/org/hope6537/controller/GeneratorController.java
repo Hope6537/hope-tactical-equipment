@@ -5,6 +5,7 @@ import org.hope6537.entity.Response;
 import org.hope6537.entity.ResultSupport;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +18,7 @@ import java.util.List;
  * 生成器Controller
  * Created by hope6537 on 16/5/20.
  */
+@CrossOrigin(maxAge = 3600)
 @Controller
 @RequestMapping("/generator/")
 @EnableAutoConfiguration

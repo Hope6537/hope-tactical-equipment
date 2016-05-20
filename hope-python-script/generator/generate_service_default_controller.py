@@ -20,6 +20,7 @@ def generate(objectName, columns):
     text = """
 package org.hope6537.controller;
 
+import org.springframework.web.bind.annotation.*;
 import com.google.common.collect.Lists;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
@@ -48,6 +49,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 默认RESTFul API实现类
  * Created by hope6537 by Code Generator
  */
+@CrossOrigin(maxAge = 3600)
 @Controller
 @RequestMapping("/{objectName}/")
 @EnableAutoConfiguration
