@@ -4,15 +4,13 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.hope6537.annotation.WatchedAuthRequest;
 import org.hope6537.annotation.WatchedNoAuthRequest;
+import org.hope6537.business.EventBusiness;
 import org.hope6537.dto.EventDto;
-import org.hope6537.dto.PublishDto;
 import org.hope6537.entity.Response;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.page.PageMapUtil;
 import org.hope6537.rest.utils.ResponseDict;
-import org.hope6537.service.ClassesService;
 import org.hope6537.service.EventService;
-import org.hope6537.service.PublishService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +34,8 @@ public class EventController {
     @Resource(name = "eventService")
     private EventService eventService;
 
-    @Resource(name = "publishService")
-    private PublishService publishService;
-
-    @Resource(name = "classesService")
-    private ClassesService classesService;
+    @Resource(name = "eventBusiness")
+    private EventBusiness eventBusiness;
 
     @WatchedAuthRequest
     @RequestMapping(value = "post", method = RequestMethod.POST)
@@ -158,6 +153,31 @@ public class EventController {
             //验证完成,开始查询
             EventDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), EventDto.class);
             ResultSupport<List<EventDto>> eventListByQuery = eventService.getEventListByQuery(query);
+            return Response.getInstance(eventListByQuery.isSuccess())
+                    .addAttribute("result", eventListByQuery.getModule())
+                    .addAttribute("isEnd", eventListByQuery.getTotalCount() < query.getPageSize() * query.getCurrentPage())
+                    .addAttribute("pageMap", PageMapUtil.sendNextPage(query));
+        } catch (JSONException e) {
+            return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.getInstance(false).setReturnMsg(e.getMessage());
+        }
+    }
+
+    @WatchedNoAuthRequest
+    @RequestMapping(value = "fetch/full", method = RequestMethod.GET)
+    @ResponseBody
+    public Response fetchEventFullData(HttpServletRequest request) {
+        try {
+            JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
+            if (dataMap == null) {
+                Object errorResponse = request.getAttribute("errorResponse");
+                return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
+            }
+            //验证完成,开始查询
+            EventDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), EventDto.class);
+            ResultSupport<List<EventDto>> eventListByQuery = eventBusiness.getEventRichListByQuery(query);
             return Response.getInstance(eventListByQuery.isSuccess())
                     .addAttribute("result", eventListByQuery.getModule())
                     .addAttribute("isEnd", eventListByQuery.getTotalCount() < query.getPageSize() * query.getCurrentPage())

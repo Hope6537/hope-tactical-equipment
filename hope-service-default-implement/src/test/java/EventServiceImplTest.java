@@ -1,5 +1,6 @@
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import org.hope6537.business.EventBusiness;
 import org.hope6537.dto.EventDto;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.helper.SpringTestHelper;
@@ -27,6 +28,9 @@ public class EventServiceImplTest extends SpringTestHelper {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private EventBusiness eventBusiness;
+
     private List<Integer> idList;
 
     @Before
@@ -42,6 +46,13 @@ public class EventServiceImplTest extends SpringTestHelper {
         System.out.println(idList.toString());
         logger.info(idList.toString());
     }
+/*
+    @Test
+    public void autoTest() {
+        EventDto query = new EventDto();
+        ResultSupport<List<EventDto>> eventRichListByQuery = eventBusiness.getEventRichListByQuery(query);
+        System.out.println(JSON.toJSONString(eventRichListByQuery));
+    }*/
 
     @Test
     public void testAddEvent() {

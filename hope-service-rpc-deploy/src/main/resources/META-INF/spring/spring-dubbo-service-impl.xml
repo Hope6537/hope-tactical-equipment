@@ -33,6 +33,7 @@
     <dubbo:service ref="teacherService" interface="org.hope6537.service.TeacherService"/>
     <dubbo:service ref="publishService" interface="org.hope6537.service.PublishService"/>
     <dubbo:service ref="generatorBusiness" interface="org.hope6537.business.GeneratorBusiness"/>
+    <dubbo:service ref="eventBusiness" interface="org.hope6537.business.EventBusiness"/>
 
 
 
