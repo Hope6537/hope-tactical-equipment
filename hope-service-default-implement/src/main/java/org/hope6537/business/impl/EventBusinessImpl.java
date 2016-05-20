@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * Created by hope6537 on 16/5/21.
  */
-@Service(value = "eventBusinessImpl")
+@Service(value = "eventBusiness")
 public class EventBusinessImpl implements EventBusiness {
 
     @Resource(name = "eventService")
