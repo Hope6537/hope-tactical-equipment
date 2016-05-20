@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface StudentService {
 
-    public ResultSupport<List<Integer>> generatorStudents(int count);
+    ResultSupport<List<Integer>> generatorStudents(int count);
 
     /**
      * 标准模板生成-向数据库添加单行记录
@@ -77,6 +77,22 @@ public interface StudentService {
      * @return ResultSupport.getData = 多条符合条件的数据
      */
     ResultSupport<List<StudentDto>> getStudentListByIdList(List<Integer> idList);
+
+    /**
+     * 标准模板生成-根据外部IDList查询多个数据
+     *
+     * @param idList 要查询的ID集合
+     * @return ResultSupport.getData = 多条符合条件的数据
+     */
+    ResultSupport<List<StudentDto>> getStudentListByParentIdList(List<Integer> idList);
+
+    /**
+     * 标准模板生成-根据外部IDList查询多个数据
+     *
+     * @param idList 要查询的ID集合
+     * @return ResultSupport.getData = 多条符合条件的数据
+     */
+    ResultSupport<List<StudentDto>> getStudentListByClassesIdList(List<Integer> idList);
 
     /**
      * 标准模板生成-根据Query对象查询符合条件的数据

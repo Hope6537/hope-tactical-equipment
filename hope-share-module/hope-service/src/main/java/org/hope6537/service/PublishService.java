@@ -77,6 +77,23 @@ public interface PublishService {
     ResultSupport<List<PublishDto>> getPublishListByIdList(List<Integer> idList);
 
     /**
+     * 标准模板生成-根据外部IDList查询多个数据
+     *
+     * @param idList 要查询的ID集合
+     * @return ResultSupport.getData = 多条符合条件的数据
+     */
+    ResultSupport<List<PublishDto>> getPublishListByEventIdList(List<Integer> idList);
+
+    /**
+     * 标准模板生成-根据外部IDList查询多个数据
+     *
+     * @param idList 要查询的ID集合
+     * @return ResultSupport.getData = 多条符合条件的数据
+     */
+    ResultSupport<List<PublishDto>> getPublishListByClassesIdList(List<Integer> idList);
+
+
+    /**
      * 标准模板生成-根据Query对象查询符合条件的数据
      *
      * @param query 数据查询对象

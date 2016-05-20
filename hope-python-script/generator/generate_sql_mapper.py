@@ -3,6 +3,9 @@ import os
 
 
 def generate(objectName, columns):
+    """
+   生成SQL映射文件
+   """
     foreginIdListInterface = ''
     for c in columns:
         if c[1] == 'int' and "Id" in c[0]:
@@ -18,10 +21,6 @@ def generate(objectName, columns):
         LIMIT ${idList.size}
     </select>
             """
-
-    """
-    生成SQL映射文件
-    """
     insertColumns = ""
     insertDynamic = ""
     updateColumns = ""
@@ -90,8 +89,7 @@ def generate(objectName, columns):
             )
         </where>
         LIMIT ${idList.size}
-    </select>
-    """ + foreginIdListInterface + """
+    </select>""" + foreginIdListInterface + """
     <!-- 默认模板生成 动态SQL语句 通常字段判断是否为空 并增加日期范围 -->
     <sql id="where">
         <where> 1 = 1
