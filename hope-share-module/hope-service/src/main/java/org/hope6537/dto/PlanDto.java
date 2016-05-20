@@ -1,3 +1,4 @@
+
 package org.hope6537.dto;
 
 /**
@@ -12,18 +13,24 @@ public class PlanDto extends BasicDto {
     private String data;
 
     /**
-     * 星期几
+     * 中文日期
      */
-    private Integer day;
+    private String day;
+
+    /**
+     * 班级ID
+     */
+    private Integer classesId;
 
     public PlanDto() {
 
     }
 
-    public PlanDto(String data, Integer day) {
+    public PlanDto(String data, String day, Integer classesId) {
 
         this.data = data;
         this.day = day;
+        this.classesId = classesId;
 
 
     }
@@ -36,12 +43,20 @@ public class PlanDto extends BasicDto {
         this.data = data;
     }
 
-    public Integer getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(Integer day) {
+    public void setDay(String day) {
         this.day = day;
+    }
+
+    public Integer getClassesId() {
+        return classesId;
+    }
+
+    public void setClassesId(Integer classesId) {
+        this.classesId = classesId;
     }
 
 }

@@ -1,3 +1,4 @@
+
 package org.hope6537.dto;
 
 /**
@@ -24,13 +25,13 @@ public class MealDto extends BasicDto {
     /**
      * 星期几
      */
-    private Integer day;
+    private String day;
 
     public MealDto() {
 
     }
 
-    public MealDto(String breakfast, String lunch, String dinner, Integer day) {
+    public MealDto(String breakfast, String lunch, String dinner, String day) {
 
         this.breakfast = breakfast;
         this.lunch = lunch;
@@ -64,11 +65,11 @@ public class MealDto extends BasicDto {
         this.dinner = dinner;
     }
 
-    public Integer getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(Integer day) {
+    public void setDay(String day) {
         this.day = day;
     }
 

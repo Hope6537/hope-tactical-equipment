@@ -1,6 +1,7 @@
 
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.PlanDao;
 import org.hope6537.dataobject.BasicDo;
@@ -10,7 +11,6 @@ import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.PlanService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,16 +59,17 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public ResultSupport<Integer> addPlan(String data,Integer day) {
+    public ResultSupport<Integer> addPlan(String data, String day, Integer classesId) {
         try {
             checkNotNull(data, "[添加失败][当前插入数据字段(data)为空]");
-checkNotNull(day, "[添加失败][当前插入数据字段(day)为空]");
+            checkNotNull(day, "[添加失败][当前插入数据字段(day)为空]");
+            checkNotNull(classesId, "[添加失败][当前插入数据字段(classesId)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addPlan(new PlanDto(data,day));
+        return this.addPlan(new PlanDto(data, day, classesId));
     }
 
     @Override

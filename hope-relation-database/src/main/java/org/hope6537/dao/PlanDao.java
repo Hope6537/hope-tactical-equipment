@@ -1,37 +1,37 @@
 
-    package org.hope6537.dao;
+package org.hope6537.dao;
 
-    import org.hope6537.annotation.MybatisRepository;
-    import org.hope6537.dataobject.PlanDo;
-    import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Param;
+import org.hope6537.annotation.MybatisRepository;
+import org.hope6537.dataobject.PlanDo;
 
-    import java.util.List;
+import java.util.List;
 
-    /**
-     * 实体数据访问接口
-     * Created by hope6537 by Code Generator
-     */
-    @MybatisRepository
-    public interface PlanDao {
+/**
+ * 实体数据访问接口
+ * Created by hope6537 by Code Generator
+ */
+@MybatisRepository
+public interface PlanDao {
 
-        int insertPlan(PlanDo planDo);
+    int insertPlan(PlanDo planDo);
 
-        int updatePlan(PlanDo planDo);
+    int updatePlan(PlanDo planDo);
 
-        int batchUpdatePlan(@Param("data") PlanDo planDo, @Param("idList") List<Integer> idList);
+    int batchUpdatePlan(@Param("data") PlanDo planDo, @Param("idList") List<Integer> idList);
 
-        int deletePlan(@Param("id") Integer id);
+    int deletePlan(@Param("id") Integer id);
 
-        int batchDeletePlan(@Param("idList") List<Integer> idList);
+    int batchDeletePlan(@Param("idList") List<Integer> idList);
 
-        PlanDo selectPlanById(@Param("id") Integer id);
+    PlanDo selectPlanById(@Param("id") Integer id);
 
-        List<PlanDo> selectPlanListByIds(@Param("idList") List<Integer> idList);
+    List<PlanDo> selectPlanListByIds(@Param("idList") List<Integer> idList);
 
-        List<PlanDo> selectPlanListByQuery(PlanDo query);
+    List<PlanDo> selectPlanListByQuery(PlanDo query);
 
-        int selectPlanCountByQuery(PlanDo query);
+    int selectPlanCountByQuery(PlanDo query);
 
-    }
+}
 
     

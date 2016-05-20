@@ -1,6 +1,7 @@
 
 package org.hope6537.service.impl;
 
+import com.google.common.collect.Lists;
 import org.hope6537.convert.impl.DozerMappingConverter;
 import org.hope6537.dao.MealDao;
 import org.hope6537.dataobject.BasicDo;
@@ -10,7 +11,6 @@ import org.hope6537.entity.ResultSupport;
 import org.hope6537.enums.IsDeleted;
 import org.hope6537.page.PageDto;
 import org.hope6537.service.MealService;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,18 +59,18 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public ResultSupport<Integer> addMeal(String breakfast,String lunch,String dinner,Integer day) {
+    public ResultSupport<Integer> addMeal(String breakfast, String lunch, String dinner, String day) {
         try {
             checkNotNull(breakfast, "[添加失败][当前插入数据字段(breakfast)为空]");
-checkNotNull(lunch, "[添加失败][当前插入数据字段(lunch)为空]");
-checkNotNull(dinner, "[添加失败][当前插入数据字段(dinner)为空]");
-checkNotNull(day, "[添加失败][当前插入数据字段(day)为空]");
+            checkNotNull(lunch, "[添加失败][当前插入数据字段(lunch)为空]");
+            checkNotNull(dinner, "[添加失败][当前插入数据字段(dinner)为空]");
+            checkNotNull(day, "[添加失败][当前插入数据字段(day)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addMeal(new MealDto(breakfast,lunch,dinner,day));
+        return this.addMeal(new MealDto(breakfast, lunch, dinner, day));
     }
 
     @Override

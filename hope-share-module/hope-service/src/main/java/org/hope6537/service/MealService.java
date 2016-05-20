@@ -22,10 +22,11 @@ public interface MealService {
 
     /**
      * 标准模板生成-向数据库添加单行记录 参数集合
+     *
      * @param 数据字段集合
      * @return ResultSupport.getData = 更新行数
      */
-    ResultSupport<Integer> addMeal(String breakfast, String lunch, String dinner, Integer day);
+    ResultSupport<Integer> addMeal(String breakfast, String lunch, String dinner, String day);
 
     /**
      * 标准模板生成-向数据库更新单行记录
@@ -39,7 +40,7 @@ public interface MealService {
      * 标准模板生成-向数据库更新多行记录
      *
      * @param mealDto 数据转换对象
-     * @param idList       要更新的ID集合
+     * @param idList  要更新的ID集合
      * @return ResultSupport.getData = 更新行数
      */
     ResultSupport<Integer> batchModifyMeal(MealDto mealDto, List<Integer> idList);
