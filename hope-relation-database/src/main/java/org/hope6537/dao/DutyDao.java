@@ -27,6 +27,10 @@ public interface DutyDao {
 
     List<DutyDo> selectDutyListByIds(@Param("idList") List<Integer> idList);
 
+    List<DutyDo> selectDutyListByClassesIds(@Param("idList") List<Integer> idList);
+
+    List<DutyDo> selectDutyListByTeacherIds(@Param("idList") List<Integer> idList);
+
     List<DutyDo> selectDutyListByQuery(DutyDo query);
 
     int selectDutyCountByQuery(DutyDo query);

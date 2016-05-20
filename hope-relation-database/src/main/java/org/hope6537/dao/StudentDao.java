@@ -27,6 +27,10 @@ public interface StudentDao {
 
     List<StudentDo> selectStudentListByIds(@Param("idList") List<Integer> idList);
 
+    List<StudentDo> selectStudentListByParentIds(@Param("idList") List<Integer> idList);
+
+    List<StudentDo> selectStudentListByClassesIds(@Param("idList") List<Integer> idList);
+
     List<StudentDo> selectStudentListByQuery(StudentDo query);
 
     int selectStudentCountByQuery(StudentDo query);

@@ -27,6 +27,10 @@ public interface ApplyDao {
 
     List<ApplyDo> selectApplyListByIds(@Param("idList") List<Integer> idList);
 
+    List<ApplyDo> selectApplyListByTeacherIds(@Param("idList") List<Integer> idList);
+
+    List<ApplyDo> selectApplyListByRequiredIds(@Param("idList") List<Integer> idList);
+
     List<ApplyDo> selectApplyListByQuery(ApplyDo query);
 
     int selectApplyCountByQuery(ApplyDo query);

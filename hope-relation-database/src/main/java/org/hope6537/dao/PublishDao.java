@@ -27,6 +27,10 @@ public interface PublishDao {
 
     List<PublishDo> selectPublishListByIds(@Param("idList") List<Integer> idList);
 
+    List<PublishDo> selectPublishListByEventIds(@Param("idList") List<Integer> idList);
+
+    List<PublishDo> selectPublishListByClassesIds(@Param("idList") List<Integer> idList);
+
     List<PublishDo> selectPublishListByQuery(PublishDo query);
 
     int selectPublishCountByQuery(PublishDo query);

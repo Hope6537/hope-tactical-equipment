@@ -27,6 +27,8 @@ public interface PlanDao {
 
     List<PlanDo> selectPlanListByIds(@Param("idList") List<Integer> idList);
 
+    List<PlanDo> selectPlanListByClassesIds(@Param("idList") List<Integer> idList);
+
     List<PlanDo> selectPlanListByQuery(PlanDo query);
 
     int selectPlanCountByQuery(PlanDo query);

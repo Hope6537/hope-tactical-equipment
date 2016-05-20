@@ -27,6 +27,10 @@ public interface MessageDao {
 
     List<MessageDo> selectMessageListByIds(@Param("idList") List<Integer> idList);
 
+    List<MessageDo> selectMessageListByNoticeIds(@Param("idList") List<Integer> idList);
+
+    List<MessageDo> selectMessageListByParentIds(@Param("idList") List<Integer> idList);
+
     List<MessageDo> selectMessageListByQuery(MessageDo query);
 
     int selectMessageCountByQuery(MessageDo query);

@@ -27,6 +27,10 @@ public interface JoinDao {
 
     List<JoinDo> selectJoinListByIds(@Param("idList") List<Integer> idList);
 
+    List<JoinDo> selectJoinListByEventIds(@Param("idList") List<Integer> idList);
+
+    List<JoinDo> selectJoinListByStudentIds(@Param("idList") List<Integer> idList);
+
     List<JoinDo> selectJoinListByQuery(JoinDo query);
 
     int selectJoinCountByQuery(JoinDo query);

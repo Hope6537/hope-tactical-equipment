@@ -27,6 +27,8 @@ public interface RequireDao {
 
     List<RequireDo> selectRequireListByIds(@Param("idList") List<Integer> idList);
 
+    List<RequireDo> selectRequireListByParentIds(@Param("idList") List<Integer> idList);
+
     List<RequireDo> selectRequireListByQuery(RequireDo query);
 
     int selectRequireCountByQuery(RequireDo query);

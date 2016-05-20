@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.hope6537.dao.DutyDao">
     <!-- 默认模板生成 添加单行记录 -->
-    <insert id="insertDuty"> INSERT INTO `Duty`
+    <insert id="insertDuty">INSERT INTO `Duty`
         (`classesId`,`teacherId`,
         <!--<if test="可以为空字段!=null and 可以为空字段!=''"> `可以为空字段`, </if>-->
         `status`, `isDeleted`, `created`, `updated`)
@@ -13,24 +13,24 @@
         <selectKey resultType="integer" keyProperty="id">SELECT LAST_INSERT_ID()</selectKey>
     </insert>
     <!-- 默认模板生成 更新单行记录 -->
-    <update id="updateDuty"> UPDATE `Duty`
+    <update id="updateDuty">UPDATE `Duty`
         <set>
-            <if test="classesId!=null and classesId!=''"> `classesId` = #{classesId}, </if>
-			<if test="teacherId!=null and teacherId!=''"> `teacherId` = #{teacherId}, </if>
-			
-            <if test="status!=null and status!=''"> `status` = #{status}, </if>
+            <if test="classesId!=null and classesId!=''">`classesId` = #{classesId},</if>
+            <if test="teacherId!=null and teacherId!=''">`teacherId` = #{teacherId},</if>
+
+            <if test="status!=null and status!=''">`status` = #{status},</if>
             updated = UNIX_TIMESTAMP()
         </set>
-        <where> id = #{id} </where>
+        <where>id = #{id}</where>
         LIMIT 1
     </update>
     <!-- 默认模板生成 更新多行记录 -->
-    <update id="batchUpdateDuty"> UPDATE `Duty`
+    <update id="batchUpdateDuty">UPDATE `Duty`
         <set>
-            <if test="data.classesId!=null and data.classesId!=''"> `classesId` = #{data.classesId}, </if>
-			<if test="data.teacherId!=null and data.teacherId!=''"> `teacherId` = #{data.teacherId}, </if>
-			
-            <if test="data.status!=null and data.status!=''"> `status` = #{data.status}, </if>
+            <if test="data.classesId!=null and data.classesId!=''">`classesId` = #{data.classesId},</if>
+            <if test="data.teacherId!=null and data.teacherId!=''">`teacherId` = #{data.teacherId},</if>
+
+            <if test="data.status!=null and data.status!=''">`status` = #{data.status},</if>
         </set>
         <where>
             <foreach collection="idList" item="id" separator=" or ">id = #{id}</foreach>
@@ -38,18 +38,21 @@
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 删除单行记录-->
-    <update id="deleteDuty"> UPDATE `Duty` SET isDeleted = 1, updated = UNIX_TIMESTAMP() WHERE id = ${id} LIMIT 1 </update>
+    <update id="deleteDuty">UPDATE `Duty` SET isDeleted = 1, updated = UNIX_TIMESTAMP() WHERE id = ${id} LIMIT 1
+    </update>
     <!-- 默认模板生成 删除多行记录-->
-    <update id="batchDeleteDuty"> UPDATE `Duty` SET isDeleted = 1,updated = UNIX_TIMESTAMP()
+    <update id="batchDeleteDuty">UPDATE `Duty` SET isDeleted = 1,updated = UNIX_TIMESTAMP()
         <where>
             <foreach collection="idList" item="id" separator=" or ">id = #{id}</foreach>
         </where>
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 根据ID选取单行记录 -->
-    <select id="selectDutyById" resultType="org.hope6537.dataobject.DutyDo"> SELECT * FROM `Duty` WHERE id = ${id} LIMIT 1 </select>
+    <select id="selectDutyById" resultType="org.hope6537.dataobject.DutyDo">SELECT * FROM `Duty` WHERE id = ${id} LIMIT
+        1
+    </select>
     <!-- 默认模板生成 根据ID集合选取多行记录-->
-    <select id="selectDutyListByIds" resultType="org.hope6537.dataobject.DutyDo"> SELECT * FROM `Duty`
+    <select id="selectDutyListByIds" resultType="org.hope6537.dataobject.DutyDo">SELECT * FROM `Duty`
         <where>
             id in (
             <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
@@ -59,28 +62,32 @@
     </select>
     <!-- 默认模板生成 动态SQL语句 通常字段判断是否为空 并增加日期范围 -->
     <sql id="where">
-        <where> 1 = 1
-            <if test="classesId!=null and classesId!=''"> AND `classesId` = #{classesId} </if>
-			<if test="teacherId!=null and teacherId!=''"> AND `teacherId` = #{teacherId} </if>
-			
+        <where>1 = 1
+            <if test="classesId!=null and classesId!=''">AND `classesId` = #{classesId}</if>
+            <if test="teacherId!=null and teacherId!=''">AND `teacherId` = #{teacherId}</if>
+
             <!--<if test="模糊查询字段!=null and 模糊查询字段!=''"> AND`模糊查询字段` LIKE concat('%',#{模糊查询字段},'%') </if>-->
-            <if test="createdAfter!=null and createdAfter!=''"> AND `created` &lt; #{createdAfter} </if>
-            <if test="createdBefore!=null and createdBefore!=''">AND `created` &gt; #{createdBefore} </if>
-            <if test="updatedAfter!=null and updatedAfter!=''"> AND `updated` &lt; #{updatedAfter} </if>
-            <if test="updatedBefore!=null and updatedBefore!=''">AND `updated` &gt; #{updatedBefore} </if>
-            <if test="status!=null and status!=''"> AND `status` = #{status} </if>
-            <if test="isDeleted!=null and isDeleted!=''"> AND `isDeleted` = #{isDeleted} </if>
+            <if test="createdAfter!=null and createdAfter!=''">AND `created` &lt; #{createdAfter}</if>
+            <if test="createdBefore!=null and createdBefore!=''">AND `created` &gt; #{createdBefore}</if>
+            <if test="updatedAfter!=null and updatedAfter!=''">AND `updated` &lt; #{updatedAfter}</if>
+            <if test="updatedBefore!=null and updatedBefore!=''">AND `updated` &gt; #{updatedBefore}</if>
+            <if test="status!=null and status!=''">AND `status` = #{status}</if>
+            <if test="isDeleted!=null and isDeleted!=''">AND `isDeleted` = #{isDeleted}</if>
         </where>
     </sql>
     <!-- 默认模板生成 根据Query对象查询记录 -->
-    <select id="selectDutyListByQuery" resultType="org.hope6537.dataobject.DutyDo" parameterType="org.hope6537.dto.DutyDto"> SELECT * FROM `Duty`
+    <select id="selectDutyListByQuery" resultType="org.hope6537.dataobject.DutyDo"
+            parameterType="org.hope6537.dto.DutyDto">SELECT * FROM `Duty`
         <include refid="where"/>
         ORDER BY `created` DESC
-        <if test="limit!=null and limit!=''"> LIMIT
-            <if test="offset!=null and offset!=''">#{offset},</if> #{limit} </if>
+        <if test="limit!=null and limit!=''">LIMIT
+            <if test="offset!=null and offset!=''">#{offset},</if>
+            #{limit}
+        </if>
     </select>
     <!-- 默认模板生成 根据Query对象查询符合条件的个数 -->
-    <select id="selectDutyCountByQuery" resultType="Integer" parameterType="org.hope6537.dataobject.DutyDo"> SELECT count(*) FROM `Duty`
+    <select id="selectDutyCountByQuery" resultType="Integer" parameterType="org.hope6537.dataobject.DutyDo">SELECT
+        count(*) FROM `Duty`
         <include refid="where"/>
     </select>
 </mapper>

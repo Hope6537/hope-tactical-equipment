@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD iBatis Mapper 3.0 //EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.hope6537.dao.MealDao">
     <!-- 默认模板生成 添加单行记录 -->
-    <insert id="insertMeal"> INSERT INTO `Meal`
+    <insert id="insertMeal">INSERT INTO `Meal`
         (`breakfast`,`lunch`,`dinner`,`day`,
         <!--<if test="可以为空字段!=null and 可以为空字段!=''"> `可以为空字段`, </if>-->
         `status`, `isDeleted`, `created`, `updated`)
@@ -13,28 +13,28 @@
         <selectKey resultType="integer" keyProperty="id">SELECT LAST_INSERT_ID()</selectKey>
     </insert>
     <!-- 默认模板生成 更新单行记录 -->
-    <update id="updateMeal"> UPDATE `Meal`
+    <update id="updateMeal">UPDATE `Meal`
         <set>
-            <if test="breakfast!=null and breakfast!=''"> `breakfast` = #{breakfast}, </if>
-			<if test="lunch!=null and lunch!=''"> `lunch` = #{lunch}, </if>
-			<if test="dinner!=null and dinner!=''"> `dinner` = #{dinner}, </if>
-			<if test="day!=null and day!=''"> `day` = #{day}, </if>
-			
-            <if test="status!=null and status!=''"> `status` = #{status}, </if>
+            <if test="breakfast!=null and breakfast!=''">`breakfast` = #{breakfast},</if>
+            <if test="lunch!=null and lunch!=''">`lunch` = #{lunch},</if>
+            <if test="dinner!=null and dinner!=''">`dinner` = #{dinner},</if>
+            <if test="day!=null and day!=''">`day` = #{day},</if>
+
+            <if test="status!=null and status!=''">`status` = #{status},</if>
             updated = UNIX_TIMESTAMP()
         </set>
-        <where> id = #{id} </where>
+        <where>id = #{id}</where>
         LIMIT 1
     </update>
     <!-- 默认模板生成 更新多行记录 -->
-    <update id="batchUpdateMeal"> UPDATE `Meal`
+    <update id="batchUpdateMeal">UPDATE `Meal`
         <set>
-            <if test="data.breakfast!=null and data.breakfast!=''"> `breakfast` = #{data.breakfast}, </if>
-			<if test="data.lunch!=null and data.lunch!=''"> `lunch` = #{data.lunch}, </if>
-			<if test="data.dinner!=null and data.dinner!=''"> `dinner` = #{data.dinner}, </if>
-			<if test="data.day!=null and data.day!=''"> `day` = #{data.day}, </if>
-			
-            <if test="data.status!=null and data.status!=''"> `status` = #{data.status}, </if>
+            <if test="data.breakfast!=null and data.breakfast!=''">`breakfast` = #{data.breakfast},</if>
+            <if test="data.lunch!=null and data.lunch!=''">`lunch` = #{data.lunch},</if>
+            <if test="data.dinner!=null and data.dinner!=''">`dinner` = #{data.dinner},</if>
+            <if test="data.day!=null and data.day!=''">`day` = #{data.day},</if>
+
+            <if test="data.status!=null and data.status!=''">`status` = #{data.status},</if>
         </set>
         <where>
             <foreach collection="idList" item="id" separator=" or ">id = #{id}</foreach>
@@ -42,18 +42,21 @@
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 删除单行记录-->
-    <update id="deleteMeal"> UPDATE `Meal` SET isDeleted = 1, updated = UNIX_TIMESTAMP() WHERE id = ${id} LIMIT 1 </update>
+    <update id="deleteMeal">UPDATE `Meal` SET isDeleted = 1, updated = UNIX_TIMESTAMP() WHERE id = ${id} LIMIT 1
+    </update>
     <!-- 默认模板生成 删除多行记录-->
-    <update id="batchDeleteMeal"> UPDATE `Meal` SET isDeleted = 1,updated = UNIX_TIMESTAMP()
+    <update id="batchDeleteMeal">UPDATE `Meal` SET isDeleted = 1,updated = UNIX_TIMESTAMP()
         <where>
             <foreach collection="idList" item="id" separator=" or ">id = #{id}</foreach>
         </where>
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 根据ID选取单行记录 -->
-    <select id="selectMealById" resultType="org.hope6537.dataobject.MealDo"> SELECT * FROM `Meal` WHERE id = ${id} LIMIT 1 </select>
+    <select id="selectMealById" resultType="org.hope6537.dataobject.MealDo">SELECT * FROM `Meal` WHERE id = ${id} LIMIT
+        1
+    </select>
     <!-- 默认模板生成 根据ID集合选取多行记录-->
-    <select id="selectMealListByIds" resultType="org.hope6537.dataobject.MealDo"> SELECT * FROM `Meal`
+    <select id="selectMealListByIds" resultType="org.hope6537.dataobject.MealDo">SELECT * FROM `Meal`
         <where>
             id in (
             <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
@@ -63,30 +66,34 @@
     </select>
     <!-- 默认模板生成 动态SQL语句 通常字段判断是否为空 并增加日期范围 -->
     <sql id="where">
-        <where> 1 = 1
-            <if test="breakfast!=null and breakfast!=''"> AND `breakfast` = #{breakfast} </if>
-			<if test="lunch!=null and lunch!=''"> AND `lunch` = #{lunch} </if>
-			<if test="dinner!=null and dinner!=''"> AND `dinner` = #{dinner} </if>
-			<if test="day!=null and day!=''"> AND `day` = #{day} </if>
-			
+        <where>1 = 1
+            <if test="breakfast!=null and breakfast!=''">AND `breakfast` = #{breakfast}</if>
+            <if test="lunch!=null and lunch!=''">AND `lunch` = #{lunch}</if>
+            <if test="dinner!=null and dinner!=''">AND `dinner` = #{dinner}</if>
+            <if test="day!=null and day!=''">AND `day` = #{day}</if>
+
             <!--<if test="模糊查询字段!=null and 模糊查询字段!=''"> AND`模糊查询字段` LIKE concat('%',#{模糊查询字段},'%') </if>-->
-            <if test="createdAfter!=null and createdAfter!=''"> AND `created` &lt; #{createdAfter} </if>
-            <if test="createdBefore!=null and createdBefore!=''">AND `created` &gt; #{createdBefore} </if>
-            <if test="updatedAfter!=null and updatedAfter!=''"> AND `updated` &lt; #{updatedAfter} </if>
-            <if test="updatedBefore!=null and updatedBefore!=''">AND `updated` &gt; #{updatedBefore} </if>
-            <if test="status!=null and status!=''"> AND `status` = #{status} </if>
-            <if test="isDeleted!=null and isDeleted!=''"> AND `isDeleted` = #{isDeleted} </if>
+            <if test="createdAfter!=null and createdAfter!=''">AND `created` &lt; #{createdAfter}</if>
+            <if test="createdBefore!=null and createdBefore!=''">AND `created` &gt; #{createdBefore}</if>
+            <if test="updatedAfter!=null and updatedAfter!=''">AND `updated` &lt; #{updatedAfter}</if>
+            <if test="updatedBefore!=null and updatedBefore!=''">AND `updated` &gt; #{updatedBefore}</if>
+            <if test="status!=null and status!=''">AND `status` = #{status}</if>
+            <if test="isDeleted!=null and isDeleted!=''">AND `isDeleted` = #{isDeleted}</if>
         </where>
     </sql>
     <!-- 默认模板生成 根据Query对象查询记录 -->
-    <select id="selectMealListByQuery" resultType="org.hope6537.dataobject.MealDo" parameterType="org.hope6537.dto.MealDto"> SELECT * FROM `Meal`
+    <select id="selectMealListByQuery" resultType="org.hope6537.dataobject.MealDo"
+            parameterType="org.hope6537.dto.MealDto">SELECT * FROM `Meal`
         <include refid="where"/>
         ORDER BY `created` DESC
-        <if test="limit!=null and limit!=''"> LIMIT
-            <if test="offset!=null and offset!=''">#{offset},</if> #{limit} </if>
+        <if test="limit!=null and limit!=''">LIMIT
+            <if test="offset!=null and offset!=''">#{offset},</if>
+            #{limit}
+        </if>
     </select>
     <!-- 默认模板生成 根据Query对象查询符合条件的个数 -->
-    <select id="selectMealCountByQuery" resultType="Integer" parameterType="org.hope6537.dataobject.MealDo"> SELECT count(*) FROM `Meal`
+    <select id="selectMealCountByQuery" resultType="Integer" parameterType="org.hope6537.dataobject.MealDo">SELECT
+        count(*) FROM `Meal`
         <include refid="where"/>
     </select>
 </mapper>

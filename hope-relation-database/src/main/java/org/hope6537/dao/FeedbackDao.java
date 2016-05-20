@@ -27,6 +27,8 @@ public interface FeedbackDao {
 
     List<FeedbackDo> selectFeedbackListByIds(@Param("idList") List<Integer> idList);
 
+    List<FeedbackDo> selectFeedbackListByParentIds(@Param("idList") List<Integer> idList);
+
     List<FeedbackDo> selectFeedbackListByQuery(FeedbackDo query);
 
     int selectFeedbackCountByQuery(FeedbackDo query);
