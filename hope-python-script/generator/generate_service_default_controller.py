@@ -172,7 +172,7 @@ public class {ObjectName}Controller {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            {ObjectName}Dto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), {ObjectName}Dto.class);
+            {ObjectName}Dto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"),,dataMap.getString("pageMap"), {ObjectName}Dto.class);
             ResultSupport<List<{ObjectName}Dto>> {objectName}ListByQuery = {objectName}Service.get{ObjectName}ListByQuery(query);
             return Response.getInstance({objectName}ListByQuery.isSuccess())
                     .addAttribute("result", {objectName}ListByQuery.getModule())

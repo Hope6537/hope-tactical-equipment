@@ -36,7 +36,7 @@ def mysql_connect():
     cursor = conn.cursor()
     # 得到当前数据库中的所有表
     cursor.execute(
-            "select distinct table_name from information_schema.columns where table_schema = 'ComicHentai' order by table_schema,table_name")
+            "select distinct table_name from information_schema.columns where table_schema = 'jxt' order by table_schema,table_name")
     tables = cursor.fetchall()
     print(tables)
     for table in tables:
