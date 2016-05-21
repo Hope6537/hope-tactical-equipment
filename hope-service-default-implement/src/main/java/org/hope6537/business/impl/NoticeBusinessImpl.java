@@ -12,6 +12,7 @@ import org.hope6537.service.NoticeService;
 import org.hope6537.service.StudentService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,11 +32,37 @@ public class NoticeBusinessImpl implements NoticeBusiness {
     @Resource(name = "studentService")
     private StudentService studentService;
 
-
-    public <T extends BasicDto> Map<Integer, T> indexObject(List<T> module) {
-        Map<Integer, T> result = Maps.newConcurrentMap();
-        module.forEach(t -> result.put(t.getId(), t));
-        return result;
+    @SuppressWarnings("unchecked")
+    public ResultSupport<Map<Integer, Map<String, Object>>> buildRichNoticeListByIdList(List<Integer> idList) {
+        Map<Integer, Map<String, Object>> result = Maps.newConcurrentMap();
+        ResultSupport<List<NoticeDto>> notice = noticeService.getNoticeListByIdList(idList);
+        if (!notice.isSuccess()) {
+            return ResultSupport.getInstance(false, "[获取notice失败]", null);
+        }
+        Map<Integer, NoticeDto> noticeDtoMap = DtoUtils.indexObject(notice.getModule());
+        ResultSupport<List<MessageDto>> message = messageService.getMessageListByNoticeIdList(notice.getModule().stream().map(NoticeDto::getId).collect(Collectors.toList()));
+        if (!message.isSuccess()) {
+            return ResultSupport.getInstance(false, "[获取message失败]", null);
+        }
+        ResultSupport<List<ClassesDto>> classes = classesService.getClassesListByIdList(message.getModule().stream().map(MessageDto::getClassesId).collect(Collectors.toList()));
+        if (!classes.isSuccess()) {
+            return ResultSupport.getInstance(false, "[获取classes失败]", null);
+        }
+        Map<Integer, ClassesDto> classesDtoMap = DtoUtils.indexObject(classes.getModule());
+        message.getModule().forEach(messageDto -> {
+            Map<String, Object> json = Maps.newConcurrentMap();
+            json.put("entry", noticeDtoMap.get(messageDto.getNoticeId()));
+            Object relation = json.get("relation");
+            if (relation == null) {
+                relation = new ArrayList<ClassesDto>();
+                json.put("relation", relation);
+            }
+            //unchecked
+            ((List<ClassesDto>) relation).add(classesDtoMap.get(messageDto.getClassesId()));
+            result.put(messageDto.getNoticeId(), json);
+        });
+        boolean expr = !result.isEmpty();
+        return ResultSupport.getInstance(expr, expr ? "[关联构建完成]" : "关联构建失败", result);
     }
 
     @Override
@@ -50,7 +77,7 @@ public class NoticeBusinessImpl implements NoticeBusiness {
         if (!noticeList.isSuccess()) {
             return ResultSupport.getInstance(false, "[获取通知失败]", null);
         }
-        noticeIndexMap = indexObject(noticeList.getModule());
+        noticeIndexMap = DtoUtils.indexObject(noticeList.getModule());
 
         ResultSupport<List<MessageDto>> messageList = messageService.getMessageListByNoticeIdList(Lists.newArrayList(noticeIndexMap.keySet()));
         if (!messageList.isSuccess()) {
@@ -70,7 +97,7 @@ public class NoticeBusinessImpl implements NoticeBusiness {
         if (!classesList.isSuccess()) {
             return ResultSupport.getInstance(false, "[获取班级列表失败]", null);
         }
-        classesIndexMap = indexObject(classesList.getModule());
+        classesIndexMap = DtoUtils.indexObject(classesList.getModule());
 
         List<NoticeDto> result = Lists.newArrayList();
 
@@ -99,7 +126,7 @@ public class NoticeBusinessImpl implements NoticeBusiness {
         if (!studentList.isSuccess()) {
             return ResultSupport.getInstance(false, "[获取学生失败]", null);
         }
-        Map<Integer, StudentDto> integerStudentDtoMap = indexObject(studentList.getModule());
+        Map<Integer, StudentDto> integerStudentDtoMap = DtoUtils.indexObject(studentList.getModule());
         ResultSupport<List<MessageDto>> messageList = messageService.getMessageListByClassesIdList(studentList.getModule().stream().map(StudentDto::getClassesId).collect(Collectors.toList()));
         if (!messageList.isSuccess()) {
             return ResultSupport.getInstance(false, "[获取消息失败]", null);

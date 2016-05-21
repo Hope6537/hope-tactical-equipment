@@ -5,6 +5,7 @@ import org.hope6537.dto.ClassesDto;
 import org.hope6537.dto.NoticeDto;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,9 @@ public class PlayGroundTest {
         noticeDtoMap.put("entry", noticeDto);
         noticeDtoMap.put("relationList", classesDtoList);
 
-        System.out.println(JSON.toJSONString(noticeDtoMap));
+        ArrayList<Map<String, Object>> object = Lists.newArrayList();
+        object.add(noticeDtoMap);
+        System.out.println(JSON.toJSONString(object));
 
 
     }
