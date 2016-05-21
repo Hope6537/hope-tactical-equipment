@@ -20,6 +20,10 @@ public class EventDto extends BasicDto {
 
     private List<ClassesDto> relationClasses;
 
+    private Integer joinId;
+
+    private Integer joinStatus;
+
     public EventDto() {
 
     }
@@ -30,6 +34,22 @@ public class EventDto extends BasicDto {
         this.des = des;
 
 
+    }
+
+    public Integer getJoinId() {
+        return joinId;
+    }
+
+    public void setJoinId(Integer joinId) {
+        this.joinId = joinId;
+    }
+
+    public Integer getJoinStatus() {
+        return joinStatus;
+    }
+
+    public void setJoinStatus(Integer joinStatus) {
+        this.joinStatus = joinStatus;
     }
 
     public String getTitle() {

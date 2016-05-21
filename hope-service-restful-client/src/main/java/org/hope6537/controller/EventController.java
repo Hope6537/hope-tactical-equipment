@@ -6,6 +6,7 @@ import org.hope6537.annotation.WatchedAuthRequest;
 import org.hope6537.annotation.WatchedNoAuthRequest;
 import org.hope6537.business.EventBusiness;
 import org.hope6537.dto.EventDto;
+import org.hope6537.dto.StudentDto;
 import org.hope6537.entity.Response;
 import org.hope6537.entity.ResultSupport;
 import org.hope6537.page.PageMapUtil;
@@ -182,6 +183,30 @@ public class EventController {
                     .addAttribute("result", eventListByQuery.getModule())
                     .addAttribute("isEnd", eventListByQuery.getTotalCount() < query.getPageSize() * query.getCurrentPage())
                     .addAttribute("pageMap", PageMapUtil.sendNextPage(query));
+        } catch (JSONException e) {
+            return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.getInstance(false).setReturnMsg(e.getMessage());
+        }
+    }
+
+
+    @WatchedNoAuthRequest
+    @RequestMapping(value = "fetch/group/student", method = RequestMethod.GET)
+    @ResponseBody
+    public Response fetchEventGroupByStudentIdByParentId(HttpServletRequest request) {
+        try {
+            JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
+            if (dataMap == null) {
+                Object errorResponse = request.getAttribute("errorResponse");
+                return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
+            }
+            //验证完成,开始查询
+            Integer parentId = dataMap.getInteger("parentId");
+            ResultSupport<List<StudentDto>> eventListByQuery = eventBusiness.getEventRichListByParentIdGroupByStudentId(parentId);
+            return Response.getInstance(eventListByQuery.isSuccess())
+                    .addAttribute("result", eventListByQuery.getModule());
         } catch (JSONException e) {
             return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
         } catch (Exception e) {

@@ -1,6 +1,7 @@
 package org.hope6537.business;
 
 import org.hope6537.dto.EventDto;
+import org.hope6537.dto.StudentDto;
 import org.hope6537.entity.ResultSupport;
 
 import java.util.List;
@@ -12,5 +13,5 @@ public interface EventBusiness {
 
     ResultSupport<List<EventDto>> getEventRichListByQuery(EventDto query);
 
-    ResultSupport<List<EventDto>> getEventRichListByIdList();
+    ResultSupport<List<StudentDto>> getEventRichListByParentIdGroupByStudentId(Integer parentId);
 }

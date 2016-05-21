@@ -1,5 +1,7 @@
 package org.hope6537.dto;
 
+import java.util.List;
+
 /**
  * 实体DTO
  * Created by hope6537 by Code Generator
@@ -31,6 +33,11 @@ public class StudentDto extends BasicDto {
      */
     private Integer classesId;
 
+    /**
+     * 关联活动
+     */
+    private List<EventDto> relationEventList;
+
     public StudentDto() {
 
     }
@@ -44,6 +51,14 @@ public class StudentDto extends BasicDto {
         this.classesId = classesId;
 
 
+    }
+
+    public List<EventDto> getRelationEventList() {
+        return relationEventList;
+    }
+
+    public void setRelationEventList(List<EventDto> relationEventList) {
+        this.relationEventList = relationEventList;
     }
 
     public String getName() {
