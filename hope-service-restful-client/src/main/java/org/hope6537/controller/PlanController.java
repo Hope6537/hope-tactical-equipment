@@ -2,6 +2,7 @@ package org.hope6537.controller;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import org.hope6537.annotation.WatchedAuthRequest;
 import org.hope6537.annotation.WatchedNoAuthRequest;
 import org.hope6537.dto.PlanDto;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -51,6 +55,58 @@ public class PlanController {
             checkNotNull(planDto, ResponseDict.ILLEGAL_REQUEST);
             ResultSupport<Integer> operationResult = planService.addPlan(planDto);
             return Response.getInstance(operationResult.isSuccess()).addAttribute("result", operationResult.getModule());
+        } catch (JSONException jsonException) {
+            return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.getInstance(false).setReturnMsg(e.getMessage());
+        }
+    }
+
+    @WatchedAuthRequest
+    @RequestMapping(value = "post/rich", method = RequestMethod.POST)
+    @ResponseBody
+    public Response postPlanRichData(HttpServletRequest request, @RequestBody String receiveData) {
+        //获取设备信息
+        try {
+            checkNotNull(receiveData, ResponseDict.ILLEGAL_PARAM);
+            JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
+            if (dataMap == null) {
+                Object errorResponse = request.getAttribute("errorResponse");
+                return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
+            }
+            //--公共部分完成--
+            PlanDto planDto = dataMap.getObject("postObject", PlanDto.class);
+            List<Integer> idList = Lists.newArrayList();
+            idList.addAll(dataMap.getJSONObject("postObject").getJSONArray("classesIdList").stream().map(o -> Integer.parseInt(o.toString())).collect(Collectors.toList()));
+            //判断planDto是否合法,还需要校验其他字段
+            checkNotNull(planDto, ResponseDict.ILLEGAL_REQUEST);
+            //查询课表信息
+            PlanDto query = new PlanDto();
+            query.setDay(planDto.getDay());
+            ResultSupport<List<PlanDto>> planList = planService.getPlanListByQuery(query);
+            checkArgument(planList.isSuccess(), "[获取作息失败]");
+            final int[] successCount = {0};
+            final int totalCount = idList.size();
+            //修改已存在数据
+            Stream<PlanDto> planDtoStream = planList.getModule().stream().filter(planDto1 -> idList.contains(planDto1.getClassesId()));
+            List<Integer> putPlanIdList = planDtoStream.peek(planDto1 -> idList.remove(planDto1.getClassesId())).map(PlanDto::getId).collect(Collectors.toList());
+            PlanDto commonUpdate = new PlanDto();
+            commonUpdate.setData(planDto.getData());
+            ResultSupport<Integer> updateResult = planService.batchModifyPlan(commonUpdate, putPlanIdList);
+            successCount[0] += updateResult.isSuccess() ? updateResult.getModule() : 0;
+            //添加新数据
+            List<Integer> postClassesIdList = idList.stream().filter(o -> !putPlanIdList.contains(o)).collect(Collectors.toList());
+            postClassesIdList.forEach(classesId -> {
+                PlanDto post = new PlanDto();
+                post.setData(planDto.getData());
+                post.setDay(planDto.getDay());
+                post.setClassesId(classesId);
+                ResultSupport<Integer> integerResultSupport = planService.addPlan(post);
+                successCount[0] += integerResultSupport.isSuccess() ? 1 : 0;
+            });
+            boolean expr = successCount[0] == totalCount;
+            return Response.getInstance(expr);
         } catch (JSONException jsonException) {
             return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
         } catch (Exception e) {

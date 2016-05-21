@@ -10,6 +10,7 @@ import org.hope6537.service.ClassesService;
 import org.hope6537.service.MessageService;
 import org.hope6537.service.NoticeService;
 import org.hope6537.service.StudentService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 /**
  * Created by hope6537 on 16/5/21.
  */
+@Service(value = "noticeBusiness")
 public class NoticeBusinessImpl implements NoticeBusiness {
 
     @Resource(name = "noticeService")
@@ -31,6 +33,26 @@ public class NoticeBusinessImpl implements NoticeBusiness {
     private MessageService messageService;
     @Resource(name = "studentService")
     private StudentService studentService;
+
+    @Override
+    public ResultSupport<Boolean> addNoticeWithClasses(NoticeDto notice, List<Integer> classesIdList) {
+        ResultSupport<Integer> addNotice = noticeService.addNotice(notice);
+        if (!addNotice.isSuccess()) {
+            return ResultSupport.getInstance(false, "[添加通知失败]");
+        }
+        Integer id = addNotice.getModule();
+        Integer successCount = 0;
+        for (Integer classesId : classesIdList) {
+            MessageDto messageDto = new MessageDto();
+            messageDto.setClassesId(classesId);
+            messageDto.setNoticeId(id);
+            ResultSupport<Integer> addMessage = messageService.addMessage(messageDto);
+            successCount += addMessage.isSuccess() ? 1 : 0;
+        }
+        boolean expr = successCount == classesIdList.size();
+        return ResultSupport.getInstance(expr, expr ? "[完成通知关联]" : "[通知关联失败]", expr);
+
+    }
 
     @SuppressWarnings("unchecked")
     public ResultSupport<Map<Integer, Map<String, Object>>> buildRichNoticeListByIdList(List<Integer> idList) {
