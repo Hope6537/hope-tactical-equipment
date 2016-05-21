@@ -1,3 +1,4 @@
+
 package org.hope6537.service;
 
 import org.hope6537.dto.MessageDto;
@@ -25,7 +26,7 @@ public interface MessageService {
      * @param 数据字段集合
      * @return ResultSupport.getData = 更新行数
      */
-    ResultSupport<Integer> addMessage(Integer noticeId, Integer parentId);
+    ResultSupport<Integer> addMessage(Integer noticeId, Integer classesId);
 
     /**
      * 标准模板生成-向数据库更新单行记录
@@ -90,7 +91,7 @@ public interface MessageService {
      * @param idList 要查询的ID集合
      * @return ResultSupport.getData = 多条符合条件的数据
      */
-    ResultSupport<List<MessageDto>> getMessageListByParentIdList(List<Integer> idList);
+    ResultSupport<List<MessageDto>> getMessageListByClassesIdList(List<Integer> idList);
 
 
     /**

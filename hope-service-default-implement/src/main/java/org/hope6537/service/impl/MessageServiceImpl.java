@@ -58,16 +58,16 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ResultSupport<Integer> addMessage(Integer noticeId, Integer parentId) {
+    public ResultSupport<Integer> addMessage(Integer noticeId, Integer classesId) {
         try {
             checkNotNull(noticeId, "[添加失败][当前插入数据字段(noticeId)为空]");
-            checkNotNull(parentId, "[添加失败][当前插入数据字段(parentId)为空]");
+            checkNotNull(classesId, "[添加失败][当前插入数据字段(classesId)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addMessage(new MessageDto(noticeId, parentId));
+        return this.addMessage(new MessageDto(noticeId, classesId));
     }
 
     @Override
@@ -219,13 +219,13 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ResultSupport<List<MessageDto>> getMessageListByParentIdList(List<Integer> idList) {
+    public ResultSupport<List<MessageDto>> getMessageListByClassesIdList(List<Integer> idList) {
         boolean flag;
         List<MessageDto> result;
         List<MessageDo> disableResultList;
         try {
             checkNotNull(idList, "[批量查询失败][当前入参实体为空]");
-            List<MessageDo> list = messageDao.selectMessageListByParentIds(idList);
+            List<MessageDo> list = messageDao.selectMessageListByClassesIds(idList);
             checkNotNull(list, "[批量查询失败][查询为空]");
             disableResultList = list.parallelStream().filter(o -> o.getId() == null || o.getStatus() == null || o.getIsDeleted() == null).collect(Collectors.toList());
             if (disableResultList == null) {
@@ -271,4 +271,3 @@ public class MessageServiceImpl implements MessageService {
     }
 }
 
-    

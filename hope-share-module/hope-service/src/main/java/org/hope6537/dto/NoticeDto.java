@@ -1,5 +1,7 @@
 package org.hope6537.dto;
 
+import java.util.List;
+
 /**
  * 实体DTO
  * Created by hope6537 by Code Generator
@@ -15,6 +17,16 @@ public class NoticeDto extends BasicDto {
      * 内容
      */
     private String des;
+
+    private List<ClassesDto> relationClasses;
+
+    public List<ClassesDto> getRelationClasses() {
+        return relationClasses;
+    }
+
+    public void setRelationClasses(List<ClassesDto> relationClasses) {
+        this.relationClasses = relationClasses;
+    }
 
     public NoticeDto() {
 

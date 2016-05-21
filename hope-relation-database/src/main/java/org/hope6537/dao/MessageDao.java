@@ -1,3 +1,4 @@
+
 package org.hope6537.dao;
 
 import org.apache.ibatis.annotations.Param;
@@ -29,7 +30,7 @@ public interface MessageDao {
 
     List<MessageDo> selectMessageListByNoticeIds(@Param("idList") List<Integer> idList);
 
-    List<MessageDo> selectMessageListByParentIds(@Param("idList") List<Integer> idList);
+    List<MessageDo> selectMessageListByClassesIds(@Param("idList") List<Integer> idList);
 
     List<MessageDo> selectMessageListByQuery(MessageDo query);
 

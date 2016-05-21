@@ -12,18 +12,18 @@ public class MessageDto extends BasicDto {
     private Integer noticeId;
 
     /**
-     * 家长ID
+     * 班级ID
      */
-    private Integer parentId;
+    private Integer classesId;
 
     public MessageDto() {
 
     }
 
-    public MessageDto(Integer noticeId, Integer parentId) {
+    public MessageDto(Integer noticeId, Integer classesId) {
 
         this.noticeId = noticeId;
-        this.parentId = parentId;
+        this.classesId = classesId;
 
 
     }
@@ -36,12 +36,12 @@ public class MessageDto extends BasicDto {
         this.noticeId = noticeId;
     }
 
-    public Integer getParentId() {
-        return parentId;
+    public Integer getClassesId() {
+        return classesId;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setClassesId(Integer classesId) {
+        this.classesId = classesId;
     }
 
 }
