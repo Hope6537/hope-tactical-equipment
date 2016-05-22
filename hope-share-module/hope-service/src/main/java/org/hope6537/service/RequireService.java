@@ -26,7 +26,7 @@ public interface RequireService {
      * @param 数据字段集合
      * @return ResultSupport.getData = 更新行数
      */
-    ResultSupport<Integer> addRequire(String title, String des, Integer parentId, Integer studentId, Integer teacherId, Integer type);
+    ResultSupport<Integer> addRequire(String title, String des, Integer parentId, Integer studentId, Integer teacherId, String date, Integer type);
 
     /**
      * 标准模板生成-向数据库更新单行记录

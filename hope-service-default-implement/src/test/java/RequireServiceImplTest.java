@@ -35,7 +35,7 @@ public class RequireServiceImplTest extends SpringTestHelper {
         logger.info(requireService.toString());
         idList = Lists.newArrayList();
         for (int i = 0; i < 5; i++) {
-            ResultSupport<Integer> integerResultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93, 94, 95);
+            ResultSupport<Integer> integerResultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93, 94, "test5" + System.currentTimeMillis(), 96);
             logger.info(JSON.toJSONString(integerResultSupport));
             assertTrue(integerResultSupport.getModule() > 0);
             idList.add(integerResultSupport.getModule());
@@ -46,16 +46,16 @@ public class RequireServiceImplTest extends SpringTestHelper {
 
     @Test
     public void testAddRequire() {
-        ResultSupport<Integer> integerResultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93, 94, 95);
+        ResultSupport<Integer> integerResultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93, 94, "test5" + System.currentTimeMillis(), 96);
         logger.info(JSON.toJSONString(integerResultSupport));
         assertTrue(integerResultSupport.getModule() > 0);
     }
 
     @Test
     public void testModifyRequire() {
-        ResultSupport<Integer> resultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93, 94, 95);
+        ResultSupport<Integer> resultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93, 94, "test5" + System.currentTimeMillis(), 96);
         Integer id = resultSupport.getModule();
-        RequireDto dto = new RequireDto("modify0" + System.currentTimeMillis(), "modify1" + System.currentTimeMillis(), 82, 83, 84, 85);
+        RequireDto dto = new RequireDto("modify0" + System.currentTimeMillis(), "modify1" + System.currentTimeMillis(), 82, 83, 84, "modify5" + System.currentTimeMillis(), 86);
         dto.setId(id);
         ResultSupport<Integer> modifyResultSupport = requireService.modifyRequire(dto);
         logger.info(JSON.toJSONString(modifyResultSupport));
@@ -68,7 +68,7 @@ public class RequireServiceImplTest extends SpringTestHelper {
 
     @Test
     public void testRemoveRequire() {
-        ResultSupport<Integer> resultSupport = requireService.addRequire("wait_delete0" + System.currentTimeMillis(), "wait_delete1" + System.currentTimeMillis(), 72, 73, 74, 75);
+        ResultSupport<Integer> resultSupport = requireService.addRequire("wait_delete0" + System.currentTimeMillis(), "wait_delete1" + System.currentTimeMillis(), 72, 73, 74, "wait_delete5" + System.currentTimeMillis(), 76);
         Integer id = resultSupport.getModule();
         ResultSupport<Integer> modifyResultSupport = requireService.removeRequire(id);
         logger.info(JSON.toJSONString(modifyResultSupport));

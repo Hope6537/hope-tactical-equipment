@@ -59,20 +59,21 @@ public class RequireServiceImpl implements RequireService {
     }
 
     @Override
-    public ResultSupport<Integer> addRequire(String title, String des, Integer parentId, Integer studentId, Integer teacherId, Integer type) {
+    public ResultSupport<Integer> addRequire(String title, String des, Integer parentId, Integer studentId, Integer teacherId, String date, Integer type) {
         try {
             checkNotNull(title, "[添加失败][当前插入数据字段(title)为空]");
             checkNotNull(des, "[添加失败][当前插入数据字段(des)为空]");
             checkNotNull(parentId, "[添加失败][当前插入数据字段(parentId)为空]");
             checkNotNull(studentId, "[添加失败][当前插入数据字段(studentId)为空]");
             checkNotNull(teacherId, "[添加失败][当前插入数据字段(teacherId)为空]");
+            checkNotNull(date, "[添加失败][当前插入数据字段(date)为空]");
             checkNotNull(type, "[添加失败][当前插入数据字段(type)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addRequire(new RequireDto(title, des, parentId, studentId, teacherId, type));
+        return this.addRequire(new RequireDto(title, des, parentId, studentId, teacherId, date, type));
     }
 
     @Override
