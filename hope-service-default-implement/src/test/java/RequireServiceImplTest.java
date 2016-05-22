@@ -1,3 +1,4 @@
+
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.hope6537.dto.RequireDto;
@@ -34,7 +35,7 @@ public class RequireServiceImplTest extends SpringTestHelper {
         logger.info(requireService.toString());
         idList = Lists.newArrayList();
         for (int i = 0; i < 5; i++) {
-            ResultSupport<Integer> integerResultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93);
+            ResultSupport<Integer> integerResultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93, 94, 95);
             logger.info(JSON.toJSONString(integerResultSupport));
             assertTrue(integerResultSupport.getModule() > 0);
             idList.add(integerResultSupport.getModule());
@@ -45,16 +46,16 @@ public class RequireServiceImplTest extends SpringTestHelper {
 
     @Test
     public void testAddRequire() {
-        ResultSupport<Integer> integerResultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93);
+        ResultSupport<Integer> integerResultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93, 94, 95);
         logger.info(JSON.toJSONString(integerResultSupport));
         assertTrue(integerResultSupport.getModule() > 0);
     }
 
     @Test
     public void testModifyRequire() {
-        ResultSupport<Integer> resultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93);
+        ResultSupport<Integer> resultSupport = requireService.addRequire("test0" + System.currentTimeMillis(), "test1" + System.currentTimeMillis(), 92, 93, 94, 95);
         Integer id = resultSupport.getModule();
-        RequireDto dto = new RequireDto("modify0" + System.currentTimeMillis(), "modify1" + System.currentTimeMillis(), 82, 83);
+        RequireDto dto = new RequireDto("modify0" + System.currentTimeMillis(), "modify1" + System.currentTimeMillis(), 82, 83, 84, 85);
         dto.setId(id);
         ResultSupport<Integer> modifyResultSupport = requireService.modifyRequire(dto);
         logger.info(JSON.toJSONString(modifyResultSupport));
@@ -67,7 +68,7 @@ public class RequireServiceImplTest extends SpringTestHelper {
 
     @Test
     public void testRemoveRequire() {
-        ResultSupport<Integer> resultSupport = requireService.addRequire("wait_delete0" + System.currentTimeMillis(), "wait_delete1" + System.currentTimeMillis(), 72, 73);
+        ResultSupport<Integer> resultSupport = requireService.addRequire("wait_delete0" + System.currentTimeMillis(), "wait_delete1" + System.currentTimeMillis(), 72, 73, 74, 75);
         Integer id = resultSupport.getModule();
         ResultSupport<Integer> modifyResultSupport = requireService.removeRequire(id);
         logger.info(JSON.toJSONString(modifyResultSupport));

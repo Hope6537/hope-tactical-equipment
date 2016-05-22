@@ -1,3 +1,4 @@
+
 package org.hope6537.service.impl;
 
 import com.google.common.collect.Lists;
@@ -58,18 +59,20 @@ public class RequireServiceImpl implements RequireService {
     }
 
     @Override
-    public ResultSupport<Integer> addRequire(String title, String des, Integer parentId, Integer type) {
+    public ResultSupport<Integer> addRequire(String title, String des, Integer parentId, Integer studentId, Integer teacherId, Integer type) {
         try {
             checkNotNull(title, "[添加失败][当前插入数据字段(title)为空]");
             checkNotNull(des, "[添加失败][当前插入数据字段(des)为空]");
             checkNotNull(parentId, "[添加失败][当前插入数据字段(parentId)为空]");
+            checkNotNull(studentId, "[添加失败][当前插入数据字段(studentId)为空]");
+            checkNotNull(teacherId, "[添加失败][当前插入数据字段(teacherId)为空]");
             checkNotNull(type, "[添加失败][当前插入数据字段(type)为空]");
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return ResultSupport.getInstance(e);
         }
-        return this.addRequire(new RequireDto(title, des, parentId, type));
+        return this.addRequire(new RequireDto(title, des, parentId, studentId, teacherId, type));
     }
 
     @Override
@@ -206,6 +209,50 @@ public class RequireServiceImpl implements RequireService {
         try {
             checkNotNull(idList, "[批量查询失败][当前入参实体为空]");
             List<RequireDo> list = requireDao.selectRequireListByParentIds(idList);
+            checkNotNull(list, "[批量查询失败][查询为空]");
+            disableResultList = list.parallelStream().filter(o -> o.getId() == null || o.getStatus() == null || o.getIsDeleted() == null).collect(Collectors.toList());
+            if (disableResultList == null) {
+                disableResultList = Lists.newArrayList();
+            }
+            flag = disableResultList.size() == 0;
+            result = list.parallelStream().filter(o -> o.getId() != null).map(o -> mappingConverter.doMap(o, RequireDto.class)).collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return ResultSupport.getInstance(e);
+        }
+        return ResultSupport.getInstance(flag, flag ? "[批量查询成功]" : "[批量查询成功][存在不符合条件的数据][idList=" + disableResultList.toString() + "]", result);
+    }
+
+    @Override
+    public ResultSupport<List<RequireDto>> getRequireListByStudentIdList(List<Integer> idList) {
+        boolean flag;
+        List<RequireDto> result;
+        List<RequireDo> disableResultList;
+        try {
+            checkNotNull(idList, "[批量查询失败][当前入参实体为空]");
+            List<RequireDo> list = requireDao.selectRequireListByStudentIds(idList);
+            checkNotNull(list, "[批量查询失败][查询为空]");
+            disableResultList = list.parallelStream().filter(o -> o.getId() == null || o.getStatus() == null || o.getIsDeleted() == null).collect(Collectors.toList());
+            if (disableResultList == null) {
+                disableResultList = Lists.newArrayList();
+            }
+            flag = disableResultList.size() == 0;
+            result = list.parallelStream().filter(o -> o.getId() != null).map(o -> mappingConverter.doMap(o, RequireDto.class)).collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return ResultSupport.getInstance(e);
+        }
+        return ResultSupport.getInstance(flag, flag ? "[批量查询成功]" : "[批量查询成功][存在不符合条件的数据][idList=" + disableResultList.toString() + "]", result);
+    }
+
+    @Override
+    public ResultSupport<List<RequireDto>> getRequireListByTeacherIdList(List<Integer> idList) {
+        boolean flag;
+        List<RequireDto> result;
+        List<RequireDo> disableResultList;
+        try {
+            checkNotNull(idList, "[批量查询失败][当前入参实体为空]");
+            List<RequireDo> list = requireDao.selectRequireListByTeacherIds(idList);
             checkNotNull(list, "[批量查询失败][查询为空]");
             disableResultList = list.parallelStream().filter(o -> o.getId() == null || o.getStatus() == null || o.getIsDeleted() == null).collect(Collectors.toList());
             if (disableResultList == null) {

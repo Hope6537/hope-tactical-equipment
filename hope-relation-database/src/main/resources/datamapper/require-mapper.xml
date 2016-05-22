@@ -3,11 +3,11 @@
 <mapper namespace="org.hope6537.dao.RequireDao">
     <!-- 默认模板生成 添加单行记录 -->
     <insert id="insertRequire">INSERT INTO `Require`
-        (`title`,`des`,`parentId`,`type`,
+        (`title`,`des`,`parentId`,`studentId`,`teacherId`,`type`,
         <!--<if test="可以为空字段!=null and 可以为空字段!=''"> `可以为空字段`, </if>-->
         `status`, `isDeleted`, `created`, `updated`)
         VALUES
-        (#{title},#{des},#{parentId},#{type},
+        (#{title},#{des},#{parentId},#{studentId},#{teacherId},#{type},
         <!--<if test="可以为空字段!=null and 可以为空字段!=''"> #{可以为空字段}, </if>-->
         #{status}, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP());
         <selectKey resultType="integer" keyProperty="id">SELECT LAST_INSERT_ID()</selectKey>
@@ -18,6 +18,8 @@
             <if test="title!=null and title!=''">`title` = #{title},</if>
             <if test="des!=null and des!=''">`des` = #{des},</if>
             <if test="parentId!=null and parentId!=''">`parentId` = #{parentId},</if>
+            <if test="studentId!=null and studentId!=''">`studentId` = #{studentId},</if>
+            <if test="teacherId!=null and teacherId!=''">`teacherId` = #{teacherId},</if>
             <if test="type!=null and type!=''">`type` = #{type},</if>
 
             <if test="status!=null and status!=''">`status` = #{status},</if>
@@ -32,6 +34,8 @@
             <if test="data.title!=null and data.title!=''">`title` = #{data.title},</if>
             <if test="data.des!=null and data.des!=''">`des` = #{data.des},</if>
             <if test="data.parentId!=null and data.parentId!=''">`parentId` = #{data.parentId},</if>
+            <if test="data.studentId!=null and data.studentId!=''">`studentId` = #{data.studentId},</if>
+            <if test="data.teacherId!=null and data.teacherId!=''">`teacherId` = #{data.teacherId},</if>
             <if test="data.type!=null and data.type!=''">`type` = #{data.type},</if>
 
             <if test="data.status!=null and data.status!=''">`status` = #{data.status},</if>
@@ -42,8 +46,10 @@
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 删除单行记录-->
-    <update id="deleteRequire">UPDATE `Require` SET isDeleted = 1, updated = UNIX_TIMESTAMP() WHERE id = ${id} LIMIT 1
-    </update>
+    <update id="deleteRequire"> UPDATE `Require`
+    SET isDeleted = 1, updated = UNIX_TIMESTAMP()
+    WHERE id = ${id}
+    LIMIT 1 </update>
     <!-- 默认模板生成 删除多行记录-->
     <update id="batchDeleteRequire">UPDATE `Require` SET isDeleted = 1,updated = UNIX_TIMESTAMP()
         <where>
@@ -52,9 +58,10 @@
         LIMIT ${idList.size}
     </update>
     <!-- 默认模板生成 根据ID选取单行记录 -->
-    <select id="selectRequireById" resultType="org.hope6537.dataobject.RequireDo">SELECT * FROM `Require` WHERE id =
-        ${id} LIMIT 1
-    </select>
+    <select id="selectRequireById" resultType="org.hope6537.dataobject.RequireDo"> SELECT *
+                                                                                   FROM `Require`
+                                                                                   WHERE id = ${id}
+                                                                                   LIMIT 1 </select>
     <!-- 默认模板生成 根据ID集合选取多行记录-->
     <select id="selectRequireListByIds" resultType="org.hope6537.dataobject.RequireDo">SELECT * FROM `Require`
         <where>
@@ -74,12 +81,34 @@
         LIMIT 3000
     </select>
 
+    <!-- 默认模板生成 根据外部ID集合选取多行记录-->
+    <select id="selectRequireListByStudentIds" resultType="org.hope6537.dataobject.RequireDo">SELECT * FROM `Require`
+        <where>
+            studentId in (
+            <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
+            )
+        </where>
+        LIMIT 3000
+    </select>
+
+    <!-- 默认模板生成 根据外部ID集合选取多行记录-->
+    <select id="selectRequireListByTeacherIds" resultType="org.hope6537.dataobject.RequireDo">SELECT * FROM `Require`
+        <where>
+            teacherId in (
+            <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
+            )
+        </where>
+        LIMIT 3000
+    </select>
+
     <!-- 默认模板生成 动态SQL语句 通常字段判断是否为空 并增加日期范围 -->
     <sql id="where">
         <where>1 = 1
             <if test="title!=null and title!=''">AND `title` = #{title}</if>
             <if test="des!=null and des!=''">AND `des` = #{des}</if>
             <if test="parentId!=null and parentId!=''">AND `parentId` = #{parentId}</if>
+            <if test="studentId!=null and studentId!=''">AND `studentId` = #{studentId}</if>
+            <if test="teacherId!=null and teacherId!=''">AND `teacherId` = #{teacherId}</if>
             <if test="type!=null and type!=''">AND `type` = #{type}</if>
 
             <!--<if test="模糊查询字段!=null and 模糊查询字段!=''"> AND`模糊查询字段` LIKE concat('%',#{模糊查询字段},'%') </if>-->

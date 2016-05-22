@@ -1,3 +1,4 @@
+
 package org.hope6537.dto;
 
 /**
@@ -22,6 +23,16 @@ public class RequireDto extends BasicDto {
     private Integer parentId;
 
     /**
+     * 对应学生ID
+     */
+    private Integer studentId;
+
+    /**
+     * 受理教师ID
+     */
+    private Integer teacherId;
+
+    /**
      * 类型 0-每日需求 1-单日需求
      */
     private Integer type;
@@ -30,11 +41,13 @@ public class RequireDto extends BasicDto {
 
     }
 
-    public RequireDto(String title, String des, Integer parentId, Integer type) {
+    public RequireDto(String title, String des, Integer parentId, Integer studentId, Integer teacherId, Integer type) {
 
         this.title = title;
         this.des = des;
         this.parentId = parentId;
+        this.studentId = studentId;
+        this.teacherId = teacherId;
         this.type = type;
 
 
@@ -62,6 +75,22 @@ public class RequireDto extends BasicDto {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
+    }
+
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
+    }
+
+    public Integer getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Integer teacherId) {
+        this.teacherId = teacherId;
     }
 
     public Integer getType() {
