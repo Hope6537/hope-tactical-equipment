@@ -92,7 +92,7 @@
             <if test="updatedAfter!=null and updatedAfter!=''">AND `updated` &lt; #{updatedAfter}</if>
             <if test="updatedBefore!=null and updatedBefore!=''">AND `updated` &gt; #{updatedBefore}</if>
             <if test="status!=null and status!=''">AND `status` = #{status}</if>
-            <if test="isDeleted!=null and isDeleted!=''">AND `isDeleted` = #{isDeleted}</if>
+            <if test="isDeleted!=null">AND `isDeleted` = #{isDeleted}</if>
         </where>
     </sql>
     <!-- 默认模板生成 根据Query对象查询记录 -->

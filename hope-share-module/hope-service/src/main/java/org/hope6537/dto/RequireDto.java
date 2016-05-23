@@ -1,4 +1,3 @@
-
 package org.hope6537.dto;
 
 /**
@@ -38,6 +37,11 @@ public class RequireDto extends BasicDto {
     private String date;
 
     /**
+     * 作用时间
+     */
+    private String time;
+
+    /**
      * 类型 0-每日需求 1-单日需求
      */
     private Integer type;
@@ -46,7 +50,7 @@ public class RequireDto extends BasicDto {
 
     }
 
-    public RequireDto(String title, String des, Integer parentId, Integer studentId, Integer teacherId, String date, Integer type) {
+    public RequireDto(String title, String des, Integer parentId, Integer studentId, Integer teacherId, String date, String time, Integer type) {
 
         this.title = title;
         this.des = des;
@@ -54,6 +58,7 @@ public class RequireDto extends BasicDto {
         this.studentId = studentId;
         this.teacherId = teacherId;
         this.date = date;
+        this.time = time;
         this.type = type;
 
 
@@ -105,6 +110,14 @@ public class RequireDto extends BasicDto {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public Integer getType() {
