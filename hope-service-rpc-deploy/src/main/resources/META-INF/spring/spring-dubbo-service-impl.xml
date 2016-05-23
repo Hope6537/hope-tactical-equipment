@@ -36,6 +36,7 @@
     <dubbo:service ref="generatorBusiness" interface="org.hope6537.business.GeneratorBusiness"/>
     <dubbo:service ref="eventBusiness" interface="org.hope6537.business.EventBusiness"/>
     <dubbo:service ref="noticeBusiness" interface="org.hope6537.business.NoticeBusiness"/>
+    <dubbo:service ref="requireBusiness" interface="org.hope6537.business.RequireBusiness"/>
 
 
 </beans>

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.hope6537.annotation.WatchedAuthRequest;
 import org.hope6537.annotation.WatchedNoAuthRequest;
+import org.hope6537.business.RequireBusiness;
 import org.hope6537.dto.RequireDto;
 import org.hope6537.entity.Response;
 import org.hope6537.entity.ResultSupport;
@@ -32,6 +33,9 @@ public class RequireController {
 
     @Resource(name = "requireService")
     private RequireService requireService;
+
+    @Resource(name = "requireBusiness")
+    private RequireBusiness requireBusiness;
 
     @WatchedAuthRequest
     @RequestMapping(value = "post", method = RequestMethod.POST)
@@ -153,6 +157,55 @@ public class RequireController {
                     .addAttribute("result", requireListByQuery.getModule())
                     .addAttribute("isEnd", requireListByQuery.getTotalCount() < query.getPageSize() * query.getCurrentPage())
                     .addAttribute("pageMap", PageMapUtil.sendNextPage(query));
+        } catch (JSONException e) {
+            return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.getInstance(false).setReturnMsg(e.getMessage());
+        }
+    }
+
+
+    @WatchedNoAuthRequest
+    @RequestMapping(value = "fetch/rich", method = RequestMethod.GET)
+    @ResponseBody
+    public Response fetchRequireRichData(HttpServletRequest request) {
+        try {
+            JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
+            if (dataMap == null) {
+                Object errorResponse = request.getAttribute("errorResponse");
+                return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
+            }
+            //验证完成,开始查询
+            RequireDto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"), dataMap.getString("pageMap"), RequireDto.class);
+            ResultSupport<List<RequireDto>> requireListByQuery = requireBusiness.getRequireRichListByQuery(query);
+            return Response.getInstance(requireListByQuery.isSuccess())
+                    .addAttribute("result", requireListByQuery.getModule())
+                    .addAttribute("isEnd", requireListByQuery.getTotalCount() < query.getPageSize() * query.getCurrentPage())
+                    .addAttribute("pageMap", PageMapUtil.sendNextPage(query));
+        } catch (JSONException e) {
+            return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.getInstance(false).setReturnMsg(e.getMessage());
+        }
+    }
+
+    @WatchedNoAuthRequest
+    @RequestMapping(value = "fetch/rich/teacher", method = RequestMethod.GET)
+    @ResponseBody
+    public Response fetchRequireRichByTeacherId(HttpServletRequest request) {
+        try {
+            JSONObject dataMap = (JSONObject) request.getAttribute("dataMap");
+            if (dataMap == null) {
+                Object errorResponse = request.getAttribute("errorResponse");
+                return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
+            }
+            //验证完成,开始查询
+            Integer teacherId = dataMap.getInteger("teacherId");
+            ResultSupport<List<RequireDto>> requireListByQuery = requireBusiness.getRequiredListByTeacherId(teacherId);
+            return Response.getInstance(requireListByQuery.isSuccess())
+                    .addAttribute("result", requireListByQuery.getModule());
         } catch (JSONException e) {
             return Response.getInstance(false).setReturnMsg(ResponseDict.ILLEGAL_PARAM);
         } catch (Exception e) {

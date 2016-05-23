@@ -41,6 +41,7 @@
     <dubbo:reference timeout="100000" id="generatorBusiness" interface="org.hope6537.business.GeneratorBusiness"/>
     <dubbo:reference timeout="100000" id="eventBusiness" interface="org.hope6537.business.EventBusiness"/>
     <dubbo:reference timeout="100000" id="noticeBusiness" interface="org.hope6537.business.NoticeBusiness"/>
+    <dubbo:reference timeout="100000" id="requireBusiness" interface="org.hope6537.business.RequireBusiness"/>
 
     <dubbo:application name="hope-service-rpc-rest-api"/>
 

@@ -1,3 +1,4 @@
+
 package org.hope6537.dataobject;
 
 /**
@@ -46,11 +47,16 @@ public class RequireDo extends BasicDo {
      */
     private Integer type;
 
+    /**
+     * 回复信息/拒绝理由
+     */
+    private String reply;
+
     public RequireDo() {
 
     }
 
-    public RequireDo(String title, String des, Integer parentId, Integer studentId, Integer teacherId, String date, String time, Integer type) {
+    public RequireDo(String title, String des, Integer parentId, Integer studentId, Integer teacherId, String date, String time, Integer type, String reply) {
 
         this.title = title;
         this.des = des;
@@ -60,6 +66,7 @@ public class RequireDo extends BasicDo {
         this.date = date;
         this.time = time;
         this.type = type;
+        this.reply = reply;
 
 
     }
@@ -126,6 +133,14 @@ public class RequireDo extends BasicDo {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
     }
 
 }

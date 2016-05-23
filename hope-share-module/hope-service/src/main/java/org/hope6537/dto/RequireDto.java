@@ -1,3 +1,4 @@
+
 package org.hope6537.dto;
 
 /**
@@ -46,11 +47,22 @@ public class RequireDto extends BasicDto {
      */
     private Integer type;
 
+    /**
+     * 回复信息/拒绝理由
+     */
+    private String reply;
+
+    private String studentName;
+
+    private String teacherName;
+
+    private String parentName;
+
     public RequireDto() {
 
     }
 
-    public RequireDto(String title, String des, Integer parentId, Integer studentId, Integer teacherId, String date, String time, Integer type) {
+    public RequireDto(String title, String des, Integer parentId, Integer studentId, Integer teacherId, String date, String time, Integer type, String reply) {
 
         this.title = title;
         this.des = des;
@@ -60,6 +72,7 @@ public class RequireDto extends BasicDto {
         this.date = date;
         this.time = time;
         this.type = type;
+        this.reply = reply;
 
 
     }
@@ -126,6 +139,38 @@ public class RequireDto extends BasicDto {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
     }
 
 }
