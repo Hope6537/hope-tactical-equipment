@@ -88,6 +88,20 @@ public class TokenCheckUtil {
         //TODO:创建REDIS关联
         return AESLocker.encrypt(JSON.toJSONString(tokenInstance));
     }
+	
+	public static String initTokenWithData(String userId, Integer availableDays, String deviceId , String otherData, HttpServletRequest request) {
+        checkNotNull(userId, ILLEGAL_USER_ID);
+        checkNotNull(deviceId, ILLEGAL_DEVICE_ID);
+        if (availableDays < 1 || availableDays > 30) {
+            availableDays = 7;
+        }
+        Token tokenInstance = Token.getTokenInstance(String.valueOf(userId), String.valueOf(TimeUtils.getUnixTime() + (availableDays * ONE_DAY_SECONDS)), deviceId);
+        tokenInstance.setOtherData(otherData);
+		//创建本地Session关联
+        request.getSession().setAttribute(tokenInstance.getTokenId(), tokenInstance.getUserInfoId());
+        //TODO:创建REDIS关联
+        return AESLocker.encryptBase64(JSON.toJSONString(tokenInstance));
+    }
 
     private static class Token implements Serializable {
 
@@ -110,6 +124,11 @@ public class TokenCheckUtil {
          * TokenId标识,由UUID生成
          */
         private String tokenId;
+		
+		/**
+		* 其他数据
+		*/
+		private String otherData;
 
 
         public Token() {
@@ -158,6 +177,14 @@ public class TokenCheckUtil {
         public void setTokenId(String tokenId) {
             this.tokenId = tokenId;
         }
+		
+		public void setOtherData(String otherData){
+			this.otherData = otherData;
+		}
+		
+		public String getOtherData(){
+			return this.otherData;
+		}
     }
 
 
