@@ -57,13 +57,4 @@ public class MD5Util {
 
     }
 
-    // 测试主函数
-    public static void main(String args[]) {
-        String s = "ZhAopeng8801.=";
-        System.out.println("原始：" + s);
-        System.out.println("MD5后：" + string2MD5(s));
-        System.out.println("加密的：" + convertMD5(s));
-        System.out.println("解密的：" + convertMD5(convertMD5(s)));
-
-    }
 }
