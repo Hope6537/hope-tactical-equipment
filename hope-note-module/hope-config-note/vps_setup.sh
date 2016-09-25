@@ -1,5 +1,13 @@
 #!/bin/sh
 
+#下载的域名
+
+remoteHost=$1
+if [ -z  ${remoteHost} ]
+then
+   remoteHost="http://mirrors.hope6537.com:81"
+fi
+
 #对VPS进行初始化设置
 
 #首先支持中文
@@ -18,15 +26,16 @@ echo 'LANG="zh_CN.UTF-8"
 LANGUAGE="zh_CN:zh:en_US:en"' >> /etc/default/locale
 
 #SSH密钥
+echo '[+] generate ssh-key';
+ssh-keygen -t rsa;
 echo '[+] add ssh-key authorized_keys';
-mkdir ~/.ssh;
 touch ~/.ssh/authorized_keys;
 echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjK6q0Z482Doylnbg30PsqywoOBEQk0lvP3oeWVqwHV6l1Hu1cwqSs+tQK3cbGhVu8VzZESF2LoGkvz18mLVuVtPO+727VAQm9qm8BDdaUtqv+wd4yg8rMNzhCoKVtbuarPma9lJldbVaw7c/Hgwq5EPDw1qYq4F7XK+2LTEvkOQ1HghAIU9trnC1PdF8vCZlDt+s/MXsTEMB4qTjsxrdNYRD07brM43CkVI3I+AigJolCfhb8s0xaVTxJxbexyVWz/k6lNyKQiwx7t6nJbq3BeYSQG5RyIkgSAMajHcWZV4dW60VDleyYRWeNNTYfPn1iuTnbemN1+unf0Zk6jmqB root@ding
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+sgIEPorYX/T/AYWIx2CYiLyVaavglfa/sR+J6wHdkDyMbijzbHAlBcSFzlmFLqgaJH5sS5RRW1i/O1x2T/7BG4QPMiK0O/Hxp5hoi8AIUXDKYR9f5sHz1hQuSNPi4wZEhtfXetIVk7q2gYBMPlM8SGY1MHxxl+e/MoUJmoTrkfVaPHO2WZtKe/dn7mwbKH8hWr6EYl6pk4KyRc3sLJyLJ6keZDHTJEr4GlvPycPbc6hac25DoHHRaY+fkr/BBP3OsJ7eepqJhbc3cvEGtIOcWDyrIq+YMjIOMDu77LG0HtLJiH2fKc4zKX9Ov10/mUktil+67wXE6ah6axj7YGtr root@hope6537
 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtqvfe64oVhqWSGDJE+/TD7JXK/KfuTppYMxX+y31hKvLCjm/YeSzbgINJB3EuLKWYltgcbwwjl/yVRl6GsO8oKdnbNnLoucV/dRUcjR65vx6pcch3RsZT9U68mXDuz1t0uM32sfT1wmpQZaE6ASPS81ddcha23OXlejjEQeaQK55zVO+TvfI/FsVnYPC9MuBZ6+IJOWW3hRw/vip/NwtqnGbBZXlAOp46RZlGNen+HqhrAVQzmV0h5vd3woKPvFxfl3H/jTbBqDUnk49OKjelvvKZcYnI4ARa6rQ1x1otJVEXKvc1ylh0qzk9dsc9E5JkzJWQyM0rBOQm2ZyzymJLw== Hope6537@HOPE6537-RABOOK
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/8/9gJ7ShCLeKxznpgauz4vuw+XZgRqSbT260LRaw5FI1KIdSOm3+mx7rtR2qsWwjh/ykQt1TVzOSA7mRNVJnVAfWymbWcWmqPMicVnPc1gKWj0RhfLfU3tlHHr5FNGIXtJmgDcf7JfVmK7qKp7jZXNjj7gXMfqni2LVF11i4EV4zoZK59wxvCa1PAM+CY/GH09KlKMNDWcIrKNBSNB8Qlq6Eo+8Xtdj8JDnx+4UfuB+rJywEnNywLeUjgXZ8FltbM/YRU0rsht1LTWSclj1o5kzkShC/nkGue9u0GeRrIGUFthes47SfwfC61f2s6o74gGZk+C318RvG0akYAQkT hope6537@hope6537deMacBook-Pro.local
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI/gkmdCU06b8bZd60FSJ+9HkdCEOw9DBbfV0NEbbZwsMLwwd+amve52/D/91Q0FBsagcBaDP1ZsO3ACqhHEt2LF8BRCiv8CJp0QBlYnOX2Vpa5jeHnEm5gUO7U71agH0WuVXiAjJa/YWfK0jqatdSnwHYudNuOj/BbNsNYkr4/r2dayB3GZdxbhZ4k0wdiwOkRBr48ulhxRj2FjJumcRWws77c582BSBq80Eo7JZ/XwAXcGfQS3fdBaWJqV2tHSOHi2rXsjbOSUPh/3KL+5UZu2j0mGA3L3sgNMxPGppLiTNyA1U2etoQCLsjO/jm7IyueY4CUa3xJL7Q9hNvVg9Z dintama@dintamadeMacBook-Pro.local
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCc3SY0fLX1qiYFO5aiQvUP7F4j/GQpYCsT36aezqB+lXK6tO4tcOmu73YMHmKoLuhYM+HDrOIdeOn+Fww3OTFAQEmc9uQY6qQFtJKvAvetCAsY7TUtBo277JypYCji2TziwodEGNLn19yP5SRTuE7uJ7PcrAKCj7vmxTKgOrm+SxTZrtLfUcv4WR+S1iiIn5pprhQE82x54k87qhqw40DIJ6Yqj2KNWGzQ/O9TvSyvbUyLT7AgfL6oH8I/Uj0ZpTX58TdhO/tnEM44zJ8yx+1l5d6BuvO4WKhXYIezilfNkCK+4eFrcD4YDQlkZhM1EeODHvpydwPhPJOrHj+qy1Ap root@iZ281hgovp7Z
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDX+m4Rut1d+yrSvdu/JdlOwTp+aHebUQI9VanBMaDJeJnNsuR7amFc2BQ/jc2NAH7ecbEq3lV4dfW5xTjlid2dJ5aUtQ86BvTl3Cufi2uqjMcTsEn3a8gsW+cxoccKP3bzfKCjqyhbE0tBJrlj0Zw1iFo5nIaHKnfvaS+Gv1tJq7VOMtvVQ0G1tvMY9StgaqCvK4iSvZxz4t5tWD8XshkGnYZ+43A2yOdqy4xk0NDdvkHsxxMWlJPv/q4S9nN4bypAC6ufVLVIhusq4x/g52TvxVkuGA0ZGylJD6eqEnscZRVQvZAnXTl8fvIZ+j3XeWLT4ymJ5koJDenUcKQPZSiB wuyang@wuyang-MBP.local
 ' >> ~/.ssh/authorized_keys;
 
 #首先需要对apt资源包进行升级
@@ -51,16 +60,35 @@ echo '[+] 正在安装python基础库'
 echo '[+] 安装科学上网'
 sudo pip install shadowsocks
 sudo touch /etc/shadowsocks.json
-sudo echo '{ "server":"0.0.0.0", "server_port":8388, "local_port":1080,"password":"password", "timeout":600, "method":"aes-256-cfb" }' >> /etc/shadowsocks.json
+sudo echo '{ "server":"0.0.0.0", "server_port":8388, "local_port":1080,"password":"gintama123", "timeout":600, "method":"aes-256-cfb" }' >> /etc/shadowsocks.json
 echo "alias ss.start='ssserver -c /etc/shadowsocks.json -d start'" >> ~/custom_alias
 echo "alias ss.stop='ssserver -c /etc/shadowsocks.json -d stop'" >> ~/custom_alias
 
+#其他资源
+if [ ! -f ocservauto.sh ]; then
+  wget 'http://mirrors.hope6537.com:81/ocservauto.sh'
+fi
+if [ ! -f openvpn-install.sh ]; then
+  wget 'https://raw.githubusercontent.com/Hope6537/openvpn-install/master/openvpn-install.sh'
+fi
+echo '[+] 完成VPN部署脚本下载'
+
 #安装其他Python基础库
+#pip uninstall mysql-python
+#pip uninstall PyQuery
+#pip uninstall requests
+#pip uninstall scapy
 echo '[+] 安装其他Python基础库 mysql-python PyQuery requests scapy pcapy pypcap numpy scipy opencv'
-pip install mysql-python
-pip install PyQuery
-pip install requests
-pip install scapy
+
+#sudo pip uninstall mysql-python
+#sudo pip uninstall PyQuery
+#sudo pip uninstall requests
+#sudo pip uninstall scapy
+
+sudo pip install mysql-python
+sudo pip install PyQuery
+sudo pip install requests
+sudo pip install scapy
 #pip install numpy
 #pip install scipy
 #pip install opencv
@@ -69,7 +97,7 @@ pip install scapy
 #配置Java
 echo '[+] 正在配置JDK中'
 if [ ! -f jdk.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com/jdk-8u65-linux-x64.tar.gz' >> jdk.tar.gz
+  curl 'http://mirrors.hope6537.com:80jdk-8u65-linux-x64.tar.gz' >> jdk.tar.gz
 fi
 echo '[+] 完成JDK下载,正在解压至share目录'
 tar -xzf jdk.tar.gz -C /usr/local/share/;
@@ -79,9 +107,9 @@ echo 'export PATH=$PATH:$JAVA_HOME/bin' >> ~/custom_profile
 
 #配置Maven
 if [ ! -f maven.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com/apache-maven-3.3.3-bin.tar.gz' >> maven.tar.gz;
+  curl 'http://mirrors.hope6537.com:81/apache-maven-3.3.3-bin.tar.gz' >> maven.tar.gz;
 fi
-wget http://mirrors.hope6537.com/settings.xml;
+wget http://mirrors.hope6537.com:81/settings.xml;
 echo '[+] 完成Maven下载,完成m2仓库坐标描述文件下载,正在移动中'
 tar -xzf maven.tar.gz -C /usr/local/share/;
 mkdir ~/.m2/
@@ -92,7 +120,7 @@ echo 'export PATH=$PATH:$M2_HOME/bin' >> ~/custom_profile
 
 #配置Tomcat
 if [ ! -f tomcat.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com/apache-tomcat-8.0.29.tar.gz' >> tomcat.tar.gz;
+  curl 'http://mirrors.hope6537.com:81/apache-tomcat-8.0.29.tar.gz' >> tomcat.tar.gz;
 fi
 echo '[+] 完成Tomcat下载'
 tar -xzf tomcat.tar.gz -C /usr/local/share/;
@@ -102,7 +130,7 @@ echo 'export PATH=$PATH:$CATALINA_HOME/bin' >> ~/custom_profile
 
 #配置Zookeeper
 if [ ! -f zookeeper.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com/zookeeper-3.4.7.tar.gz'>> zookeeper.tar.gz;
+  curl 'http://mirrors.hope6537.com:81/zookeeper-3.4.7.tar.gz'>> zookeeper.tar.gz;
 fi
 echo '[+] 完成Zookeeper下载'
 tar -xzf zookeeper.tar.gz -C /usr/local/share/;
@@ -129,7 +157,7 @@ echo 'export PATH=$PATH:$ZK_HOME/bin' >> ~/custom_profile
 
 #配置Node
 if [ ! -f node.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com/node-v5.1.1-linux-x64.tar.gz' >> node.tar.gz;
+  curl 'http://mirrors.hope6537.com:81/node-v5.1.1-linux-x64.tar.gz' >> node.tar.gz;
 fi
 echo '[+] 完成node下载'
 tar -xzf node.tar.gz -C /usr/local/share/;
@@ -140,26 +168,19 @@ echo '[+] 配置npm和cnpm'
 /usr/local/share/node-v5.1.1-linux-x64/bin/npm install -g cnpm --registry=https://registry.npm.taobao.org
 
 
-#其他资源
-if [ ! -f ocservauto.sh ]; then
-  wget 'http://mirrors.hope6537.com/ocservauto.sh'
-fi
-echo '[+] 完成VPN部署脚本下载'
-
-
 #配置Nginx
 echo '[-] 开始进行Nginx编译构建'
 if [ ! -f nginx.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com/nginx-1.8.0.tar.gz' >> nginx.tar.gz;
+  curl 'http://mirrors.hope6537.com:81/nginx-1.8.0.tar.gz' >> nginx.tar.gz;
 fi
 echo '[+] 完成nginx下载'
 if [ ! -f zlib-1.2.8.tar.gz ]; then
-wget 'http://mirrors.hope6537.com/zlib-1.2.8.tar.gz'
+wget 'http://mirrors.hope6537.com:81/zlib-1.2.8.tar.gz'
 fi
 echo '[+] 完成zlib下载'
 
 if [ ! -f pcre-8.38.tar.gz ]; then
-wget 'http://mirrors.hope6537.com/pcre-8.38.tar.gz'
+wget 'http://mirrors.hope6537.com:81/pcre-8.38.tar.gz'
 fi
 echo '[+] 完成pcre下载'
 if [ ! -f ngx_cache_purge-2.3.tar.gz ]; then
@@ -209,7 +230,7 @@ echo "alias nginx.stop='/usr/local/nginx/sbin/nginx -s stop'" >> ~/custom_alias
 
 #REDIS 主从和集群
 if [ ! -f redis.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com/redis-3.0.5.tar.gz' >> redis.tar.gz;
+  curl 'http://mirrors.hope6537.com:81/redis-3.0.5.tar.gz' >> redis.tar.gz;
 fi
 echo '[+] 完成redis下载'
 tar -xzf redis.tar.gz -C /usr/local/share/;
@@ -248,7 +269,7 @@ echo "alias redis.stop='/usr/local/share/redis-3.0.4/src/redis-server stop'" >> 
 #ElasticSearch
 
 if [ ! -f elasticsearch.tar.gz ]; then
-    curl 'http://mirrors.hope6537.com/elasticsearch.tar.gz' >> elasticsearch.tar.gz
+    curl 'http://mirrors.hope6537.com:81/elasticsearch.tar.gz' >> elasticsearch.tar.gz
 fi
 echo '[+] 完成elasticsearch下载'
 tar -xzf elasticsearch.tar.gz -C /usr/local/share/;
