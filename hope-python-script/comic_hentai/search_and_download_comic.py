@@ -34,11 +34,11 @@ def init(proxy, page=1, max_page=20, use_proxy=True, dir_name=None):
     global index, proxy_list
     if dir_name is None:
         # 首先创建一个基于当前时间的文件夹
-        dir_name = time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime(int(time.time())))
+        dir_name = time.strftime("%Y-%m-%d %H%M%S", time.localtime(int(time.time())))
         # 在Windows环境下 文件夹不允许带冒号
         if platform.system() == "Windows":
-            dir_name = time.strftime("[%Y-%m-%d %H-%M-%S]", time.localtime(int(time.time())))
-        dir_name = "ComicHentai" + dir_name
+            dir_name = time.strftime("%Y-%m-%d %H%M%S", time.localtime(int(time.time())))
+        dir_name = "data-" + dir_name
         os.mkdir(dir_name)
     proxies = {
         "http": proxy,
