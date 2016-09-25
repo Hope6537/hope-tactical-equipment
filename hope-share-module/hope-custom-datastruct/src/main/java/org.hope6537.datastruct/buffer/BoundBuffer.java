@@ -23,16 +23,16 @@ public class BoundBuffer<V> extends BaseBoundedBuffer<V> {
      */
     private Lock conditionPredicateLock;
 
+    public BoundBuffer(int capacity) {
+        super(capacity);
+    }
+
     public synchronized final boolean notNull() {
         return !this.isFull();
     }
 
     public synchronized final boolean notEmpty() {
         return !this.isEmpty();
-    }
-
-    public BoundBuffer(int capacity) {
-        super(capacity);
     }
 
     /**

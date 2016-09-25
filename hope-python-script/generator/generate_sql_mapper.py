@@ -4,8 +4,23 @@ import os
 
 def generate(objectName, columns):
     """
-    生成SQL映射文件
-    """
+   生成SQL映射文件
+   """
+    foreginIdListInterface = ''
+    for c in columns:
+        if c[1] == 'int' and "Id" in c[0]:
+            foreginName = c[0]
+            foreginIdListInterface += """
+            <!-- 默认模板生成 根据外部ID集合选取多行记录-->
+    <select id="select{ObjectName}ListBy""" + (foreginName[0].upper() + foreginName[1:]) + """s" resultType="org.hope6537.dataobject.{ObjectName}Do"> SELECT * FROM `{ObjectName}`
+        <where>
+            """ + foreginName + """ in (
+            <foreach collection="idList" item="id" separator=" , ">#{id}</foreach>
+            )
+        </where>
+        LIMIT 3000
+    </select>
+            """
     insertColumns = ""
     insertDynamic = ""
     updateColumns = ""
@@ -74,7 +89,7 @@ def generate(objectName, columns):
             )
         </where>
         LIMIT ${idList.size}
-    </select>
+    </select>""" + foreginIdListInterface + """
     <!-- 默认模板生成 动态SQL语句 通常字段判断是否为空 并增加日期范围 -->
     <sql id="where">
         <where> 1 = 1
@@ -85,7 +100,7 @@ def generate(objectName, columns):
             <if test="updatedAfter!=null and updatedAfter!=''"> AND `updated` &lt; #{updatedAfter} </if>
             <if test="updatedBefore!=null and updatedBefore!=''">AND `updated` &gt; #{updatedBefore} </if>
             <if test="status!=null and status!=''"> AND `status` = #{status} </if>
-            <if test="isDeleted!=null and isDeleted!=''"> AND `isDeleted` = #{isDeleted} </if>
+            <if test="isDeleted!=null"> AND `isDeleted` = #{isDeleted} </if>
         </where>
     </sql>
     <!-- 默认模板生成 根据Query对象查询记录 -->

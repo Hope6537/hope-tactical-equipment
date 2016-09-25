@@ -2,12 +2,21 @@
 import os
 
 
-def generate(objectName):
+def generate(objectName, columns):
     """
     生成Dao接口
     :param objectName:
     :return:
     """
+
+    foreginIdListInterface = ''
+    for c in columns:
+        if c[1] == 'int' and "Id" in c[0]:
+            foreginName = c[0]
+            foreginIdListInterface += """
+            List<{ObjectName}Do> select{ObjectName}ListBy""" + (foreginName[0].upper() + foreginName[1:]) + """s(@Param("idList") List<Integer> idList);
+            """
+
     text = """
     package org.hope6537.dao;
 
@@ -37,7 +46,7 @@ def generate(objectName):
         {ObjectName}Do select{ObjectName}ById(@Param("id") Integer id);
 
         List<{ObjectName}Do> select{ObjectName}ListByIds(@Param("idList") List<Integer> idList);
-
+    """ + foreginIdListInterface + """
         List<{ObjectName}Do> select{ObjectName}ListByQuery({ObjectName}Do query);
 
         int select{ObjectName}CountByQuery({ObjectName}Do query);

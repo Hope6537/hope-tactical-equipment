@@ -11,19 +11,18 @@ import generate_data_object
 import generate_data_transform_object
 import generate_dir
 import generate_service
+import generate_service_default_controller
 import generate_service_default_implement
 import generate_sql_mapper
 import generate_test
-import generate_service_default_controller
 from comic_hentai import comic_hentai_data_source
-
 
 
 def initAll(objectName, columns):
     generate_dir.generate()
     print(generate_data_object.generate(objectName, columns))
     print(generate_data_transform_object.generate(objectName, columns))
-    print(generate_dao.generate(objectName))
+    print(generate_dao.generate(objectName, columns))
     print(generate_sql_mapper.generate(objectName, columns))
     print(generate_service.generate(objectName, columns))
     print(generate_service_default_implement.generate(objectName, columns))
@@ -36,7 +35,7 @@ def mysql_connect():
     cursor = conn.cursor()
     # 得到当前数据库中的所有表
     cursor.execute(
-            "select distinct table_name from information_schema.columns where table_schema = 'ComicHentai' order by table_schema,table_name")
+            "SELECT DISTINCT table_name FROM information_schema.columns WHERE table_schema = 'jxt' ORDER BY table_schema,table_name")
     tables = cursor.fetchall()
     print(tables)
     for table in tables:
@@ -44,7 +43,7 @@ def mysql_connect():
         if table == 'TestComic' or table == "TestUser":
             continue
         cursor.execute(
-                "select column_name,data_type,is_nullable,column_comment from information_schema.columns where table_name = '" + table + "' order by table_schema,table_name", )
+                "SELECT column_name,data_type,is_nullable,column_comment FROM information_schema.columns WHERE table_name = '" + table + "' ORDER BY table_schema,table_name", )
         values = cursor.fetchall()
         columns = []
         for column in values:

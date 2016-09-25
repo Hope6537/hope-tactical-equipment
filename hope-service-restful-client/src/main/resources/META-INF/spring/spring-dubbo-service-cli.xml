@@ -10,7 +10,7 @@
 
     <context:component-scan base-package="org.hope6537.controller.*"/>
     <import resource="classpath*:/spring/spring-aspect.xml"/>
-    
+
     <!--<import resource="classpath*:/redis/spring-redis.xml"/>-->
 
     <bean id="elasticSearchUtil" class="org.hope6537.rest.utils.ElasticSearchUtil" init-method="init"
@@ -22,18 +22,26 @@
     <!-- 默认消费者域名 -->
     <dubbo:protocol host="www.hope6537.com"/>
 
-    <dubbo:reference id="categoryService" interface="org.hope6537.service.CategoryService"/>
-    <dubbo:reference id="classifiedService" interface="org.hope6537.service.ClassifiedService"/>
-    <dubbo:reference id="comicService" interface="org.hope6537.service.ComicService"/>
-    <dubbo:reference id="favoriteService" interface="org.hope6537.service.FavoriteService"/>
-    <dubbo:reference id="jumpService" interface="org.hope6537.service.JumpService"/>
-    <dubbo:reference id="specialService" interface="org.hope6537.service.SpecialService"/>
-    <dubbo:reference id="userInfoService" interface="org.hope6537.service.UserInfoService"/>
+    <dubbo:reference timeout="10000" id="applyService" interface="org.hope6537.service.ApplyService"/>
+    <dubbo:reference timeout="10000" id="classesService" interface="org.hope6537.service.ClassesService"/>
+    <dubbo:reference timeout="10000" id="dutyService" interface="org.hope6537.service.DutyService"/>
+    <dubbo:reference timeout="10000" id="eventService" interface="org.hope6537.service.EventService"/>
+    <dubbo:reference timeout="10000" id="feedbackService" interface="org.hope6537.service.FeedbackService"/>
+    <dubbo:reference timeout="10000" id="joinService" interface="org.hope6537.service.JoinService"/>
+    <dubbo:reference timeout="10000" id="mealService" interface="org.hope6537.service.MealService"/>
+    <dubbo:reference timeout="10000" id="messageService" interface="org.hope6537.service.MessageService"/>
+    <dubbo:reference timeout="10000" id="noticeService" interface="org.hope6537.service.NoticeService"/>
+    <dubbo:reference timeout="10000" id="parentService" interface="org.hope6537.service.ParentService"/>
+    <dubbo:reference timeout="10000" id="planService" interface="org.hope6537.service.PlanService"/>
+    <dubbo:reference timeout="10000" id="requireService" interface="org.hope6537.service.RequireService"/>
+    <dubbo:reference timeout="10000" id="studentService" interface="org.hope6537.service.StudentService"/>
+    <dubbo:reference timeout="10000" id="teacherService" interface="org.hope6537.service.TeacherService"/>
+    <dubbo:reference timeout="10000" id="publishService" interface="org.hope6537.service.PublishService"/>
 
-    <dubbo:reference id="jumpBusiness" interface="org.hope6537.bo.JumpBusiness"/>
-    <dubbo:reference id="categoryBusiness" interface="org.hope6537.bo.CategoryBusiness"/>
-    <dubbo:reference id="comicBusiness" interface="org.hope6537.bo.ComicBusiness"/>
-    <dubbo:reference id="favoriteBusiness" interface="org.hope6537.bo.FavoriteBusiness"/>
+    <dubbo:reference timeout="100000" id="generatorBusiness" interface="org.hope6537.business.GeneratorBusiness"/>
+    <dubbo:reference timeout="100000" id="eventBusiness" interface="org.hope6537.business.EventBusiness"/>
+    <dubbo:reference timeout="100000" id="noticeBusiness" interface="org.hope6537.business.NoticeBusiness"/>
+    <dubbo:reference timeout="100000" id="requireBusiness" interface="org.hope6537.business.RequireBusiness"/>
 
     <dubbo:application name="hope-service-rpc-rest-api"/>
 

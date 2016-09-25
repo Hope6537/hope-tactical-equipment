@@ -2,7 +2,6 @@ package org.hope6537.page;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
-import org.hope6537.page.PageDto;
 import org.hope6537.security.AESLocker;
 
 /**
@@ -67,6 +66,29 @@ public class PageMapUtil {
                 query.setCurrentPage(MIN_PAGE_NUMBER);
             } else {
                 query = JSON.parseObject(AESLocker.decrypt(pageMap), clz);
+            }
+            return query;
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException("查询失败");
+        } catch (JSONException e) {
+            throw new RuntimeException("页码非法");
+        }
+    }
+
+    public static <T extends PageDto> T getQuery(String dataMap, String pageMap, Class<T> clz) {
+        try {
+            T query;
+            if (dataMap == null || dataMap.equals("")) {
+                query = clz.newInstance();
+                query.setCurrentPage(MIN_PAGE_NUMBER);
+            } else {
+                query = JSON.parseObject(dataMap, clz);
+                query.setCurrentPage(MIN_PAGE_NUMBER);
+                if (pageMap != null && !pageMap.equals("")) {
+                    T pageMapObject = JSON.parseObject(AESLocker.decrypt(pageMap), clz);
+                    query.setCurrentPage(pageMapObject.getCurrentPage());
+                    query.setPageSize(pageMapObject.getPageSize());
+                }
             }
             return query;
         } catch (InstantiationException | IllegalAccessException e) {

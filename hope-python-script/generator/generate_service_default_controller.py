@@ -20,6 +20,7 @@ def generate(objectName, columns):
     text = """
 package org.hope6537.controller;
 
+import org.springframework.web.bind.annotation.*;
 import com.google.common.collect.Lists;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
@@ -48,6 +49,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 默认RESTFul API实现类
  * Created by hope6537 by Code Generator
  */
+@CrossOrigin(maxAge = 3600)
 @Controller
 @RequestMapping("/{objectName}/")
 @EnableAutoConfiguration
@@ -170,7 +172,7 @@ public class {ObjectName}Controller {
                 return errorResponse != null ? (Response) errorResponse : Response.getInstance(false).setReturnMsg(ResponseDict.UNKNOWN_ERROR);
             }
             //验证完成,开始查询
-            {ObjectName}Dto query = PageMapUtil.getQuery(dataMap.getString("pageMap"), {ObjectName}Dto.class);
+            {ObjectName}Dto query = PageMapUtil.getQuery(dataMap.getString("fetchObject"),dataMap.getString("pageMap"), {ObjectName}Dto.class);
             ResultSupport<List<{ObjectName}Dto>> {objectName}ListByQuery = {objectName}Service.get{ObjectName}ListByQuery(query);
             return Response.getInstance({objectName}ListByQuery.isSuccess())
                     .addAttribute("result", {objectName}ListByQuery.getModule())

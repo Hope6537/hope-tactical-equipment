@@ -17,20 +17,26 @@
     <dubbo:protocol name="dubbo" port="20880"/>
 
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service ref="testComicService" interface="org.hope6537.service.TestComicService"/>
-    <dubbo:service ref="testUserService" interface="org.hope6537.service.TestUserService"/>
-    <dubbo:service ref="categoryService" interface="org.hope6537.service.CategoryService"/>
-    <dubbo:service ref="classifiedService" interface="org.hope6537.service.ClassifiedService"/>
-    <dubbo:service ref="comicService" interface="org.hope6537.service.ComicService"/>
-    <dubbo:service ref="favoriteService" interface="org.hope6537.service.FavoriteService"/>
-    <dubbo:service ref="jumpService" interface="org.hope6537.service.JumpService"/>
-    <dubbo:service ref="specialService" interface="org.hope6537.service.SpecialService"/>
-    <dubbo:service ref="userInfoService" interface="org.hope6537.service.UserInfoService"/>
+    <dubbo:service ref="applyService" interface="org.hope6537.service.ApplyService"/>
+    <dubbo:service ref="classesService" interface="org.hope6537.service.ClassesService"/>
+    <dubbo:service ref="dutyService" interface="org.hope6537.service.DutyService"/>
+    <dubbo:service ref="eventService" interface="org.hope6537.service.EventService"/>
+    <dubbo:service ref="feedbackService" interface="org.hope6537.service.FeedbackService"/>
+    <dubbo:service ref="joinService" interface="org.hope6537.service.JoinService"/>
+    <dubbo:service ref="mealService" interface="org.hope6537.service.MealService"/>
+    <dubbo:service ref="messageService" interface="org.hope6537.service.MessageService"/>
+    <dubbo:service ref="noticeService" interface="org.hope6537.service.NoticeService"/>
+    <dubbo:service ref="parentService" interface="org.hope6537.service.ParentService"/>
+    <dubbo:service ref="planService" interface="org.hope6537.service.PlanService"/>
+    <dubbo:service ref="requireService" interface="org.hope6537.service.RequireService"/>
+    <dubbo:service ref="studentService" interface="org.hope6537.service.StudentService"/>
+    <dubbo:service ref="teacherService" interface="org.hope6537.service.TeacherService"/>
+    <dubbo:service ref="publishService" interface="org.hope6537.service.PublishService"/>
 
+    <dubbo:service ref="generatorBusiness" interface="org.hope6537.business.GeneratorBusiness"/>
+    <dubbo:service ref="eventBusiness" interface="org.hope6537.business.EventBusiness"/>
+    <dubbo:service ref="noticeBusiness" interface="org.hope6537.business.NoticeBusiness"/>
+    <dubbo:service ref="requireBusiness" interface="org.hope6537.business.RequireBusiness"/>
 
-    <dubbo:service ref="jumpBusiness" interface="org.hope6537.bo.JumpBusiness"/>
-    <dubbo:service ref="favoriteBusiness" interface="org.hope6537.bo.FavoriteBusiness"/>
-    <dubbo:service ref="categoryBusiness" interface="org.hope6537.bo.CategoryBusiness"/>
-    <dubbo:service ref="comicBusiness" interface="org.hope6537.bo.ComicBusiness"/>
 
 </beans>

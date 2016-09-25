@@ -1,26 +1,23 @@
 package org.hope6537.controller;
 
 import org.hope6537.security.AESLocker;
-import org.hope6537.service.ComicService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+@CrossOrigin(maxAge = 3600)
 @Controller
 @EnableAutoConfiguration
 @ImportResource("classpath*:/META-INF/spring/spring-dubbo-service-cli.xml")
 public class LockerController {
 
     private static final String IILEGAL_REQUEST = "非法请求";
-
-    @Resource(name = "comicService")
-    public ComicService comicService;
 
     @RequestMapping(value = "/encrypt", method = RequestMethod.GET)
     @ResponseBody

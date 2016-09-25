@@ -11,14 +11,14 @@ import java.io.Serializable;
  */
 public class PageDto implements Serializable {
 
-    public static final int DEFAULT_PAGESIZE = 20;
+    public static final int DEFAULT_PAGESIZE = 500;
     private static final long serialVersionUID = -4299676786928364850L;
     private Integer pageSize;
     private Integer startRecord;
     private Integer currentPageNo;
 
     public PageDto() {
-        pageSize = 20;
+        pageSize = 500;
     }
 
     public Integer getPageSize() {
