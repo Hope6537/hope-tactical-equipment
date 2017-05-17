@@ -30,12 +30,7 @@ echo '[+] generate ssh-key';
 ssh-keygen -t rsa;
 echo '[+] add ssh-key authorized_keys';
 touch ~/.ssh/authorized_keys;
-echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjK6q0Z482Doylnbg30PsqywoOBEQk0lvP3oeWVqwHV6l1Hu1cwqSs+tQK3cbGhVu8VzZESF2LoGkvz18mLVuVtPO+727VAQm9qm8BDdaUtqv+wd4yg8rMNzhCoKVtbuarPma9lJldbVaw7c/Hgwq5EPDw1qYq4F7XK+2LTEvkOQ1HghAIU9trnC1PdF8vCZlDt+s/MXsTEMB4qTjsxrdNYRD07brM43CkVI3I+AigJolCfhb8s0xaVTxJxbexyVWz/k6lNyKQiwx7t6nJbq3BeYSQG5RyIkgSAMajHcWZV4dW60VDleyYRWeNNTYfPn1iuTnbemN1+unf0Zk6jmqB root@ding
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+sgIEPorYX/T/AYWIx2CYiLyVaavglfa/sR+J6wHdkDyMbijzbHAlBcSFzlmFLqgaJH5sS5RRW1i/O1x2T/7BG4QPMiK0O/Hxp5hoi8AIUXDKYR9f5sHz1hQuSNPi4wZEhtfXetIVk7q2gYBMPlM8SGY1MHxxl+e/MoUJmoTrkfVaPHO2WZtKe/dn7mwbKH8hWr6EYl6pk4KyRc3sLJyLJ6keZDHTJEr4GlvPycPbc6hac25DoHHRaY+fkr/BBP3OsJ7eepqJhbc3cvEGtIOcWDyrIq+YMjIOMDu77LG0HtLJiH2fKc4zKX9Ov10/mUktil+67wXE6ah6axj7YGtr root@hope6537
-ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtqvfe64oVhqWSGDJE+/TD7JXK/KfuTppYMxX+y31hKvLCjm/YeSzbgINJB3EuLKWYltgcbwwjl/yVRl6GsO8oKdnbNnLoucV/dRUcjR65vx6pcch3RsZT9U68mXDuz1t0uM32sfT1wmpQZaE6ASPS81ddcha23OXlejjEQeaQK55zVO+TvfI/FsVnYPC9MuBZ6+IJOWW3hRw/vip/NwtqnGbBZXlAOp46RZlGNen+HqhrAVQzmV0h5vd3woKPvFxfl3H/jTbBqDUnk49OKjelvvKZcYnI4ARa6rQ1x1otJVEXKvc1ylh0qzk9dsc9E5JkzJWQyM0rBOQm2ZyzymJLw== Hope6537@HOPE6537-RABOOK
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC/8/9gJ7ShCLeKxznpgauz4vuw+XZgRqSbT260LRaw5FI1KIdSOm3+mx7rtR2qsWwjh/ykQt1TVzOSA7mRNVJnVAfWymbWcWmqPMicVnPc1gKWj0RhfLfU3tlHHr5FNGIXtJmgDcf7JfVmK7qKp7jZXNjj7gXMfqni2LVF11i4EV4zoZK59wxvCa1PAM+CY/GH09KlKMNDWcIrKNBSNB8Qlq6Eo+8Xtdj8JDnx+4UfuB+rJywEnNywLeUjgXZ8FltbM/YRU0rsht1LTWSclj1o5kzkShC/nkGue9u0GeRrIGUFthes47SfwfC61f2s6o74gGZk+C318RvG0akYAQkT hope6537@hope6537deMacBook-Pro.local
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI/gkmdCU06b8bZd60FSJ+9HkdCEOw9DBbfV0NEbbZwsMLwwd+amve52/D/91Q0FBsagcBaDP1ZsO3ACqhHEt2LF8BRCiv8CJp0QBlYnOX2Vpa5jeHnEm5gUO7U71agH0WuVXiAjJa/YWfK0jqatdSnwHYudNuOj/BbNsNYkr4/r2dayB3GZdxbhZ4k0wdiwOkRBr48ulhxRj2FjJumcRWws77c582BSBq80Eo7JZ/XwAXcGfQS3fdBaWJqV2tHSOHi2rXsjbOSUPh/3KL+5UZu2j0mGA3L3sgNMxPGppLiTNyA1U2etoQCLsjO/jm7IyueY4CUa3xJL7Q9hNvVg9Z dintama@dintamadeMacBook-Pro.local
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDX+m4Rut1d+yrSvdu/JdlOwTp+aHebUQI9VanBMaDJeJnNsuR7amFc2BQ/jc2NAH7ecbEq3lV4dfW5xTjlid2dJ5aUtQ86BvTl3Cufi2uqjMcTsEn3a8gsW+cxoccKP3bzfKCjqyhbE0tBJrlj0Zw1iFo5nIaHKnfvaS+Gv1tJq7VOMtvVQ0G1tvMY9StgaqCvK4iSvZxz4t5tWD8XshkGnYZ+43A2yOdqy4xk0NDdvkHsxxMWlJPv/q4S9nN4bypAC6ufVLVIhusq4x/g52TvxVkuGA0ZGylJD6eqEnscZRVQvZAnXTl8fvIZ+j3XeWLT4ymJ5koJDenUcKQPZSiB wuyang@wuyang-MBP.local
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDX+m4Rut1d+yrSvdu/JdlOwTp+aHebUQI9VanBMaDJeJnNsuR7amFc2BQ/jc2NAH7ecbEq3lV4dfW5xTjlid2dJ5aUtQ86BvTl3Cufi2uqjMcTsEn3a8gsW+cxoccKP3bzfKCjqyhbE0tBJrlj0Zw1iFo5nIaHKnfvaS+Gv1tJq7VOMtvVQ0G1tvMY9StgaqCvK4iSvZxz4t5tWD8XshkGnYZ+43A2yOdqy4xk0NDdvkHsxxMWlJPv/q4S9nN4bypAC6ufVLVIhusq4x/g52TvxVkuGA0ZGylJD6eqEnscZRVQvZAnXTl8fvIZ+j3XeWLT4ymJ5koJDenUcKQPZSiB wuyang@wuyang-MBP.local
 ' >> ~/.ssh/authorized_keys;
 
 #首先需要对apt资源包进行升级
@@ -60,9 +55,9 @@ echo '[+] 正在安装python基础库'
 echo '[+] 安装科学上网'
 sudo pip install shadowsocks
 sudo touch /etc/shadowsocks.json
-sudo echo '{ "server":"0.0.0.0", "server_port":8388, "local_port":1080,"password":"gintama123", "timeout":600, "method":"aes-256-cfb" }' >> /etc/shadowsocks.json
-echo "alias ss.start='ssserver -c /etc/shadowsocks.json -d start'" >> ~/custom_alias
-echo "alias ss.stop='ssserver -c /etc/shadowsocks.json -d stop'" >> ~/custom_alias
+sudo echo '{ "server":"0.0.0.0", "server_port":8388, "local_port":1080,"password":"gintama123", "timeout":600, "method":"aes-256-cfb" }' >> /etc/shadowsocks.json;
+echo "alias ss.start='ssserver -c /etc/shadowsocks.json -d start'" >> ~/custom_alias;
+echo "alias ss.stop='ssserver -c /etc/shadowsocks.json -d stop'" >> ~/custom_alias;
 
 #其他资源
 if [ ! -f ocservauto.sh ]; then
@@ -97,7 +92,7 @@ sudo pip install scapy
 #配置Java
 echo '[+] 正在配置JDK中'
 if [ ! -f jdk.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com:80jdk-8u65-linux-x64.tar.gz' >> jdk.tar.gz
+  curl 'http://mirrors.hope6537.com:81/jdk.tar.gz' >> jdk.tar.gz
 fi
 echo '[+] 完成JDK下载,正在解压至share目录'
 tar -xzf jdk.tar.gz -C /usr/local/share/;
@@ -130,13 +125,13 @@ echo 'export PATH=$PATH:$CATALINA_HOME/bin' >> ~/custom_profile
 
 #配置Zookeeper
 if [ ! -f zookeeper.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com:81/zookeeper-3.4.7.tar.gz'>> zookeeper.tar.gz;
+  curl 'http://mirrors.hope6537.com:81/zookeeper.tar.gz' >> zookeeper.tar.gz;
 fi
 echo '[+] 完成Zookeeper下载'
 tar -xzf zookeeper.tar.gz -C /usr/local/share/;
 echo '[+] 配置Zookeeper默认设置中'
-mkdir ~/zk
-mkdir ~/zk/data
+mkdir ~/zk;
+mkdir ~/zk/data;
 rm -rf ~/zk/data/myid
 touch ~/zk/data/myid
 echo '10' >> ~/zk/data/myid
@@ -149,7 +144,7 @@ dataDir=/root/zk/data
 clientPort=2181
 server.1=www.hope6537.com:2555:3555
 server.2=ding.hope6537.com:2555:3555
-#server.10=jp.hope6537.com:2555:3555' >> /usr/local/share/zookeeper-3.4.7/conf/zoo.cfg
+server.10=jp.hope6537.com:2555:3555' >> /usr/local/share/zookeeper-3.4.7/conf/zoo.cfg
 echo '[.] 完成zk配置文件初始化'
 echo '[+] 导出环境变量中'
 echo 'export ZK_HOME=/usr/local/share/zookeeper-3.4.7' >> ~/custom_profile
