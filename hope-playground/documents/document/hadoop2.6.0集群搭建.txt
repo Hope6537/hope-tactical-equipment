@@ -56,7 +56,7 @@
 			#hadoop2.0的配置文件全部在$HADOOP_HOME/etc/hadoop下
 			cd $HADOOP_HOME/etc/hadoop
 			
-			2.2.1修改hadoo-env.sh
+			2.2.1修改hadoop-env.sh
 				export JAVA_HOME=/home/hope6537/hadoop/jdk/jdk1.8
 				
 			2.2.2修改core-site.xml
@@ -268,4 +268,35 @@
 	OK，大功告成！！！
 
 
- 
+
+============伪分布式场景===========
+core-site.xml
+
+<configuration>
+        <property>
+             <name>hadoop.tmp.dir</name>
+             <value>file:/usr/local/hadoop/tmp</value>
+             <description>Abase for other temporary directories.</description>
+        </property>
+        <property>
+             <name>fs.defaultFS</name>
+             <value>hdfs://localhost:9000</value>
+        </property>
+</configuration>
+
+hdfs-site.xml
+
+<configuration>
+        <property>
+             <name>dfs.replication</name>
+             <value>1</value>
+        </property>
+        <property>
+             <name>dfs.namenode.name.dir</name>
+             <value>/usr/local/share/hadoop-2.6.0/tmp/dfs/name</value>
+        </property>
+        <property>
+             <name>dfs.datanode.data.dir</name>
+             <value>/usr/local/share/hadoop-2.6.0/tmp/dfs/data</value>
+        </property>
+</configuration>

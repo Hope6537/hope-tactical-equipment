@@ -66,6 +66,9 @@ fi
 if [ ! -f openvpn-install.sh ]; then
   wget 'https://raw.githubusercontent.com/Hope6537/openvpn-install/master/openvpn-install.sh'
 fi
+if [ ! -f setup.sh ]; then
+  curl -L -O https://raw.github.com/philplckthun/setup-strong-strongswan/master/setup.sh
+fi
 echo '[+] 完成VPN部署脚本下载'
 
 #安装其他Python基础库
