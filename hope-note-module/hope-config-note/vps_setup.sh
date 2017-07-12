@@ -11,44 +11,38 @@ fi
 #对VPS进行初始化设置
 
 #首先支持中文
-echo '[+] Add Chinese Support';
 echo 'LANG="zh_CN.UTF-8"
-LANGUAGE="zh_CN:zh:en_US:en"' >> /etc/environment
+LANGUAGE="zh_CN:zh:en_US:en"' >> /etc/environment;
+
 echo '
 en_US.UTF-8 UTF-8
 zh_CN.UTF-8 UTF-8
 zh_CN.GBK GBK
 zh_CN GB2312
-' >>  /var/lib/locales/supported.d/local
-sudo locale-gen
-rm -rf /etc/default/locale
+' >>  /var/lib/locales/supported.d/local;
+
+sudo locale-gen;
+
+rm -rf /etc/default/locale;
+
 echo 'LANG="zh_CN.UTF-8"
-LANGUAGE="zh_CN:zh:en_US:en"' >> /etc/default/locale
+LANGUAGE="zh_CN:zh:en_US:en"' >> /etc/default/locale;
 
 #SSH密钥
-echo '[+] generate ssh-key';
 ssh-keygen -t rsa;
-echo '[+] add ssh-key authorized_keys';
 touch ~/.ssh/authorized_keys;
 echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDX+m4Rut1d+yrSvdu/JdlOwTp+aHebUQI9VanBMaDJeJnNsuR7amFc2BQ/jc2NAH7ecbEq3lV4dfW5xTjlid2dJ5aUtQ86BvTl3Cufi2uqjMcTsEn3a8gsW+cxoccKP3bzfKCjqyhbE0tBJrlj0Zw1iFo5nIaHKnfvaS+Gv1tJq7VOMtvVQ0G1tvMY9StgaqCvK4iSvZxz4t5tWD8XshkGnYZ+43A2yOdqy4xk0NDdvkHsxxMWlJPv/q4S9nN4bypAC6ufVLVIhusq4x/g52TvxVkuGA0ZGylJD6eqEnscZRVQvZAnXTl8fvIZ+j3XeWLT4ymJ5koJDenUcKQPZSiB wuyang@wuyang-MBP.local
 ' >> ~/.ssh/authorized_keys;
 
 #首先需要对apt资源包进行升级
-echo '[+] 正在更新apt-get资源包列表中'
 sudo apt-get update -y;
-echo '[+] 正在更新apt-get已安装资源中'
 sudo apt-get upgrade -y;
-echo '[+] 正在安装基础依赖'
-sudo apt-get install gcc git zsh python expect curl libdnet openssl wget gcc python-dev python-pypcap autoconf automake python3-dev python-gevent python-pip python-m2crypto libxml2-dev libxslt1-dev zlib1g-dev libmysqlclient-dev libxml2-dev libxslt1-dev -y;
-echo '[+] 正在从远程获取源代码'
+sudo apt-get install gcc git zsh python expect curl libdnet openssl wget gcc python-dev python-pypcap autoconf automake python3-dev python-gevent python-pip python-m2crypto libxml2-dev libxslt1-dev zlib1g-dev libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev -y;
 
 #切换终端为zsh
-echo '[+] 获取zsh'
-git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-cp ~/.zshrc ~/.zshrc.bak
-cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
-echo '[+] 切换默认shell为zsh'
-chsh -s /bin/zsh
+git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh;
+cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc;
+chsh -s /bin/zsh;
 
 #安装科学上网客户端
 echo '[+] 正在安装python基础库'
@@ -58,6 +52,14 @@ sudo touch /etc/shadowsocks.json
 sudo echo '{ "server":"0.0.0.0", "server_port":8388, "local_port":1080,"password":"gintama123", "timeout":600, "method":"aes-256-cfb" }' >> /etc/shadowsocks.json;
 echo "alias ss.start='ssserver -c /etc/shadowsocks.json -d start'" >> ~/custom_alias;
 echo "alias ss.stop='ssserver -c /etc/shadowsocks.json -d stop'" >> ~/custom_alias;
+
+echo '[+] 安装科学上网 v2'
+wget --no-check-certificate -O shadowsocks-libev-debian.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-libev-debian.sh
+chmod +x shadowsocks-libev-debian.sh
+./shadowsocks-libev-debian.sh 2>&1 | tee shadowsocks-libev-debian.log
+
+nohup /usr/local/bin/ss-server -u -c /etc/shadowsocks-libev/config.json &
+
 
 #其他资源
 if [ ! -f ocservauto.sh ]; then
