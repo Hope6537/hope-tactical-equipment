@@ -1,16 +1,16 @@
 #!/bin/sh
 
-#ä¸‹è½½çš„åŸŸå
+#ÏÂÔØµÄÓòÃû
 
 remoteHost=$1
 if [ -z  ${remoteHost} ]
 then
-   remoteHost="http://mirrors.hope6537.com:81"
+   remoteHost="http://hk.hope6537.org:81"
 fi
 
-#å¯¹VPSè¿›è¡Œåˆå§‹åŒ–è®¾ç½®
+#¶ÔVPS½øĞĞ³õÊ¼»¯ÉèÖÃ
 
-#é¦–å…ˆæ”¯æŒä¸­æ–‡
+#Ê×ÏÈÖ§³ÖÖĞÎÄ
 echo 'LANG="zh_CN.UTF-8"
 LANGUAGE="zh_CN:zh:en_US:en"' >> /etc/environment;
 
@@ -28,32 +28,32 @@ rm -rf /etc/default/locale;
 echo 'LANG="zh_CN.UTF-8"
 LANGUAGE="zh_CN:zh:en_US:en"' >> /etc/default/locale;
 
-#SSHå¯†é’¥
+#SSHÃÜÔ¿
 ssh-keygen -t rsa;
 touch ~/.ssh/authorized_keys;
 echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDX+m4Rut1d+yrSvdu/JdlOwTp+aHebUQI9VanBMaDJeJnNsuR7amFc2BQ/jc2NAH7ecbEq3lV4dfW5xTjlid2dJ5aUtQ86BvTl3Cufi2uqjMcTsEn3a8gsW+cxoccKP3bzfKCjqyhbE0tBJrlj0Zw1iFo5nIaHKnfvaS+Gv1tJq7VOMtvVQ0G1tvMY9StgaqCvK4iSvZxz4t5tWD8XshkGnYZ+43A2yOdqy4xk0NDdvkHsxxMWlJPv/q4S9nN4bypAC6ufVLVIhusq4x/g52TvxVkuGA0ZGylJD6eqEnscZRVQvZAnXTl8fvIZ+j3XeWLT4ymJ5koJDenUcKQPZSiB wuyang@wuyang-MBP.local
 ' >> ~/.ssh/authorized_keys;
 
-#é¦–å…ˆéœ€è¦å¯¹aptèµ„æºåŒ…è¿›è¡Œå‡çº§
+#Ê×ÏÈĞèÒª¶Ôapt×ÊÔ´°ü½øĞĞÉı¼¶
 sudo apt-get update -y;
 sudo apt-get upgrade -y;
 sudo apt-get install gcc git zsh python expect curl libdnet openssl wget gcc python-dev python-pypcap autoconf automake python3-dev python-gevent python-pip python-m2crypto libxml2-dev libxslt1-dev zlib1g-dev libmysqlclient-dev libxml2-dev libxslt1-dev libssl-dev libffi-dev -y;
 
-#åˆ‡æ¢ç»ˆç«¯ä¸ºzsh
+#ÇĞ»»ÖÕ¶ËÎªzsh
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh;
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc;
 chsh -s /bin/zsh;
 
-#å®‰è£…ç§‘å­¦ä¸Šç½‘å®¢æˆ·ç«¯
-echo '[+] æ­£åœ¨å®‰è£…pythonåŸºç¡€åº“'
-echo '[+] å®‰è£…ç§‘å­¦ä¸Šç½‘'
+#°²×°¿ÆÑ§ÉÏÍø¿Í»§¶Ë
+echo '[+] ÕıÔÚ°²×°python»ù´¡¿â'
+echo '[+] °²×°¿ÆÑ§ÉÏÍø'
 sudo pip install shadowsocks
 sudo touch /etc/shadowsocks.json
 sudo echo '{ "server":"0.0.0.0", "server_port":8388, "local_port":1080,"password":"gintama123", "timeout":600, "method":"aes-256-cfb" }' >> /etc/shadowsocks.json;
 echo "alias ss.start='ssserver -c /etc/shadowsocks.json -d start'" >> ~/custom_alias;
 echo "alias ss.stop='ssserver -c /etc/shadowsocks.json -d stop'" >> ~/custom_alias;
 
-echo '[+] å®‰è£…ç§‘å­¦ä¸Šç½‘ v2'
+echo '[+] °²×°¿ÆÑ§ÉÏÍø v2'
 wget --no-check-certificate -O shadowsocks-libev-debian.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-libev-debian.sh
 chmod +x shadowsocks-libev-debian.sh
 ./shadowsocks-libev-debian.sh 2>&1 | tee shadowsocks-libev-debian.log
@@ -61,9 +61,9 @@ chmod +x shadowsocks-libev-debian.sh
 nohup /usr/local/bin/ss-server -u -c /etc/shadowsocks-libev/config.json &
 
 
-#å…¶ä»–èµ„æº
+#ÆäËû×ÊÔ´
 if [ ! -f ocservauto.sh ]; then
-  wget 'http://mirrors.hope6537.com:81/ocservauto.sh'
+  wget 'http://hk.hope6537.org/ocservauto.sh'
 fi
 if [ ! -f openvpn-install.sh ]; then
   wget 'https://raw.githubusercontent.com/Hope6537/openvpn-install/master/openvpn-install.sh'
@@ -71,14 +71,14 @@ fi
 if [ ! -f setup.sh ]; then
   curl -L -O https://raw.github.com/philplckthun/setup-strong-strongswan/master/setup.sh
 fi
-echo '[+] å®ŒæˆVPNéƒ¨ç½²è„šæœ¬ä¸‹è½½'
+echo '[+] Íê³ÉVPN²¿Êğ½Å±¾ÏÂÔØ'
 
-#å®‰è£…å…¶ä»–PythonåŸºç¡€åº“
+#°²×°ÆäËûPython»ù´¡¿â
 #pip uninstall mysql-python
 #pip uninstall PyQuery
 #pip uninstall requests
 #pip uninstall scapy
-echo '[+] å®‰è£…å…¶ä»–PythonåŸºç¡€åº“ mysql-python PyQuery requests scapy pcapy pypcap numpy scipy opencv'
+echo '[+] °²×°ÆäËûPython»ù´¡¿â mysql-python PyQuery requests scapy pcapy pypcap numpy scipy opencv'
 
 #sudo pip uninstall mysql-python
 #sudo pip uninstall PyQuery
@@ -93,54 +93,54 @@ sudo pip install scapy
 #pip install scipy
 #pip install opencv
 
-#è·å–åŸºç¡€å·¥å…·åŒ…
-#é…ç½®Java
-echo '[+] æ­£åœ¨é…ç½®JDKä¸­'
+#»ñÈ¡»ù´¡¹¤¾ß°ü
+#ÅäÖÃJava
+echo '[+] ÕıÔÚÅäÖÃJDKÖĞ'
 if [ ! -f jdk.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com:81/jdk.tar.gz' >> jdk.tar.gz
+  curl 'http://hk.hope6537.org:81/jdk.tar.gz' >> jdk.tar.gz
 fi
-echo '[+] å®ŒæˆJDKä¸‹è½½,æ­£åœ¨è§£å‹è‡³shareç›®å½•'
+echo '[+] Íê³ÉJDKÏÂÔØ,ÕıÔÚ½âÑ¹ÖÁshareÄ¿Â¼'
 tar -xzf jdk.tar.gz -C /usr/local/share/;
-echo '[+] å¯¼å‡ºç¯å¢ƒå˜é‡ä¸­'
+echo '[+] µ¼³ö»·¾³±äÁ¿ÖĞ'
 echo 'export JAVA_HOME=/usr/local/share/jdk1.8.0_65' >> ~/custom_profile
 echo 'export PATH=$PATH:$JAVA_HOME/bin' >> ~/custom_profile
 
-#é…ç½®Maven
+#ÅäÖÃMaven
 if [ ! -f maven.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com:81/apache-maven-3.3.3-bin.tar.gz' >> maven.tar.gz;
+  curl 'http://hk.hope6537.org:81/apache-maven-3.3.3-bin.tar.gz' >> maven.tar.gz;
 fi
-wget http://mirrors.hope6537.com:81/settings.xml;
-echo '[+] å®ŒæˆMavenä¸‹è½½,å®Œæˆm2ä»“åº“åæ ‡æè¿°æ–‡ä»¶ä¸‹è½½,æ­£åœ¨ç§»åŠ¨ä¸­'
+wget http://hk.hope6537.org:81/settings.xml;
+echo '[+] Íê³ÉMavenÏÂÔØ,Íê³Ém2²Ö¿â×ø±êÃèÊöÎÄ¼şÏÂÔØ,ÕıÔÚÒÆ¶¯ÖĞ'
 tar -xzf maven.tar.gz -C /usr/local/share/;
 mkdir ~/.m2/
 cp settings.xml ~/.m2/
-echo '[+] å¯¼å‡ºç¯å¢ƒå˜é‡ä¸­'
+echo '[+] µ¼³ö»·¾³±äÁ¿ÖĞ'
 echo 'export M2_HOME=/usr/local/share/apache-maven-3.3.3' >> ~/custom_profile
 echo 'export PATH=$PATH:$M2_HOME/bin' >> ~/custom_profile
 
-#é…ç½®Tomcat
+#ÅäÖÃTomcat
 if [ ! -f tomcat.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com:81/apache-tomcat-8.0.29.tar.gz' >> tomcat.tar.gz;
+  curl 'http://hk.hope6537.org:81/apache-tomcat-8.0.29.tar.gz' >> tomcat.tar.gz;
 fi
-echo '[+] å®ŒæˆTomcatä¸‹è½½'
+echo '[+] Íê³ÉTomcatÏÂÔØ'
 tar -xzf tomcat.tar.gz -C /usr/local/share/;
-echo '[+] å¯¼å‡ºç¯å¢ƒå˜é‡ä¸­'
+echo '[+] µ¼³ö»·¾³±äÁ¿ÖĞ'
 echo 'export CATALINA_HOME=/usr/local/share/apache-tomcat-8.0.29' >> ~/custom_profile
 echo 'export PATH=$PATH:$CATALINA_HOME/bin' >> ~/custom_profile
 
-#é…ç½®Zookeeper
+#ÅäÖÃZookeeper
 if [ ! -f zookeeper.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com:81/zookeeper.tar.gz' >> zookeeper.tar.gz;
+  curl 'http://hk.hope6537.org:81/zookeeper.tar.gz' >> zookeeper.tar.gz;
 fi
-echo '[+] å®ŒæˆZookeeperä¸‹è½½'
+echo '[+] Íê³ÉZookeeperÏÂÔØ'
 tar -xzf zookeeper.tar.gz -C /usr/local/share/;
-echo '[+] é…ç½®Zookeeperé»˜è®¤è®¾ç½®ä¸­'
+echo '[+] ÅäÖÃZookeeperÄ¬ÈÏÉèÖÃÖĞ'
 mkdir ~/zk;
 mkdir ~/zk/data;
 rm -rf ~/zk/data/myid
 touch ~/zk/data/myid
 echo '10' >> ~/zk/data/myid
-echo '[.] å®ŒæˆzkIdè®¾ç½®,æ­£åœ¨ä¿®æ”¹é…ç½®æ–‡ä»¶'
+echo '[.] Íê³ÉzkIdÉèÖÃ,ÕıÔÚĞŞ¸ÄÅäÖÃÎÄ¼ş'
 touch /usr/local/share/zookeeper-3.4.7/conf/zoo.cfg
 echo 'tickTime=2000
 initLimit=10
@@ -150,44 +150,44 @@ clientPort=2181
 server.1=www.hope6537.com:2555:3555
 server.2=ding.hope6537.com:2555:3555
 server.10=jp.hope6537.com:2555:3555' >> /usr/local/share/zookeeper-3.4.7/conf/zoo.cfg
-echo '[.] å®Œæˆzké…ç½®æ–‡ä»¶åˆå§‹åŒ–'
-echo '[+] å¯¼å‡ºç¯å¢ƒå˜é‡ä¸­'
+echo '[.] Íê³ÉzkÅäÖÃÎÄ¼ş³õÊ¼»¯'
+echo '[+] µ¼³ö»·¾³±äÁ¿ÖĞ'
 echo 'export ZK_HOME=/usr/local/share/zookeeper-3.4.7' >> ~/custom_profile
 echo 'export PATH=$PATH:$ZK_HOME/bin' >> ~/custom_profile
 
-#é…ç½®Node
+#ÅäÖÃNode
 if [ ! -f node.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com:81/node-v5.1.1-linux-x64.tar.gz' >> node.tar.gz;
+  curl 'http://hk.hope6537.org:81/node-v5.1.1-linux-x64.tar.gz' >> node.tar.gz;
 fi
-echo '[+] å®Œæˆnodeä¸‹è½½'
+echo '[+] Íê³ÉnodeÏÂÔØ'
 tar -xzf node.tar.gz -C /usr/local/share/;
-echo '[+] å¯¼å‡ºç¯å¢ƒå˜é‡ä¸­'
+echo '[+] µ¼³ö»·¾³±äÁ¿ÖĞ'
 echo 'export NODE_HOME=/usr/local/share/node-v5.1.1-linux-x64' >> ~/custom_profile
 echo 'export PATH=$PATH:$NODE_HOME/bin' >> ~/custom_profile
-echo '[+] é…ç½®npmå’Œcnpm'
+echo '[+] ÅäÖÃnpmºÍcnpm'
 /usr/local/share/node-v5.1.1-linux-x64/bin/npm install -g cnpm --registry=https://registry.npm.taobao.org
 
 
-#é…ç½®Nginx
-echo '[-] å¼€å§‹è¿›è¡ŒNginxç¼–è¯‘æ„å»º'
+#ÅäÖÃNginx
+echo '[-] ¿ªÊ¼½øĞĞNginx±àÒë¹¹½¨'
 if [ ! -f nginx.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com:81/nginx-1.8.0.tar.gz' >> nginx.tar.gz;
+  curl 'http://hk.hope6537.org:81/nginx-1.8.0.tar.gz' >> nginx.tar.gz;
 fi
-echo '[+] å®Œæˆnginxä¸‹è½½'
+echo '[+] Íê³ÉnginxÏÂÔØ'
 if [ ! -f zlib-1.2.8.tar.gz ]; then
-wget 'http://mirrors.hope6537.com:81/zlib-1.2.8.tar.gz'
+wget 'http://hk.hope6537.org:81/zlib-1.2.8.tar.gz'
 fi
-echo '[+] å®Œæˆzlibä¸‹è½½'
+echo '[+] Íê³ÉzlibÏÂÔØ'
 
 if [ ! -f pcre-8.38.tar.gz ]; then
-wget 'http://mirrors.hope6537.com:81/pcre-8.38.tar.gz'
+wget 'http://hk.hope6537.org:81/pcre-8.38.tar.gz'
 fi
-echo '[+] å®Œæˆpcreä¸‹è½½'
+echo '[+] Íê³ÉpcreÏÂÔØ'
 if [ ! -f ngx_cache_purge-2.3.tar.gz ]; then
 wget http://labs.frickle.com/files/ngx_cache_purge-2.3.tar.gz
 fi
-echo '[+] å®Œæˆnginx ç¼“å­˜æ¸…é™¤æ’ä»¶ä¸‹è½½'
-echo '[+] æ­£åœ¨è§£å‹ä¸€å †nginxå¤§ç¤¼åŒ…ä¸­'
+echo '[+] Íê³Énginx »º´æÇå³ı²å¼şÏÂÔØ'
+echo '[+] ÕıÔÚ½âÑ¹Ò»¶Ñnginx´óÀñ°üÖĞ'
 tar -xzf nginx.tar.gz -C /usr/local/share/;
 tar -xzf zlib-1.2.8.tar.gz -C /usr/local/share/;
 
@@ -195,57 +195,57 @@ tar -xzf pcre-8.38.tar.gz  -C /usr/local/share/;
 tar -xzf solr-5.4.0.tgz -C /usr/local/share;
 tar -xzf ngx_cache_purge-2.3.tar.gz -C /usr/local/share;
 
-echo '[+] é¦–å…ˆç¼–è¯‘pcre'
+echo '[+] Ê×ÏÈ±àÒëpcre'
 cd /usr/local/share/pcre-8.38
 ./configure;
 make;
 make install;
 
-echo '[+] ç„¶åç¼–è¯‘zlib'
+echo '[+] È»ºó±àÒëzlib'
 cd /usr/local/share/zlib-1.2.8
 ./configure;
 make;
 make install;
 
-echo '[+]æœ€åå¸¦ä¸Šnginxè‡ªå·±'
+echo '[+]×îºó´øÉÏnginx×Ô¼º'
 cd /usr/local/share/nginx-1.8.0;
  ./configure --add-module=/usr/local/share/ngx_cache_purge-2.3;
 make;
 make install
 
-echo '[+] ä¸‹è½½é…ç½®æ–‡ä»¶ä¸­'
+echo '[+] ÏÂÔØÅäÖÃÎÄ¼şÖĞ'
 cd /usr/local/nginx/conf
 wget https://raw.githubusercontent.com/Hope6537/hope-tactical-equipment/master/hope-note-module/hope-config-note/nginx_default_tomcat.conf
 wget https://raw.githubusercontent.com/Hope6537/hope-tactical-equipment/master/hope-note-module/hope-config-note/nginx_image_server.conf
 
 cd ~
-echo '[+] å¯¼å‡ºç¯å¢ƒå˜é‡ä¸­'
+echo '[+] µ¼³ö»·¾³±äÁ¿ÖĞ'
 echo 'export NGINX_HOME=/usr/local/nginx/sbin' >> ~/custom_profile
 echo 'export PATH=$PATH:$NGINX_HOME/bin' >> ~/custom_profile
 echo "alias nginx.start='/usr/local/nginx/sbin/nginx'" >> ~/custom_alias
 echo "alias nginx.stop='/usr/local/nginx/sbin/nginx -s stop'" >> ~/custom_alias
 
 
-#å®‰è£…æ•°æ®åº“å±‚é¢çš„æ•°æ®
+#°²×°Êı¾İ¿â²ãÃæµÄÊı¾İ
 
-#REDIS ä¸»ä»å’Œé›†ç¾¤
+#REDIS Ö÷´ÓºÍ¼¯Èº
 if [ ! -f redis.tar.gz ]; then
-  curl 'http://mirrors.hope6537.com:81/redis-3.0.5.tar.gz' >> redis.tar.gz;
+  curl 'http://hk.hope6537.org:81/redis-3.0.5.tar.gz' >> redis.tar.gz;
 fi
-echo '[+] å®Œæˆredisä¸‹è½½'
+echo '[+] Íê³ÉredisÏÂÔØ'
 tar -xzf redis.tar.gz -C /usr/local/share/;
 cd /usr/local/share/redis-3.0.4
-echo '[+] ç¼–è¯‘Redisä¸­'
+echo '[+] ±àÒëRedisÖĞ'
 ./configure;
 make & make install;
-echo '[+] å®Œæˆç¼–è¯‘,ä¸»ä»é…ç½®ç”Ÿæˆ,è¿›è¡Œsentinelé…ç½®ç”Ÿæˆ'
+echo '[+] Íê³É±àÒë,Ö÷´ÓÅäÖÃÉú³É,½øĞĞsentinelÅäÖÃÉú³É'
 echo 'slaveof www.hope6537.com 6379
 masterauth redispass
 requirepass redispass' >> /etc/redis_slave.conf
 echo 'masterauth redispass
 requirepass redispass' >> /etc/redis_master.conf
-echo '[+] masteré…ç½®æ–‡ä»¶ä¸º/etc/redis_master.conf,slaveé…ç½®æ–‡ä»¶ä¸º/etc/redis_slave.conf'
-echo '[+] è¿›è¡Œsentinelé…ç½®ç”Ÿæˆ'
+echo '[+] masterÅäÖÃÎÄ¼şÎª/etc/redis_master.conf,slaveÅäÖÃÎÄ¼şÎª/etc/redis_slave.conf'
+echo '[+] ½øĞĞsentinelÅäÖÃÉú³É'
 echo 'port 26379
  sentinel monitor mymaster 172.17.16.7 6379 2
  sentinel auth-pass mymaster redispass
@@ -258,22 +258,22 @@ echo 'port 26379
 cd ~
 echo "alias redis.start='redis-server /etc/sentinel.conf --sentinel'"
 
-echo '[+] å¯¼å‡ºç¯å¢ƒå˜é‡ä¸­'
+echo '[+] µ¼³ö»·¾³±äÁ¿ÖĞ'
 echo 'export REDIS_HOME=/usr/local/share/redis-3.0.4' >> ~/custom_profile
 echo 'export PATH=$PATH:$REDIS_HOME/bin' >> ~/custom_profile
 echo "alias redis.start='/usr/local/share/redis-3.0.4/src/redis-server /etc/sentinel.conf --sentinel'" >> ~/custom_alias
 echo "alias redis.stop='/usr/local/share/redis-3.0.4/src/redis-server stop'" >> ~/custom_alias
 
-#MYSQLè¯»å†™åˆ†ç¦»
+#MYSQL¶ÁĞ´·ÖÀë
 
 #ElasticSearch
 
 if [ ! -f elasticsearch.tar.gz ]; then
-    curl 'http://mirrors.hope6537.com:81/elasticsearch.tar.gz' >> elasticsearch.tar.gz
+    curl 'http://hk.hope6537.org:81/elasticsearch.tar.gz' >> elasticsearch.tar.gz
 fi
-echo '[+] å®Œæˆelasticsearchä¸‹è½½'
+echo '[+] Íê³ÉelasticsearchÏÂÔØ'
 tar -xzf elasticsearch.tar.gz -C /usr/local/share/;
-#ç„¶åéœ€è¦æ·»åŠ ä¸€ä¸ªelasticsearchç”¨æˆ·
+#È»ºóĞèÒªÌí¼ÓÒ»¸öelasticsearchÓÃ»§
 rm -rf /home/elatsicsearch
 expect  -c  '
         set timeout 3600;
@@ -297,19 +297,19 @@ expect  -c  '
         interact;';
 
 
-#å¯¹esç›®å½•è¿›è¡Œæˆæƒ
+#¶ÔesÄ¿Â¼½øĞĞÊÚÈ¨
 #expect  -c 'set timeout 3600; spawn su elatsicsearch expect "password:"; send "espasswd\n"; interact;';
 cd /usr/local/share/elasticsearch-rtf/config
 rm /usr/local/share/elasticsearch-rtf/config/elasticsearch.yml
 wget https://raw.githubusercontent.com/Hope6537/hope-tactical-equipment/master/hope-note-module/hope-config-note/elasticsearch.conf
 sudo chown -R elatsicsearch:admin /usr/local/share/elasticsearch-rtf/
 
-echo '[+] å¯¼å‡ºç¯å¢ƒå˜é‡ä¸­'
+echo '[+] µ¼³ö»·¾³±äÁ¿ÖĞ'
 echo 'export ES_HOME=/usr/local/share/redis-3.0.4' >> ~/custom_profile
 echo 'export PATH=$PATH:$ES_HOME/bin' >> ~/custom_profile
 echo "alias es.start='/usr/local/share/elasticsearch-rtf/bin/elasticsearch'" >> ~/custom_alias
 echo "alias es.stop='/usr/local/share/elasticsearch-rtf/bin/elasticsearch stop'" >> ~/custom_alias
 
-#æµ‹è¯•
+#²âÊÔ
 
-#å¯åŠ¨
+#Æô¶¯
