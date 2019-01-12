@@ -3,6 +3,7 @@ package org.hope6537.note.leetcode;
 import org.junit.Test;
 
 public class Numberof1Bits {
+
     public int hammingWeight(int n) {
         char[] s = Integer.toBinaryString(n).toCharArray();
         int count = 0;
